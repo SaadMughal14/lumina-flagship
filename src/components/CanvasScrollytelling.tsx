@@ -18,6 +18,7 @@ export default function CanvasScrollytelling() {
     const canvas2Ref = useRef<HTMLCanvasElement>(null);
     const canvas3Ref = useRef<HTMLCanvasElement>(null);
     const frameRef = useRef<HTMLDivElement>(null);
+    const textRef = useRef<HTMLDivElement>(null);
 
 
 
@@ -228,8 +229,8 @@ export default function CanvasScrollytelling() {
                 18
             );
 
-            // Fade out the premium frame at the very end (Time 27 to 30) so it disappears before the footer
-            tl.to(frameRef.current, { opacity: 0, duration: 3, ease: "power2.inOut" }, 27);
+            // Fade out the premium frame and text at the very end (Time 27 to 30) so it disappears before the footer
+            tl.to([frameRef.current, textRef.current], { opacity: 0, duration: 3, ease: "power2.inOut" }, 27);
 
         },
         { dependencies: [loaded], scope: containerRef }
@@ -250,9 +251,32 @@ export default function CanvasScrollytelling() {
             {/* Scrollytelling Container */}
             <div ref={containerRef} className="relative w-full h-[100dvh] bg-[#0B0C10] overflow-hidden flex items-center justify-center p-4 lg:p-8">
 
+                {/* Edge Typography (Visible only on wider screens) */}
+                <div ref={textRef} className="absolute inset-0 hidden lg:flex items-center justify-between px-12 pointer-events-none z-40 transition-opacity duration-700">
+
+                    {/* Left Side: KEEP SCROLLING */}
+                    <div className="flex flex-col items-center gap-6 opacity-30">
+                        <span className="font-inter tracking-[0.5em] text-[10px] text-white" style={{ writingMode: "vertical-rl", transform: "rotate(180deg)" }}>
+                            KEEP SCROLLING
+                        </span>
+                        <div className="w-[1px] h-16 bg-white/30 rounded-full"></div>
+                    </div>
+
+                    {/* Right Side: Animated Arrow & Coordinates */}
+                    <div className="flex flex-col items-center gap-6 opacity-30">
+                        <span className="font-inter tracking-[0.3em] text-[10px] text-white" style={{ writingMode: "vertical-rl", transform: "rotate(180deg)" }}>
+                            N 48° 52' 5"
+                        </span>
+                        {/* Custom animated trailing line for arrow */}
+                        <div className="relative w-[1px] h-16 bg-white/10 overflow-hidden rounded-full">
+                            <div className="absolute top-0 left-0 w-full h-full bg-white animate-[scrollLine_2s_ease-in-out_infinite]"></div>
+                        </div>
+                    </div>
+                </div>
+
                 {/* The actual bounded wrapper that matches the frame precisely */}
                 <div
-                    className="relative rounded-xl lg:rounded-2xl overflow-hidden transition-all duration-300 ease-out"
+                    className="relative rounded-xl lg:rounded-2xl overflow-hidden transition-all duration-300 ease-out z-30"
                     style={{
                         width: frameBounds.width,
                         height: frameBounds.height,
