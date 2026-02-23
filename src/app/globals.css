@@ -3,6 +3,8 @@
 @theme {
   --color-background: #0B0C10;
   --color-foreground: #FFFFFF;
+  --font-bricolage: var(--font-bricolage);
+  --font-manrope: var(--font-manrope);
 }
 
 :root {
