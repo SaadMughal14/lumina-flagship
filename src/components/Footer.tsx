@@ -26,9 +26,23 @@ export default function Footer() {
 
             {/* Bottom Section: Giant Logo & Copyright */}
             <div className="w-full flex flex-col items-center mt-auto">
-                <h1 className="font-bricolage text-[15vw] lg:text-[18vw] leading-none text-white uppercase tracking-tight opacity-90 select-none font-bold">
-                    Lumina
-                </h1>
+                <div className="flex flex-col items-center gap-8 opacity-90 mb-10">
+                    <svg className="w-24 h-24 lg:w-32 lg:h-32 text-white" viewBox="0 0 100 100">
+                        <g transform="translate(50, 50)">
+                            {Array.from({ length: 12 }).map((_, i) => (
+                                <path
+                                    key={i}
+                                    d="M 0,-8 C -8,-25 -8,-45 0,-45 C 8,-45 8,-25 0,-8 Z"
+                                    transform={`rotate(${i * 30})`}
+                                    fill="currentColor"
+                                />
+                            ))}
+                        </g>
+                    </svg>
+                    <h1 className="font-degular text-5xl lg:text-7xl leading-none text-white uppercase tracking-[0.2em] select-none font-bold">
+                        Lumina
+                    </h1>
+                </div>
                 <div className="flex w-full justify-between items-center text-white/40 font-degular text-[10px] tracking-[0.2em] uppercase mt-8 border-t border-white/10 pt-8">
                     <span>&copy; {new Date().getFullYear()} Lumina Parfums</span>
                     <div className="flex gap-8">
