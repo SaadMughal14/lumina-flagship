@@ -243,7 +243,7 @@ export default function CanvasScrollytelling() {
                 className={`fixed inset-0 z-50 flex items-center justify-center bg-[#0B0C10] text-[#FFFFFF] transition-opacity duration-1000 ${loaded ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
             >
                 <div className="flex flex-col items-center gap-6">
-                    <h1 className="font-degular text-5xl tracking-[0.2em] uppercase font-bold text-white/90">
+                    <h1 className="font-cursive text-6xl lg:text-7xl capitalize font-normal text-white">
                         Lumina
                     </h1>
                     {/* Elegant loading line expanding outward */}
@@ -279,7 +279,7 @@ export default function CanvasScrollytelling() {
                                 ))}
                             </g>
                         </svg>
-                        <span className="font-degular text-xl tracking-widest text-white uppercase font-bold">Lumina</span>
+                        <span className="font-cursive text-4xl capitalize text-white font-normal mt-2">Lumina</span>
                     </div>
 
                     {/* Architectural Framing Corners */}

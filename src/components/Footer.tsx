@@ -39,7 +39,7 @@ export default function Footer() {
                             ))}
                         </g>
                     </svg>
-                    <h1 className="font-degular text-5xl lg:text-7xl leading-none text-white uppercase tracking-[0.2em] select-none font-bold">
+                    <h1 className="font-cursive text-7xl lg:text-9xl leading-none text-white capitalize select-none font-normal">
                         Lumina
                     </h1>
                 </div>
