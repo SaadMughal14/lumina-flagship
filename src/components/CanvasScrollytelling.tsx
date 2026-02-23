@@ -23,6 +23,7 @@ export default function CanvasScrollytelling() {
 
     const [loaded, setLoaded] = useState(false);
     const [progress, setProgress] = useState(0); // for the loading screen (optional)
+    const [frameBounds, setFrameBounds] = useState({ width: "100%", height: "100%" });
 
     // We store Image objects in refs to persist across renders without trigerring react state
     const act1Images = useRef<HTMLImageElement[]>([]);
@@ -118,6 +119,14 @@ export default function CanvasScrollytelling() {
             offsetX = 0;
             offsetY = (canvasHeight - drawHeight) / 2;
         }
+
+        // Sync the frame's CSS size to EXACTLY match the drawn image
+        // (convert from Dpr-scaled pixel sizes back to CSS sizes)
+        const dpr = window.devicePixelRatio || 1;
+        setFrameBounds({
+            width: `${drawWidth / dpr}px`,
+            height: `${drawHeight / dpr}px`
+        });
 
         ctx.clearRect(0, 0, canvasWidth, canvasHeight);
         ctx.drawImage(img, offsetX, offsetY, drawWidth, drawHeight);
@@ -242,7 +251,16 @@ export default function CanvasScrollytelling() {
             <div ref={containerRef} className="relative w-full h-[100dvh] bg-[#0B0C10] overflow-hidden flex items-center justify-center p-4 lg:p-8">
 
                 {/* The actual bounded wrapper that matches the frame precisely */}
-                <div className="relative w-full h-full rounded-xl lg:rounded-2xl overflow-hidden">
+                <div
+                    className="relative rounded-xl lg:rounded-2xl overflow-hidden transition-all duration-300 ease-out"
+                    style={{
+                        width: frameBounds.width,
+                        height: frameBounds.height,
+                        // Provide sensible max bounds
+                        maxWidth: "1400px",
+                        maxHeight: "100%"
+                    }}
+                >
 
                     {/* Premium Frame Overlay (sits top-level inside the bound to cast inset shadows over the video) */}
                     <div
