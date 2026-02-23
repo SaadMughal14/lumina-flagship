@@ -1,0 +1,272 @@
+"use client";
+
+import { useEffect, useRef, useState } from "react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useGSAP } from "@gsap/react";
+
+if (typeof window !== "undefined") {
+    gsap.registerPlugin(ScrollTrigger, useGSAP);
+}
+
+const TOTAL_FRAMES = 240;
+
+export default function CanvasScrollytelling() {
+    const containerRef = useRef<HTMLDivElement>(null);
+
+    const canvas1Ref = useRef<HTMLCanvasElement>(null);
+    const canvas2Ref = useRef<HTMLCanvasElement>(null);
+    const canvas3Ref = useRef<HTMLCanvasElement>(null);
+
+
+
+    const [loaded, setLoaded] = useState(false);
+    const [progress, setProgress] = useState(0); // for the loading screen (optional)
+
+    // We store Image objects in refs to persist across renders without trigerring react state
+    const act1Images = useRef<HTMLImageElement[]>([]);
+    const act2Images = useRef<HTMLImageElement[]>([]);
+    const act3Images = useRef<HTMLImageElement[]>([]);
+
+    // Frame tracking objects for GSAP to animate
+    const frames = useRef({
+        act1: 1,
+        act2: 1,
+        act3: 1,
+    });
+
+    // Loading Logic Phase 1, 2, 3
+    useEffect(() => {
+        let isCancelled = false;
+
+        const loadInitial60 = async () => {
+            const promises = [];
+            for (let i = 1; i <= 60; i++) {
+                const img = new Image();
+                img.src = `/assets/lumina-web/ezgif-frame-${String(i).padStart(3, "0")}.jpg`;
+                promises.push(
+                    new Promise((resolve) => {
+                        img.onload = () => resolve(img);
+                        img.onerror = () => resolve(img); // resolve anyway to not block
+                    })
+                );
+                act1Images.current[i - 1] = img;
+            }
+
+            await Promise.all(promises);
+
+            if (!isCancelled) {
+                setLoaded(true); // Phase 2: dismiss loader
+                // Draw the first frame immediately
+                renderCanvas(act1Images.current[0], canvas1Ref.current);
+                loadRest(); // Phase 3: load the rest in background
+            }
+        };
+
+        const loadRest = async () => {
+            // Act 1 remaining
+            for (let i = 61; i <= TOTAL_FRAMES; i++) {
+                const img = new Image();
+                img.src = `/assets/lumina-web/ezgif-frame-${String(i).padStart(3, "0")}.jpg`;
+                act1Images.current[i - 1] = img;
+            }
+            // Act 2
+            for (let i = 1; i <= TOTAL_FRAMES; i++) {
+                const img = new Image();
+                img.src = `/assets/monolith-web/ezgif-frame-${String(i).padStart(3, "0")}.jpg`;
+                act2Images.current[i - 1] = img;
+            }
+            // Act 3
+            for (let i = 1; i <= TOTAL_FRAMES; i++) {
+                const img = new Image();
+                img.src = `/assets/extrait-web/ezgif-frame-${String(i).padStart(3, "0")}.jpg`;
+                act3Images.current[i - 1] = img;
+            }
+        };
+
+        loadInitial60();
+
+        return () => {
+            isCancelled = true;
+        };
+    }, []);
+
+    const renderCanvas = (img: HTMLImageElement | undefined, canvas: HTMLCanvasElement | null) => {
+        if (!img || !img.complete || !canvas) return;
+        const ctx = canvas.getContext("2d");
+        if (!ctx) return;
+
+        const canvasWidth = canvas.width;
+        const canvasHeight = canvas.height;
+        const imgRatio = img.width / img.height;
+        const canvasRatio = canvasWidth / canvasHeight;
+
+        let drawWidth, drawHeight, offsetX, offsetY;
+
+        // "Cover" logic
+        if (canvasRatio > imgRatio) {
+            // Canvas is wider than image (e.g. desktop)
+            drawWidth = canvasWidth;
+            drawHeight = canvasWidth / imgRatio;
+            offsetX = 0;
+            offsetY = (canvasHeight - drawHeight) / 2;
+        } else {
+            // Canvas is taller than image (e.g. mobile)
+            drawHeight = canvasHeight;
+            drawWidth = canvasHeight * imgRatio;
+            offsetY = 0;
+            offsetX = (canvasWidth - drawWidth) / 2;
+        }
+
+        ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+        ctx.drawImage(img, offsetX, offsetY, drawWidth, drawHeight);
+    };
+
+    // Resize handling
+    useEffect(() => {
+        const handleResize = () => {
+            [canvas1Ref, canvas2Ref, canvas3Ref].forEach((ref) => {
+                if (ref.current) {
+                    ref.current.width = window.innerWidth;
+                    // Use visualViewport if available, otherwise fallback to innerHeight
+                    ref.current.height = window.visualViewport ? window.visualViewport.height : window.innerHeight;
+                }
+            });
+            // Re-render current frames on resize
+            renderCanvas(act1Images.current[Math.max(0, Math.round(frames.current.act1) - 1)], canvas1Ref.current);
+            renderCanvas(act2Images.current[Math.max(0, Math.round(frames.current.act2) - 1)], canvas2Ref.current);
+            renderCanvas(act3Images.current[Math.max(0, Math.round(frames.current.act3) - 1)], canvas3Ref.current);
+        };
+
+        handleResize();
+        window.addEventListener("resize", handleResize);
+        return () => window.removeEventListener("resize", handleResize);
+    }, []);
+
+    useGSAP(
+        () => {
+            if (!loaded) return;
+
+            const tl = gsap.timeline({
+                scrollTrigger: {
+                    trigger: containerRef.current,
+                    start: "top top",
+                    end: "+=1200%", // 1200vh of scrolling for slower, smoother frame rate
+                    scrub: 1,
+                    pin: true,
+                },
+            });
+
+            // --- ACT 1 (Time 0 to 10) ---
+            tl.to(
+                frames.current,
+                {
+                    act1: TOTAL_FRAMES,
+                    snap: "act1",
+                    ease: "none",
+                    duration: 10,
+                    onUpdate: () => renderCanvas(act1Images.current[Math.max(0, Math.round(frames.current.act1) - 1)], canvas1Ref.current),
+                },
+                0
+            );
+
+            // --- CROSSFADE ACT 1 -> ACT 2 (Time 10 to 11.5) ---
+            tl.to(canvas1Ref.current, { opacity: 0, duration: 1.5, ease: "power1.inOut" }, 10);
+            tl.to(canvas2Ref.current, { opacity: 1, duration: 1.5, ease: "power1.inOut" }, 10);
+
+            // Render first frame of Act 2 during crossfade to prevent blank canvas
+            tl.to(
+                frames.current,
+                {
+                    act2: 1,
+                    duration: 1.5,
+                    onUpdate: () => renderCanvas(act2Images.current[0], canvas2Ref.current),
+                },
+                10
+            );
+
+            // --- ACT 2 (Time 11.5 to 21.5) ---
+            tl.to(
+                frames.current,
+                {
+                    act2: TOTAL_FRAMES,
+                    snap: "act2",
+                    ease: "none",
+                    duration: 10,
+                    onUpdate: () => renderCanvas(act2Images.current[Math.max(0, Math.round(frames.current.act2) - 1)], canvas2Ref.current),
+                },
+                11.5
+            );
+
+            // --- CROSSFADE ACT 2 -> ACT 3 (Time 21.5 to 23) ---
+            tl.to(canvas2Ref.current, { opacity: 0, duration: 1.5, ease: "power1.inOut" }, 21.5);
+            tl.to(canvas3Ref.current, { opacity: 1, duration: 1.5, ease: "power1.inOut" }, 21.5);
+
+            // Render first frame of Act 3 during crossfade
+            tl.to(
+                frames.current,
+                {
+                    act3: 1,
+                    duration: 1.5,
+                    onUpdate: () => renderCanvas(act3Images.current[0], canvas3Ref.current),
+                },
+                21.5
+            );
+
+            // --- ACT 3 (Time 23 to 33) ---
+            tl.to(
+                frames.current,
+                {
+                    act3: TOTAL_FRAMES,
+                    snap: "act3",
+                    ease: "none",
+                    duration: 10,
+                    onUpdate: () => renderCanvas(act3Images.current[Math.max(0, Math.round(frames.current.act3) - 1)], canvas3Ref.current),
+                },
+                23
+            );
+
+        },
+        { dependencies: [loaded], scope: containerRef }
+    );
+
+    return (
+        <>
+            {/* Loading Screen */}
+            {!loaded && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#0B0C10] text-[#FFFFFF]">
+                    <div className="flex flex-col items-center gap-4 animate-pulse">
+                        <h1 className="font-playfair text-4xl tracking-widest uppercase">Lumina</h1>
+                        <p className="font-inter text-sm uppercase tracking-[0.2em] text-white/50">Curating the Experience</p>
+                    </div>
+                </div>
+            )}
+
+            {/* Scrollytelling Container */}
+            <div ref={containerRef} className="relative w-full h-[100dvh] bg-[#0B0C10] overflow-hidden">
+
+                {/* ACT 3: EXTRAIT */}
+
+                <canvas
+                    ref={canvas3Ref}
+                    className="absolute inset-0 w-full h-full object-cover opacity-0 z-10"
+                />
+
+                {/* ACT 2: MONOLITH */}
+                <canvas
+                    ref={canvas2Ref}
+                    className="absolute inset-0 w-full h-full object-cover opacity-0 z-20"
+                />
+
+
+                {/* ACT 1: LUMINA */}
+                <canvas
+                    ref={canvas1Ref}
+                    className="absolute inset-0 w-full h-full object-cover opacity-100 z-40"
+                />
+
+
+            </div>
+        </>
+    );
+}

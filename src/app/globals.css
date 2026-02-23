@@ -1,0 +1,27 @@
+@import "tailwindcss";
+
+@theme {
+  --color-background: #0B0C10;
+  --color-foreground: #FFFFFF;
+}
+
+:root {
+  background-color: var(--color-background);
+  color: var(--color-foreground);
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--color-background);
+  color: var(--color-foreground);
+  margin: 0;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Hide scrollbar for a cleaner cinematic look */
+::-webkit-scrollbar {
+  width: 0px;
+  background: transparent;
+}
