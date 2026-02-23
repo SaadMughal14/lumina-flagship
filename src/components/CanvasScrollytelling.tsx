@@ -101,21 +101,21 @@ export default function CanvasScrollytelling() {
         const imgRatio = img.width / img.height;
         const canvasRatio = canvasWidth / canvasHeight;
 
-        let drawWidth, drawHeight, offsetX, offsetY;
+        let drawWidth: number, drawHeight: number, offsetX: number, offsetY: number;
 
-        // "Cover" logic
+        // "Contain" / Letterbox logic
         if (canvasRatio > imgRatio) {
-            // Canvas is wider than image (e.g. desktop)
-            drawWidth = canvasWidth;
-            drawHeight = canvasWidth / imgRatio;
-            offsetX = 0;
-            offsetY = (canvasHeight - drawHeight) / 2;
-        } else {
-            // Canvas is taller than image (e.g. mobile)
+            // Screen is wider than image (add black bars on left/right)
             drawHeight = canvasHeight;
             drawWidth = canvasHeight * imgRatio;
             offsetY = 0;
             offsetX = (canvasWidth - drawWidth) / 2;
+        } else {
+            // Screen is taller than image (add black bars on top/bottom)
+            drawWidth = canvasWidth;
+            drawHeight = canvasWidth / imgRatio;
+            offsetX = 0;
+            offsetY = (canvasHeight - drawHeight) / 2;
         }
 
         ctx.clearRect(0, 0, canvasWidth, canvasHeight);
@@ -235,7 +235,7 @@ export default function CanvasScrollytelling() {
             )}
 
             {/* Scrollytelling Container */}
-            <div ref={containerRef} className="relative w-full h-[100dvh] bg-[#0B0C10] overflow-hidden">
+            <div ref={containerRef} className="relative w-full max-w-[1400px] mx-auto h-[100dvh] bg-[#0B0C10] overflow-hidden">
 
                 {/* ACT 3: EXTRAIT */}
 
