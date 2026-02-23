@@ -239,44 +239,45 @@ export default function CanvasScrollytelling() {
             )}
 
             {/* Scrollytelling Container */}
-            <div ref={containerRef} className="relative w-full h-[100dvh] bg-[#0B0C10] overflow-hidden">
+            <div ref={containerRef} className="relative w-full h-[100dvh] bg-[#0B0C10] overflow-hidden flex items-center justify-center p-4 lg:p-8">
 
-                {/* Premium Frame Overlay */}
-                <div
-                    ref={frameRef}
-                    className="absolute inset-4 lg:inset-8 border border-white/10 z-50 pointer-events-none rounded-xl lg:rounded-2xl transition-opacity duration-700"
-                    style={{
-                        boxShadow: "inset 0 0 100px 20px #0B0C10, 0 0 100px 20px rgba(0,0,0,0.5)"
-                    }}
-                >
-                    {/* Decorative Corner Marks */}
-                    <div className="absolute top-0 left-0 w-4 h-4 border-t border-l border-white/30 rounded-tl-xl lg:rounded-tl-2xl"></div>
-                    <div className="absolute top-0 right-0 w-4 h-4 border-t border-r border-white/30 rounded-tr-xl lg:rounded-tr-2xl"></div>
-                    <div className="absolute bottom-0 left-0 w-4 h-4 border-b border-l border-white/30 rounded-bl-xl lg:rounded-bl-2xl"></div>
-                    <div className="absolute bottom-0 right-0 w-4 h-4 border-b border-r border-white/30 rounded-br-xl lg:rounded-br-2xl"></div>
+                {/* The actual bounded wrapper that matches the frame precisely */}
+                <div className="relative w-full h-full rounded-xl lg:rounded-2xl overflow-hidden">
+
+                    {/* Premium Frame Overlay (sits top-level inside the bound to cast inset shadows over the video) */}
+                    <div
+                        ref={frameRef}
+                        className="absolute inset-0 border border-white/10 z-50 pointer-events-none rounded-xl lg:rounded-2xl transition-opacity duration-700"
+                        style={{
+                            boxShadow: "inset 0 0 100px 20px rgba(11,12,16, 0.9), inset 0 0 60px 10px rgba(0,0,0,0.8)"
+                        }}
+                    >
+                        {/* Decorative Corner Marks */}
+                        <div className="absolute top-0 left-0 w-4 h-4 border-t border-l border-white/30 rounded-tl-xl lg:rounded-tl-2xl"></div>
+                        <div className="absolute top-0 right-0 w-4 h-4 border-t border-r border-white/30 rounded-tr-xl lg:rounded-tr-2xl"></div>
+                        <div className="absolute bottom-0 left-0 w-4 h-4 border-b border-l border-white/30 rounded-bl-xl lg:rounded-bl-2xl"></div>
+                        <div className="absolute bottom-0 right-0 w-4 h-4 border-b border-r border-white/30 rounded-br-xl lg:rounded-br-2xl"></div>
+                    </div>
+
+                    {/* ACT 3: EXTRAIT */}
+                    <canvas
+                        ref={canvas3Ref}
+                        className="absolute inset-0 w-full h-full object-cover opacity-0 z-10"
+                    />
+
+                    {/* ACT 2: MONOLITH */}
+                    <canvas
+                        ref={canvas2Ref}
+                        className="absolute inset-0 w-full h-full object-cover opacity-0 z-20"
+                    />
+
+                    {/* ACT 1: LUMINA */}
+                    <canvas
+                        ref={canvas1Ref}
+                        className="absolute inset-0 w-full h-full object-cover opacity-100 z-40"
+                    />
+
                 </div>
-
-                {/* ACT 3: EXTRAIT */}
-
-                <canvas
-                    ref={canvas3Ref}
-                    className="absolute inset-0 w-full h-full object-cover opacity-0 z-10"
-                />
-
-                {/* ACT 2: MONOLITH */}
-                <canvas
-                    ref={canvas2Ref}
-                    className="absolute inset-0 w-full h-full object-cover opacity-0 z-20"
-                />
-
-
-                {/* ACT 1: LUMINA */}
-                <canvas
-                    ref={canvas1Ref}
-                    className="absolute inset-0 w-full h-full object-cover opacity-100 z-40"
-                />
-
-
             </div>
         </>
     );
