@@ -17,6 +17,7 @@ export default function CanvasScrollytelling() {
     const canvas1Ref = useRef<HTMLCanvasElement>(null);
     const canvas2Ref = useRef<HTMLCanvasElement>(null);
     const canvas3Ref = useRef<HTMLCanvasElement>(null);
+    const frameRef = useRef<HTMLDivElement>(null);
 
 
 
@@ -218,6 +219,9 @@ export default function CanvasScrollytelling() {
                 18
             );
 
+            // Fade out the premium frame at the very end (Time 27 to 30) so it disappears before the footer
+            tl.to(frameRef.current, { opacity: 0, duration: 3, ease: "power2.inOut" }, 27);
+
         },
         { dependencies: [loaded], scope: containerRef }
     );
@@ -235,7 +239,22 @@ export default function CanvasScrollytelling() {
             )}
 
             {/* Scrollytelling Container */}
-            <div ref={containerRef} className="relative w-full max-w-[1400px] mx-auto h-[80dvh] bg-[#0B0C10] overflow-hidden mt-[10dvh]">
+            <div ref={containerRef} className="relative w-full h-[100dvh] bg-[#0B0C10] overflow-hidden">
+
+                {/* Premium Frame Overlay */}
+                <div
+                    ref={frameRef}
+                    className="absolute inset-4 lg:inset-8 border border-white/10 z-50 pointer-events-none rounded-xl lg:rounded-2xl transition-opacity duration-700"
+                    style={{
+                        boxShadow: "inset 0 0 100px 20px #0B0C10, 0 0 100px 20px rgba(0,0,0,0.5)"
+                    }}
+                >
+                    {/* Decorative Corner Marks */}
+                    <div className="absolute top-0 left-0 w-4 h-4 border-t border-l border-white/30 rounded-tl-xl lg:rounded-tl-2xl"></div>
+                    <div className="absolute top-0 right-0 w-4 h-4 border-t border-r border-white/30 rounded-tr-xl lg:rounded-tr-2xl"></div>
+                    <div className="absolute bottom-0 left-0 w-4 h-4 border-b border-l border-white/30 rounded-bl-xl lg:rounded-bl-2xl"></div>
+                    <div className="absolute bottom-0 right-0 w-4 h-4 border-b border-r border-white/30 rounded-br-xl lg:rounded-br-2xl"></div>
+                </div>
 
                 {/* ACT 3: EXTRAIT */}
 
