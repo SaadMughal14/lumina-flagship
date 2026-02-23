@@ -235,7 +235,7 @@ export default function CanvasScrollytelling() {
             )}
 
             {/* Scrollytelling Container */}
-            <div ref={containerRef} className="relative w-full max-w-[1400px] mx-auto h-[100dvh] bg-[#0B0C10] overflow-hidden">
+            <div ref={containerRef} className="relative w-full max-w-[1400px] mx-auto h-[80dvh] bg-[#0B0C10] overflow-hidden mt-[10dvh]">
 
                 {/* ACT 3: EXTRAIT */}
 
