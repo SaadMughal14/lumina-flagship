@@ -23,7 +23,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
         className={`${playfair.variable} ${inter.variable} antialiased selection:bg-white/20 selection:text-white`}
       >
