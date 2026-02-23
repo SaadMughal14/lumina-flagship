@@ -265,8 +265,39 @@ export default function CanvasScrollytelling() {
                 {/* Edge Typography & Architectural Marks (Visible only on wider screens) */}
                 <div ref={textRef} className="absolute inset-0 hidden lg:flex items-center justify-between px-10 pointer-events-none z-40 transition-opacity duration-700">
 
+                    {/* Brand Logo - Top Left */}
+                    <div className="absolute top-10 left-10 flex items-center gap-4 opacity-90">
+                        <svg className="w-8 h-8 text-white" viewBox="0 0 100 100">
+                            <g transform="translate(50, 50)">
+                                {Array.from({ length: 12 }).map((_, i) => (
+                                    <path
+                                        key={i}
+                                        d="M 0,-8 C -8,-25 -8,-45 0,-45 C 8,-45 8,-25 0,-8 Z"
+                                        transform={`rotate(${i * 30})`}
+                                        fill="currentColor"
+                                    />
+                                ))}
+                            </g>
+                        </svg>
+                        <span className="font-bricolage text-xl tracking-widest text-white uppercase font-bold">Lumina</span>
+                    </div>
+
+                    {/* Architectural Framing Corners */}
+                    <svg className="absolute top-10 right-10 w-8 h-8 opacity-30 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1">
+                        <path d="M4 4h16v16" />
+                        <circle cx="20" cy="4" r="1.5" fill="currentColor" />
+                    </svg>
+                    <svg className="absolute bottom-10 left-10 w-8 h-8 opacity-30 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1">
+                        <path d="M20 20H4V4" />
+                        <circle cx="4" cy="20" r="1.5" fill="currentColor" />
+                    </svg>
+                    <svg className="absolute bottom-10 right-10 w-8 h-8 opacity-30 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1">
+                        <path d="M4 20h16V4" />
+                        <circle cx="20" cy="20" r="1.5" fill="currentColor" />
+                    </svg>
+
                     {/* Left Column Fillers */}
-                    <div className="flex flex-col items-center justify-between h-full py-24 opacity-30">
+                    <div className="flex flex-col items-center justify-between h-[60%] my-auto opacity-30">
                         {/* Top Crosshair */}
                         <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="0.5" className="text-white">
                             <path d="M6 0V12M0 6H12" />
@@ -274,8 +305,8 @@ export default function CanvasScrollytelling() {
 
                         {/* Center Scroll Text */}
                         <div className="flex flex-col items-center gap-6">
-                            <span className="font-degular tracking-[0.5em] text-[10px] text-white" style={{ writingMode: "vertical-rl", transform: "rotate(180deg)" }}>
-                                KEEP SCROLLING
+                            <span className="font-degular tracking-[0.5em] text-[10px] text-white uppercase" style={{ writingMode: "vertical-rl", transform: "rotate(180deg)" }}>
+                                Formulation
                             </span>
                             <div className="w-[1px] h-16 bg-white/30 rounded-full"></div>
                         </div>
@@ -287,7 +318,7 @@ export default function CanvasScrollytelling() {
                     </div>
 
                     {/* Right Column Fillers */}
-                    <div className="flex flex-col items-center justify-between h-full py-24 opacity-30">
+                    <div className="flex flex-col items-center justify-between h-[60%] my-auto opacity-30">
                         {/* Top Star/Asterisk */}
                         <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="0.5" className="text-white">
                             <path d="M6 1V11M1 6H11M2.5 2.5L9.5 9.5M2.5 9.5L9.5 2.5" />
