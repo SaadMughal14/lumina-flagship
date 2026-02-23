@@ -12,12 +12,12 @@ export default function Footer() {
                     <input
                         type="email"
                         placeholder="Enter your email address"
-                        className="w-full bg-transparent border-b border-white/30 text-white font-manrope font-light text-[15px] py-4 px-2 focus:outline-none focus:border-white transition-colors placeholder:text-white/20 tracking-wide"
+                        className="w-full bg-transparent border-b border-white/30 text-white font-degular font-light text-[15px] py-4 px-2 focus:outline-none focus:border-white transition-colors placeholder:text-white/20 tracking-wide"
                         required
                     />
                     <button
                         type="submit"
-                        className="absolute right-0 text-white font-manrope text-[11px] tracking-[0.2em] uppercase hover:text-white/70 transition-colors"
+                        className="absolute right-0 text-white font-degular text-[11px] tracking-[0.2em] uppercase hover:text-white/70 transition-colors"
                     >
                         Submit
                     </button>
@@ -29,12 +29,12 @@ export default function Footer() {
                 <h1 className="font-bricolage text-[15vw] lg:text-[18vw] leading-none text-white uppercase tracking-tight opacity-90 select-none font-bold">
                     Lumina
                 </h1>
-                <div className="flex w-full justify-between items-center text-white/40 font-manrope text-[10px] tracking-[0.2em] uppercase mt-8 border-t border-white/10 pt-8">
+                <div className="flex w-full justify-between items-center text-white/40 font-degular text-[10px] tracking-[0.2em] uppercase mt-8 border-t border-white/10 pt-8">
                     <span>&copy; {new Date().getFullYear()} Lumina Parfums</span>
                     <div className="flex gap-8">
-                        <a href="#" className="hover:text-white transition-colors">Instagram</a>
+                        <a href="https://instagram.com/batch_systems" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">Instagram</a>
                         <a href="#" className="hover:text-white transition-colors">Legal</a>
-                        <a href="#" className="hover:text-white transition-colors">Contact</a>
+                        <a href="mailto:isaadimughal@gmail.com" className="hover:text-white transition-colors">Contact</a>
                     </div>
                 </div>
             </div>

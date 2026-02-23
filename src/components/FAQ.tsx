@@ -53,7 +53,7 @@ export default function FAQ() {
                                     className={`overflow-hidden transition-all duration-500 ease-in-out ${isOpen ? "max-h-40 opacity-100" : "max-h-0 opacity-0"
                                         }`}
                                 >
-                                    <p className="font-manrope text-white/50 text-[15px] tracking-wide font-light leading-loose pb-6 pr-8">
+                                    <p className="font-degular text-white/50 text-[15px] tracking-wide font-light leading-loose pb-6 pr-8">
                                         {faq.answer}
                                     </p>
                                 </div>

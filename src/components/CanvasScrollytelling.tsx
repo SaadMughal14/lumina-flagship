@@ -250,7 +250,7 @@ export default function CanvasScrollytelling() {
                     <div className="relative w-32 h-[1px] bg-white/10 overflow-hidden">
                         <div className="absolute top-0 left-0 h-full bg-white/60 animate-[loadingLine_2s_ease-in-out_infinite]"></div>
                     </div>
-                    <p className="font-manrope text-xs uppercase tracking-[0.4em] text-white/40">
+                    <p className="font-degular text-xs uppercase tracking-[0.4em] text-white/40">
                         Initializing Experience
                     </p>
                 </div>
@@ -274,7 +274,7 @@ export default function CanvasScrollytelling() {
 
                         {/* Center Scroll Text */}
                         <div className="flex flex-col items-center gap-6">
-                            <span className="font-manrope tracking-[0.5em] text-[10px] text-white" style={{ writingMode: "vertical-rl", transform: "rotate(180deg)" }}>
+                            <span className="font-degular tracking-[0.5em] text-[10px] text-white" style={{ writingMode: "vertical-rl", transform: "rotate(180deg)" }}>
                                 KEEP SCROLLING
                             </span>
                             <div className="w-[1px] h-16 bg-white/30 rounded-full"></div>
@@ -295,7 +295,7 @@ export default function CanvasScrollytelling() {
 
                         {/* Center Coordinate/Arrow */}
                         <div className="flex flex-col items-center gap-6">
-                            <span className="font-manrope tracking-[0.3em] text-[10px] text-white" style={{ writingMode: "vertical-rl", transform: "rotate(180deg)" }}>
+                            <span className="font-degular tracking-[0.3em] text-[10px] text-white" style={{ writingMode: "vertical-rl", transform: "rotate(180deg)" }}>
                                 N 48° 52' 5"
                             </span>
                             {/* Custom animated trailing line for arrow */}

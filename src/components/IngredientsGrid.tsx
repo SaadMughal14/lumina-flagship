@@ -45,7 +45,7 @@ export default function IngredientsGrid() {
                     <h2 className="font-bricolage text-4xl lg:text-6xl text-white uppercase tracking-wider mb-6 font-medium">
                         The Alchemy
                     </h2>
-                    <p className="font-manrope text-white/50 max-w-2xl text-[15px] font-light leading-loose tracking-wide">
+                    <p className="font-degular text-white/50 max-w-2xl text-[15px] font-light leading-loose tracking-wide">
                         A precise curation of the world’s rarest raw materials, meticulously blended to forge an uncompromising signature.
                     </p>
                 </div>
@@ -61,7 +61,7 @@ export default function IngredientsGrid() {
                                 <h3 className="font-bricolage text-2xl text-white tracking-widest mb-4 font-normal uppercase">
                                     {item.title}
                                 </h3>
-                                <p className="font-manrope text-white/50 font-light leading-loose text-sm tracking-wide">
+                                <p className="font-degular text-white/50 font-light leading-loose text-sm tracking-wide">
                                     {item.description}
                                 </p>
                             </div>

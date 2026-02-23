@@ -4,7 +4,14 @@
   --color-background: #0B0C10;
   --color-foreground: #FFFFFF;
   --font-bricolage: var(--font-bricolage);
-  --font-manrope: var(--font-manrope);
+  --font-degular: "Degular", sans-serif;
+}
+
+@font-face {
+  font-family: 'Degular';
+  src: url('/fonts/Degular.otf') format('opentype'), local('Degular'), local('Degular-Regular');
+  font-weight: normal;
+  font-style: normal;
 }
 
 :root {
