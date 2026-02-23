@@ -122,17 +122,28 @@ export default function CanvasScrollytelling() {
         ctx.drawImage(img, offsetX, offsetY, drawWidth, drawHeight);
     };
 
-    // Resize handling
+    // Resize handling with devicePixelRatio for high-quality rendering
     useEffect(() => {
         const handleResize = () => {
+            const dpr = window.devicePixelRatio || 1;
             [canvas1Ref, canvas2Ref, canvas3Ref].forEach((ref) => {
-                if (ref.current) {
-                    ref.current.width = window.innerWidth;
-                    // Use visualViewport if available, otherwise fallback to innerHeight
-                    ref.current.height = window.visualViewport ? window.visualViewport.height : window.innerHeight;
+                const canvas = ref.current;
+                if (canvas) {
+                    const rect = canvas.parentElement?.getBoundingClientRect();
+                    if (rect) {
+                        // Set actual size in memory (scaled to account for extra pixel density)
+                        canvas.width = rect.width * dpr;
+                        canvas.height = rect.height * dpr;
+
+                        // Normalize coordinate system to use css pixels
+                        const ctx = canvas.getContext('2d');
+                        if (ctx) {
+                            ctx.scale(dpr, dpr);
+                        }
+                    }
                 }
             });
-            // Re-render current frames on resize
+            // Re-render current frames on resize using layout dimensions
             renderCanvas(act1Images.current[Math.max(0, Math.round(frames.current.act1) - 1)], canvas1Ref.current);
             renderCanvas(act2Images.current[Math.max(0, Math.round(frames.current.act2) - 1)], canvas2Ref.current);
             renderCanvas(act3Images.current[Math.max(0, Math.round(frames.current.act3) - 1)], canvas3Ref.current);
@@ -157,73 +168,54 @@ export default function CanvasScrollytelling() {
                 },
             });
 
-            // --- ACT 1 (Time 0 to 10) ---
+            // --- OVERLAPPING CONTINUOUS SCROLL LOGIC ---
+
+            // ACT 1 logic (Time 0 to 12)
             tl.to(
                 frames.current,
                 {
                     act1: TOTAL_FRAMES,
                     snap: "act1",
                     ease: "none",
-                    duration: 10,
+                    duration: 12,
                     onUpdate: () => renderCanvas(act1Images.current[Math.max(0, Math.round(frames.current.act1) - 1)], canvas1Ref.current),
                 },
                 0
             );
 
-            // --- CROSSFADE ACT 1 -> ACT 2 (Time 10 to 11.5) ---
-            tl.to(canvas1Ref.current, { opacity: 0, duration: 1.5, ease: "power1.inOut" }, 10);
-            tl.to(canvas2Ref.current, { opacity: 1, duration: 1.5, ease: "power1.inOut" }, 10);
+            // Crossfade 1 -> 2 (Starts fading out Act 1 at Time 9, fades in Act 2 at Time 9, finishes crossfade at Time 12)
+            // By doing this while Act 1's frames are still updating, it looks like a continuous transforming video
+            tl.to(canvas1Ref.current, { opacity: 0, duration: 3, ease: "none" }, 9);
+            tl.to(canvas2Ref.current, { opacity: 1, duration: 3, ease: "none" }, 9);
 
-            // Render first frame of Act 2 during crossfade to prevent blank canvas
-            tl.to(
-                frames.current,
-                {
-                    act2: 1,
-                    duration: 1.5,
-                    onUpdate: () => renderCanvas(act2Images.current[0], canvas2Ref.current),
-                },
-                10
-            );
-
-            // --- ACT 2 (Time 11.5 to 21.5) ---
+            // ACT 2 logic (Time 9 to 21) - Act 2 starts playing frames AS it is fading in
             tl.to(
                 frames.current,
                 {
                     act2: TOTAL_FRAMES,
                     snap: "act2",
                     ease: "none",
-                    duration: 10,
+                    duration: 12,
                     onUpdate: () => renderCanvas(act2Images.current[Math.max(0, Math.round(frames.current.act2) - 1)], canvas2Ref.current),
                 },
-                11.5
+                9
             );
 
-            // --- CROSSFADE ACT 2 -> ACT 3 (Time 21.5 to 23) ---
-            tl.to(canvas2Ref.current, { opacity: 0, duration: 1.5, ease: "power1.inOut" }, 21.5);
-            tl.to(canvas3Ref.current, { opacity: 1, duration: 1.5, ease: "power1.inOut" }, 21.5);
+            // Crossfade 2 -> 3 (Time 18 to 21)
+            tl.to(canvas2Ref.current, { opacity: 0, duration: 3, ease: "none" }, 18);
+            tl.to(canvas3Ref.current, { opacity: 1, duration: 3, ease: "none" }, 18);
 
-            // Render first frame of Act 3 during crossfade
-            tl.to(
-                frames.current,
-                {
-                    act3: 1,
-                    duration: 1.5,
-                    onUpdate: () => renderCanvas(act3Images.current[0], canvas3Ref.current),
-                },
-                21.5
-            );
-
-            // --- ACT 3 (Time 23 to 33) ---
+            // ACT 3 logic (Time 18 to 30) - Act 3 starts playing AS it is fading in
             tl.to(
                 frames.current,
                 {
                     act3: TOTAL_FRAMES,
                     snap: "act3",
                     ease: "none",
-                    duration: 10,
+                    duration: 12,
                     onUpdate: () => renderCanvas(act3Images.current[Math.max(0, Math.round(frames.current.act3) - 1)], canvas3Ref.current),
                 },
-                23
+                18
             );
 
         },
