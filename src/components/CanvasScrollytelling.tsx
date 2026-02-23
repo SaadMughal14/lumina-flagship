@@ -239,38 +239,75 @@ export default function CanvasScrollytelling() {
     return (
         <>
             {/* Loading Screen */}
-            {!loaded && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#0B0C10] text-[#FFFFFF]">
-                    <div className="flex flex-col items-center gap-4 animate-pulse">
-                        <h1 className="font-playfair text-4xl tracking-widest uppercase">Lumina</h1>
-                        <p className="font-inter text-sm uppercase tracking-[0.2em] text-white/50">Curating the Experience</p>
+            <div
+                className={`fixed inset-0 z-50 flex items-center justify-center bg-[#0B0C10] text-[#FFFFFF] transition-opacity duration-1000 ${loaded ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
+            >
+                <div className="flex flex-col items-center gap-6">
+                    <h1 className="font-playfair text-5xl tracking-[0.2em] uppercase font-light text-white/90">
+                        Lumina
+                    </h1>
+                    {/* Elegant loading line expanding outward */}
+                    <div className="relative w-32 h-[1px] bg-white/10 overflow-hidden">
+                        <div className="absolute top-0 left-0 h-full bg-white/60 animate-[loadingLine_2s_ease-in-out_infinite]"></div>
                     </div>
+                    <p className="font-inter text-xs uppercase tracking-[0.4em] text-white/40">
+                        Initializing Experience
+                    </p>
                 </div>
-            )}
+            </div>
 
-            {/* Scrollytelling Container */}
-            <div ref={containerRef} className="relative w-full h-[100dvh] bg-[#0B0C10] overflow-hidden flex items-center justify-center p-4 lg:p-8">
+            {/* Scrollytelling Container (Only fade in once loaded) */}
+            <div
+                ref={containerRef}
+                className={`relative w-full h-[100dvh] bg-[#0B0C10] overflow-hidden flex items-center justify-center p-4 lg:p-8 transition-opacity duration-1000 ${loaded ? 'opacity-100' : 'opacity-0'}`}
+            >
 
-                {/* Edge Typography (Visible only on wider screens) */}
-                <div ref={textRef} className="absolute inset-0 hidden lg:flex items-center justify-between px-12 pointer-events-none z-40 transition-opacity duration-700">
+                {/* Edge Typography & Architectural Marks (Visible only on wider screens) */}
+                <div ref={textRef} className="absolute inset-0 hidden lg:flex items-center justify-between px-10 pointer-events-none z-40 transition-opacity duration-700">
 
-                    {/* Left Side: KEEP SCROLLING */}
-                    <div className="flex flex-col items-center gap-6 opacity-30">
-                        <span className="font-inter tracking-[0.5em] text-[10px] text-white" style={{ writingMode: "vertical-rl", transform: "rotate(180deg)" }}>
-                            KEEP SCROLLING
-                        </span>
-                        <div className="w-[1px] h-16 bg-white/30 rounded-full"></div>
+                    {/* Left Column Fillers */}
+                    <div className="flex flex-col items-center justify-between h-full py-24 opacity-30">
+                        {/* Top Crosshair */}
+                        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="0.5" className="text-white">
+                            <path d="M6 0V12M0 6H12" />
+                        </svg>
+
+                        {/* Center Scroll Text */}
+                        <div className="flex flex-col items-center gap-6">
+                            <span className="font-inter tracking-[0.5em] text-[10px] text-white" style={{ writingMode: "vertical-rl", transform: "rotate(180deg)" }}>
+                                KEEP SCROLLING
+                            </span>
+                            <div className="w-[1px] h-16 bg-white/30 rounded-full"></div>
+                        </div>
+
+                        {/* Bottom Diamond */}
+                        <svg width="8" height="8" viewBox="0 0 8 8" fill="none" stroke="currentColor" strokeWidth="0.5" className="text-white mt-10">
+                            <rect x="4" y="0.5" width="4.95" height="4.95" transform="rotate(45 4 0.5)" />
+                        </svg>
                     </div>
 
-                    {/* Right Side: Animated Arrow & Coordinates */}
-                    <div className="flex flex-col items-center gap-6 opacity-30">
-                        <span className="font-inter tracking-[0.3em] text-[10px] text-white" style={{ writingMode: "vertical-rl", transform: "rotate(180deg)" }}>
-                            N 48° 52' 5"
-                        </span>
-                        {/* Custom animated trailing line for arrow */}
-                        <div className="relative w-[1px] h-16 bg-white/10 overflow-hidden rounded-full">
-                            <div className="absolute top-0 left-0 w-full h-full bg-white animate-[scrollLine_2s_ease-in-out_infinite]"></div>
+                    {/* Right Column Fillers */}
+                    <div className="flex flex-col items-center justify-between h-full py-24 opacity-30">
+                        {/* Top Star/Asterisk */}
+                        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="0.5" className="text-white">
+                            <path d="M6 1V11M1 6H11M2.5 2.5L9.5 9.5M2.5 9.5L9.5 2.5" />
+                        </svg>
+
+                        {/* Center Coordinate/Arrow */}
+                        <div className="flex flex-col items-center gap-6">
+                            <span className="font-inter tracking-[0.3em] text-[10px] text-white" style={{ writingMode: "vertical-rl", transform: "rotate(180deg)" }}>
+                                N 48° 52' 5"
+                            </span>
+                            {/* Custom animated trailing line for arrow */}
+                            <div className="relative w-[1px] h-16 bg-white/10 overflow-hidden rounded-full">
+                                <div className="absolute top-0 left-0 w-full h-[50%] bg-white animate-[scrollLine_2s_ease-in-out_infinite]"></div>
+                            </div>
                         </div>
+
+                        {/* Bottom Crosshair */}
+                        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="0.5" className="text-white mt-10">
+                            <path d="M6 0V12M0 6H12" />
+                        </svg>
                     </div>
                 </div>
 

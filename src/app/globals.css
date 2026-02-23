@@ -25,3 +25,31 @@ body {
   width: 0px;
   background: transparent;
 }
+
+@keyframes loadingLine {
+  0% {
+    transform: translateX(-100%);
+  }
+
+  50% {
+    transform: translateX(0%);
+  }
+
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes scrollLine {
+  0% {
+    transform: translateY(-150%);
+  }
+
+  50% {
+    transform: translateY(0%);
+  }
+
+  100% {
+    transform: translateY(150%);
+  }
+}
