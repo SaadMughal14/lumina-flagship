@@ -59,7 +59,7 @@ export default function CanvasScrollytelling() {
         setHoldProgress(0);
         let progress = 0;
         holdIntervalRef.current = setInterval(() => {
-            progress += 2; // +2 every 20ms = 100 in 1000ms (1 second hold time)
+            progress += 1; // +1 every 10ms = 100 in 1000ms (1 second hold time but ultra smooth)
             setHoldProgress(progress);
             if (progress >= 100) {
                 if (holdIntervalRef.current) clearInterval(holdIntervalRef.current);
@@ -69,7 +69,7 @@ export default function CanvasScrollytelling() {
                     localStorage.setItem("lumina_visited", "true");
                 }
             }
-        }, 20);
+        }, 10);
     };
 
     const stopHold = () => {
@@ -77,7 +77,7 @@ export default function CanvasScrollytelling() {
             clearInterval(holdIntervalRef.current);
             holdIntervalRef.current = null;
         }
-        setHoldProgress(0); // Reset if they let go early
+        setHoldProgress(0); // Instantly drop if they let go 
     };
 
     // We store Image objects in refs to persist across renders without trigerring react state
@@ -436,16 +436,16 @@ export default function CanvasScrollytelling() {
                         onMouseLeave={stopHold}
                         onTouchStart={startHold}
                         onTouchEnd={stopHold}
-                        className="relative w-full overflow-hidden rounded-full border border-white border-opacity-30 bg-transparent px-8 py-3 transition-transform hover:scale-105 active:scale-95 select-none"
+                        className="relative w-full overflow-hidden rounded-full border border-white border-opacity-30 bg-black/40 px-8 py-3 transition-transform hover:scale-[1.02] active:scale-95 select-none"
                     >
                         {/* Progress Fill Background */}
                         <div
-                            className="absolute left-0 top-0 h-full bg-white transition-all duration-75 ease-linear pointer-events-none"
+                            className="absolute left-0 top-0 h-full bg-white transition-all duration-[20ms] ease-linear pointer-events-none"
                             style={{ width: `${holdProgress}%` }}
                         ></div>
 
                         <span className={`relative z-10 font-degular uppercase tracking-[0.2em] text-xs font-bold transition-colors duration-300 pointer-events-none ${holdProgress > 50 ? 'text-black' : 'text-white'}`}>
-                            {holdProgress > 0 ? `Loading... ${Math.floor(holdProgress)}%` : 'Hold to Enter'}
+                            {holdProgress > 0 ? `Loading...` : 'Hold to Enter'}
                         </span>
                     </button>
                 </div>
