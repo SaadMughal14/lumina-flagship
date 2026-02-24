@@ -208,9 +208,9 @@ export default function CanvasScrollytelling() {
         }
 
         // Apply a hard architectural cap so it doesn't get ridiculously big on 49-inch curved monitors
-        if (finalWidth > 1400) {
-            finalWidth = 1400;
-            finalHeight = 1400 / (16 / 9);
+        if (finalWidth > 1120) {
+            finalWidth = 1120;
+            finalHeight = 630;
         }
 
         setFrameBounds({
@@ -540,7 +540,9 @@ export default function CanvasScrollytelling() {
                     className="relative rounded-xl lg:rounded-2xl bg-black overflow-hidden transition-all duration-300 ease-out z-30"
                     style={{
                         width: frameBounds.width,
-                        height: frameBounds.height
+                        height: frameBounds.height,
+                        maxWidth: "1120px",
+                        maxHeight: "630px"
                     }}
                 >
 
