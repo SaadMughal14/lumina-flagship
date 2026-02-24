@@ -25,7 +25,7 @@ const styleScript = Style_Script({
 });
 
 export const metadata: Metadata = {
-  title: "LUMINA | Digital Flagship",
+  title: "LUMINA | Saad Mughal",
   description: "An ultra-luxury fragrance experience.",
 };
 

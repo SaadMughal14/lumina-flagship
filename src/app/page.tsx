@@ -8,10 +8,14 @@ export default function Home() {
     <main className="min-h-screen bg-[#0B0C10] selection:bg-white/20 selection:text-white">
       <header id="global-header" className="fixed top-0 left-0 w-full z-[100] transition-all duration-500 pointer-events-none">
         <div id="navbar-bg" className="absolute inset-0 bg-[#0B0C10] border-b border-white/10 opacity-0 transition-opacity duration-500 pointer-events-auto"></div>
-        <div className="relative flex justify-between items-center p-3 lg:p-4 pl-0 lg:pl-0">
-          <div className="flex items-center gap-3 mix-blend-difference pointer-events-auto cursor-pointer pl-4 lg:pl-6">
-            <img src="/logo.png" className="h-5 lg:h-6 w-auto" alt="Lumina Logo" />
-            <span className="font-style-script font-normal text-2xl lg:text-3xl text-white capitalize leading-none tracking-wide" style={{ fontFamily: "var(--font-style-script)" }}>Lumina</span>
+        <div className="relative flex justify-between items-center p-3 lg:px-5 lg:py-3 left-0">
+          <div className="flex items-center gap-2 mix-blend-difference pointer-events-auto cursor-pointer">
+            <img
+              src="/assets/new-logo.png"
+              alt="Lumina Icon"
+              className="w-8 h-8 lg:w-9 lg:h-9 object-contain brightness-0 invert"
+            />
+            <span className="font-style-script font-normal text-3xl lg:text-4xl text-white capitalize leading-none tracking-wide" style={{ fontFamily: "var(--font-style-script)" }}>Lumina</span>
           </div>
         </div>
       </header>
