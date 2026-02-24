@@ -173,7 +173,7 @@ export default function CanvasScrollytelling() {
                 scrollTrigger: {
                     trigger: containerRef.current,
                     start: "top top",
-                    end: "+=1200%", // 1200vh of scrolling for slower, smoother frame rate
+                    end: "+=1800%", // 1800vh of scrolling for slower, smoother frame rate
                     scrub: 1,
                     pin: true,
                 },
@@ -230,17 +230,17 @@ export default function CanvasScrollytelling() {
             );
 
             // Fade out the global header logo ~1 second into scrolling (Time 1 ~ 2.5)
-            tl.to("#global-header", { opacity: 0, duration: 1.5, ease: "power2.inOut" }, 1);
+            tl.to(document.querySelector("#global-header"), { opacity: 0, duration: 1.5, ease: "power2.inOut" }, 1);
 
             // Fade out the premium frame and text at the very end (Time 27 to 30) so it disappears before the footer
             tl.to([frameRef.current, textRef.current], { opacity: 0, duration: 3, ease: "power2.inOut" }, 27);
 
             // Fade the global header back in right before footer appears (Time 28.5)
-            tl.to("#global-header", { opacity: 1, duration: 1.5, ease: "power2.inOut" }, 28.5);
+            tl.to(document.querySelector("#global-header"), { opacity: 1, duration: 1.5, ease: "power2.inOut" }, 28.5);
 
             // Unfurl the floating pill at the bottom of the scroll animation (Time 29 to 30)
-            tl.to("#floating-pill", { width: 220, duration: 1, ease: "power2.out" }, 29);
-            tl.to("#floating-pill-text", {
+            tl.to(document.querySelector("#floating-pill"), { width: 220, duration: 1, ease: "power2.out" }, 29);
+            tl.to(document.querySelector("#floating-pill-text"), {
                 opacity: 1,
                 x: 0,
                 duration: 1,
@@ -312,7 +312,7 @@ export default function CanvasScrollytelling() {
                         {/* Center Scroll Text */}
                         <div className="flex flex-col items-center gap-6">
                             <span className="font-degular tracking-[0.5em] text-[10px] text-white uppercase" style={{ writingMode: "vertical-rl", transform: "rotate(180deg)" }}>
-                                Formulation
+                                KEEP SCROLLING
                             </span>
                             <div className="w-[1px] h-16 bg-white/30 rounded-full"></div>
                         </div>
