@@ -186,24 +186,30 @@ export default function CanvasScrollytelling() {
 
         let drawWidth: number, drawHeight: number, offsetX: number, offsetY: number;
 
-        // "Cover" logic - dynamically scale the image so it perfectly fills the container 
-        // without leaving any black bars, gracefully cropping the overflow natively by centering it.
+        // "Contain" / Letterbox logic - dynamically scale the image so it perfectly fills the container 
+        // while maintaining its exact native aspect ratio, leaving empty space natively.
         if (canvasRatio > imgRatio) {
-            // Screen is wider than image (scale width to 100%, crop top/bottom overflow)
-            drawWidth = canvasWidth;
-            drawHeight = canvasWidth / imgRatio;
-            offsetX = 0;
-            offsetY = (canvasHeight - drawHeight) / 2;
-        } else {
-            // Screen is taller than image (scale height to 100%, crop left/right overflow)
+            // Screen is wider than image (scale height to 100%, letterbox left/right)
             drawHeight = canvasHeight;
             drawWidth = canvasHeight * imgRatio;
             offsetY = 0;
             offsetX = (canvasWidth - drawWidth) / 2;
+        } else {
+            // Screen is taller than image (scale width to 100%, letterbox top/bottom)
+            drawWidth = canvasWidth;
+            drawHeight = canvasWidth / imgRatio;
+            offsetX = 0;
+            offsetY = (canvasHeight - drawHeight) / 2;
         }
 
-        // We no longer manually resize the DOM container to match the letterbox. 
-        // We let the container be 100% architectural and the canvas fills it via cover.
+        // Pass the EXACT, calculated native letterbox dimensions to the React State.
+        // This physically shrinks the absolute DOM wrapper (`frameBounds.width`/`height`) 
+        // so the camera frame right-angles natively hug the video instead of flying off to the edge of the monitor.
+        const dpr = window.devicePixelRatio || 1;
+        setFrameBounds({
+            width: `${drawWidth / dpr}px`,
+            height: `${drawHeight / dpr}px`
+        });
 
         ctx.clearRect(0, 0, canvasWidth, canvasHeight);
         ctx.drawImage(img, offsetX, offsetY, drawWidth, drawHeight);
@@ -519,15 +525,15 @@ export default function CanvasScrollytelling() {
                     </div>
                 </div>
 
-                {/* The actual bounded wrapper that matches the frame precisely */}
+                {/* The actual bounded wrapper that strictly conforms to the exact video dimensions */}
                 <div
                     className="relative rounded-xl lg:rounded-2xl bg-black overflow-hidden transition-all duration-300 ease-out z-30"
                     style={{
-                        width: "100%",
-                        height: "100%",
-                        // Provide sensible architectural max bounds so it doesn't blow up on Ultrawide monitors
-                        maxWidth: "1200px",
-                        maxHeight: "800px"
+                        width: frameBounds.width,
+                        height: frameBounds.height,
+                        // Capping the maximum physical native resolution of the box on massive Ultrawide monitors
+                        maxWidth: "1400px",
+                        maxHeight: "100dvh"
                     }}
                 >
 
