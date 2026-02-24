@@ -26,6 +26,21 @@ export default function CanvasScrollytelling() {
     const [progress, setProgress] = useState(0); // for the loading screen (optional)
     const [frameBounds, setFrameBounds] = useState({ width: "100%", height: "100%" });
 
+    // Onboarding Feature
+    const [showWelcome, setShowWelcome] = useState(false);
+    const [showInstructions, setShowInstructions] = useState(false);
+    const [hasBypassedLoader, setHasBypassedLoader] = useState(false); // Controls GSAP scroll lock
+
+    // Initial check for returning visitors
+    useEffect(() => {
+        if (typeof window !== "undefined") {
+            const visited = localStorage.getItem("lumina_visited");
+            if (visited === "true") {
+                setHasBypassedLoader(true);
+            }
+        }
+    }, []);
+
     // We store Image objects in refs to persist across renders without trigerring react state
     const act1Images = useRef<HTMLImageElement[]>([]);
     const act2Images = useRef<HTMLImageElement[]>([]);
@@ -80,6 +95,11 @@ export default function CanvasScrollytelling() {
                 setProgress(100); // Guarantee 100% just in case mathematical rounding drops a percent
                 setLoaded(true); // Phase 1 complete: dismiss loader
                 renderCanvas(act1Images.current[0], canvas1Ref.current);
+
+                // If they are a new user, block scrolling and show Popups. If returning, unlock immediately.
+                if (!hasBypassedLoader) {
+                    setShowWelcome(true);
+                }
 
                 // Immediately kick off background loading for the massive rest of the site silently
                 loadPhase2();
@@ -187,7 +207,7 @@ export default function CanvasScrollytelling() {
 
     useGSAP(
         () => {
-            if (!loaded) return;
+            if (!loaded || (!hasBypassedLoader && showWelcome) || (!hasBypassedLoader && showInstructions)) return;
 
             const tl = gsap.timeline({
                 scrollTrigger: {
@@ -315,6 +335,61 @@ export default function CanvasScrollytelling() {
                             <span>{progress}%</span>
                         </div>
                     </div>
+                </div>
+            </div>
+
+            {/* Onboarding Popup 1: Welcome (Blocks canvas, forces background loading time) */}
+            <div
+                className={`fixed inset-0 z-[60] flex items-center justify-center p-4 transition-all duration-700 ease-out 
+                ${showWelcome ? 'opacity-100 pointer-events-auto backdrop-blur-md bg-black/40' : 'opacity-0 pointer-events-none'}`}
+            >
+                <div className={`flex flex-col items-center justify-center max-w-md w-full p-10 border border-white/20 rounded-2xl bg-black/60 shadow-2xl transition-transform duration-700 delay-300 ${showWelcome ? 'translate-y-0 scale-100' : 'translate-y-10 scale-95'}`}>
+                    <h2 className="font-style-script text-white text-5xl mb-6">Welcome</h2>
+                    <p className="font-degular text-white/70 text-center text-sm md:text-base leading-relaxed mb-10">
+                        Experience the world of Lumina. A digital flagship exploring the intersection of modern luxury and olfactory art.
+                    </p>
+                    <button
+                        onClick={() => {
+                            setShowWelcome(false);
+                            setTimeout(() => setShowInstructions(true), 600);
+                        }}
+                        className="group relative w-full overflow-hidden rounded-full border border-white/30 px-8 py-3 transition-colors hover:border-white"
+                    >
+                        <span className="relative z-10 font-degular uppercase tracking-[0.2em] text-xs text-white transition-colors">
+                            Continue
+                        </span>
+                        <div className="absolute inset-0 z-0 h-full w-0 bg-white transition-all duration-500 ease-out group-hover:w-full mix-blend-difference"></div>
+                    </button>
+                </div>
+            </div>
+
+            {/* Onboarding Popup 2: Instruction */}
+            <div
+                className={`fixed inset-0 z-[60] flex items-center justify-center p-4 transition-all duration-700 ease-out 
+                ${showInstructions ? 'opacity-100 pointer-events-auto backdrop-blur-md bg-black/40' : 'opacity-0 pointer-events-none'}`}
+            >
+                <div className={`flex flex-col items-center justify-center max-w-md w-full p-10 border border-white/20 rounded-2xl bg-black/60 shadow-2xl transition-transform duration-700 ${showInstructions ? 'translate-y-0 scale-100' : 'translate-y-10 scale-95'}`}>
+                    <div className="w-12 h-20 border-2 border-white/50 rounded-full flex justify-center p-2 mb-8">
+                        <div className="w-1.5 h-3 bg-white rounded-full animate-bounce"></div>
+                    </div>
+                    <h2 className="font-degular font-bold uppercase tracking-[0.3em] text-white text-xl md:text-2xl mb-4 text-center">Keep Scrolling</h2>
+                    <p className="font-degular text-white/50 text-center text-sm mb-10">
+                        This is a continuous scrollytelling experience. Scroll downwards at your own pace to explore the collection.
+                    </p>
+                    <button
+                        onClick={() => {
+                            setShowInstructions(false);
+                            setHasBypassedLoader(true);
+                            if (typeof window !== "undefined") {
+                                localStorage.setItem("lumina_visited", "true");
+                            }
+                        }}
+                        className="group relative w-full overflow-hidden rounded-full bg-white px-8 py-3 transition-transform hover:scale-105"
+                    >
+                        <span className="relative z-10 font-degular uppercase tracking-[0.2em] text-xs text-black font-bold">
+                            Enter Experience
+                        </span>
+                    </button>
                 </div>
             </div>
 
