@@ -45,7 +45,7 @@ export default function Footer() {
                 </div>
                 <div className="flex w-full justify-between items-center text-white/40 font-degular text-[10px] tracking-[0.2em] uppercase mt-8 border-t border-white/10 pt-8">
                     <span>&copy; {new Date().getFullYear()} Lumina Parfums</span>
-                    <div className="flex gap-8">
+                    <div className="flex gap-8 lg:pr-32 pr-28 z-20">
                         <a href="https://instagram.com/batch_systems" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">Instagram</a>
                         <a href="#" className="hover:text-white transition-colors">Legal</a>
                         <a href="mailto:isaadimughal@gmail.com" className="hover:text-white transition-colors">Contact</a>

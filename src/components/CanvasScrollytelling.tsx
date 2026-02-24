@@ -265,22 +265,7 @@ export default function CanvasScrollytelling() {
                 {/* Edge Typography & Architectural Marks (Visible only on wider screens) */}
                 <div ref={textRef} className="absolute inset-0 hidden lg:flex items-center justify-between px-10 pointer-events-none z-40 transition-opacity duration-700">
 
-                    {/* Brand Logo - Top Left */}
-                    <div className="absolute top-10 left-10 flex items-center gap-4 opacity-90">
-                        <svg className="w-8 h-8 text-white" viewBox="0 0 100 100">
-                            <g transform="translate(50, 50)">
-                                {Array.from({ length: 12 }).map((_, i) => (
-                                    <path
-                                        key={i}
-                                        d="M 0,-8 C -8,-25 -8,-45 0,-45 C 8,-45 8,-25 0,-8 Z"
-                                        transform={`rotate(${i * 30})`}
-                                        fill="currentColor"
-                                    />
-                                ))}
-                            </g>
-                        </svg>
-                        <span className="font-cursive text-4xl capitalize text-white font-normal mt-2">Lumina</span>
-                    </div>
+                    {/* Brand Logo Removed - Placed in Header */}
 
                     {/* Architectural Framing Corners */}
                     <svg className="absolute top-10 right-10 w-8 h-8 opacity-30 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1">
