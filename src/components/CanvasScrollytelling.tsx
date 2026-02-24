@@ -85,9 +85,9 @@ export default function CanvasScrollytelling() {
                 promises.push(loadImg(`/assets/lumina-web/ezgif-frame-${String(i).padStart(3, "0")}.jpg`, act1Images.current, i - 1));
             }
 
-            // Minimal 500ms delay: Downloading 150 files naturally takes ~2-4s for most users. 
-            // This 0.5s buffer simply guarantees the UI flash looks deliberate for Gigabit users.
-            const minimumDelay = new Promise(resolve => setTimeout(resolve, 500));
+            // Minimal 1500ms delay: Downloading 150 files naturally takes ~2-4s for most users. 
+            // This 1.5s buffer simply guarantees the UI flash looks deliberate for Gigabit users.
+            const minimumDelay = new Promise(resolve => setTimeout(resolve, 1500));
 
             await Promise.all([...promises, minimumDelay]);
 
@@ -475,9 +475,30 @@ export default function CanvasScrollytelling() {
                     </div>
                 </div>
 
+                {/* Premium Frame Overlay (Moved to screen-level background so it sits flush on all big screens independently of video) */}
+                <div
+                    ref={frameRef}
+                    className="absolute inset-2 lg:inset-4 border border-white/10 z-50 pointer-events-none rounded-xl lg:rounded-2xl transition-opacity duration-700"
+                    style={{
+                        boxShadow: "inset 0 0 100px 20px rgba(11,12,16, 0.9), inset 0 0 60px 10px rgba(0,0,0,0.8)"
+                    }}
+                >
+                    {/* Top Left: REC */}
+                    <div className="absolute top-3 left-4 lg:top-5 lg:left-6 flex items-center gap-2">
+                        <div className="w-3 h-3 lg:w-4 lg:h-4 bg-red-500 rounded-full animate-rec-flicker"></div>
+                        <span className="font-degular font-bold text-white tracking-widest text-sm lg:text-base selection:bg-transparent shadow-black drop-shadow-md">REC</span>
+                    </div>
+
+                    {/* Decorative Corner Marks */}
+                    <div className="absolute top-0 left-0 w-4 h-4 border-t border-l border-white/30 rounded-tl-xl lg:rounded-tl-2xl"></div>
+                    <div className="absolute top-0 right-0 w-4 h-4 border-t border-r border-white/30 rounded-tr-xl lg:rounded-tr-2xl"></div>
+                    <div className="absolute bottom-0 left-0 w-4 h-4 border-b border-l border-white/30 rounded-bl-xl lg:rounded-bl-2xl"></div>
+                    <div className="absolute bottom-0 right-0 w-4 h-4 border-b border-r border-white/30 rounded-br-xl lg:rounded-br-2xl"></div>
+                </div>
+
                 {/* The actual bounded wrapper that matches the frame precisely */}
                 <div
-                    className="relative rounded-xl lg:rounded-2xl overflow-hidden transition-all duration-300 ease-out z-30"
+                    className="relative rounded-xl lg:rounded-2xl bg-black overflow-hidden transition-all duration-300 ease-out z-30"
                     style={{
                         width: frameBounds.width,
                         height: frameBounds.height,
@@ -486,28 +507,6 @@ export default function CanvasScrollytelling() {
                         maxHeight: "100%"
                     }}
                 >
-
-                    {/* Premium Frame Overlay (sits top-level inside the bound to cast inset shadows over the video) */}
-                    <div
-                        ref={frameRef}
-                        className="absolute inset-0 border border-white/10 z-50 pointer-events-none rounded-xl lg:rounded-2xl transition-opacity duration-700"
-                        style={{
-                            boxShadow: "inset 0 0 100px 20px rgba(11,12,16, 0.9), inset 0 0 60px 10px rgba(0,0,0,0.8)"
-                        }}
-                    >
-                        {/* Top Left: REC */}
-                        <div className="absolute top-3 left-4 lg:top-5 lg:left-6 flex items-center gap-2">
-                            <div className="w-3 h-3 lg:w-4 lg:h-4 bg-red-500 rounded-full animate-rec-flicker"></div>
-                            <span className="font-degular font-bold text-white tracking-widest text-sm lg:text-base selection:bg-transparent shadow-black drop-shadow-md">REC</span>
-                        </div>
-
-                        {/* Decorative Corner Marks */}
-                        <div className="absolute top-0 left-0 w-4 h-4 border-t border-l border-white/30 rounded-tl-xl lg:rounded-tl-2xl"></div>
-                        <div className="absolute top-0 right-0 w-4 h-4 border-t border-r border-white/30 rounded-tr-xl lg:rounded-tr-2xl"></div>
-                        <div className="absolute bottom-0 left-0 w-4 h-4 border-b border-l border-white/30 rounded-bl-xl lg:rounded-bl-2xl"></div>
-                        <div className="absolute bottom-0 right-0 w-4 h-4 border-b border-r border-white/30 rounded-br-xl lg:rounded-br-2xl"></div>
-                    </div>
-
                     {/* ACT 3: EXTRAIT */}
                     <canvas
                         ref={canvas3Ref}
@@ -525,7 +524,6 @@ export default function CanvasScrollytelling() {
                         ref={canvas1Ref}
                         className="absolute inset-0 w-full h-full object-cover opacity-100 z-40"
                     />
-
                 </div>
             </div>
         </>
