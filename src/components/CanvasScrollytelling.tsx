@@ -184,35 +184,45 @@ export default function CanvasScrollytelling() {
         const imgRatio = img.width / img.height;
         const canvasRatio = canvasWidth / canvasHeight;
 
-        let drawWidth: number, drawHeight: number, offsetX: number, offsetY: number;
+        // Step 1: Calculate the maximum possible 16:9 bounding box that physically 
+        // fits inside the user's current screen WITHOUT extending past the screen edges.
+        const dpr = window.devicePixelRatio || 1;
+        const screenWidth = window.innerWidth;
+        const screenHeight = window.innerHeight;
 
-        // "Contain" / Letterbox logic - dynamically scale the image so it perfectly fills the container 
-        // while maintaining its exact native aspect ratio, leaving empty space natively.
-        if (canvasRatio > imgRatio) {
-            // Screen is wider than image (scale height to 100%, letterbox left/right)
-            drawHeight = canvasHeight;
-            drawWidth = canvasHeight * imgRatio;
-            offsetY = 0;
-            offsetX = (canvasWidth - drawWidth) / 2;
+        // We subtract a little bit of padding so it's not literally touching the glass edge
+        const availableWidth = screenWidth - 32; // 16px padding on each side
+        const availableHeight = screenHeight - 64; // 32px padding top/bottom
+
+        let finalWidth, finalHeight;
+
+        // 16:9 = 1.777...
+        if (availableWidth / availableHeight > 16 / 9) {
+            // Screen is too wide. Lock height to max, calculate width.
+            finalHeight = availableHeight;
+            finalWidth = finalHeight * (16 / 9);
         } else {
-            // Screen is taller than image (scale width to 100%, letterbox top/bottom)
-            drawWidth = canvasWidth;
-            drawHeight = canvasWidth / imgRatio;
-            offsetX = 0;
-            offsetY = (canvasHeight - drawHeight) / 2;
+            // Screen is too tall. Lock width to max, calculate height.
+            finalWidth = availableWidth;
+            finalHeight = finalWidth / (16 / 9);
         }
 
-        // Pass the EXACT, calculated native letterbox dimensions to the React State.
-        // This physically shrinks the absolute DOM wrapper (`frameBounds.width`/`height`) 
-        // so the camera frame right-angles natively hug the video instead of flying off to the edge of the monitor.
-        const dpr = window.devicePixelRatio || 1;
+        // Apply a hard architectural cap so it doesn't get ridiculously big on 49-inch curved monitors
+        if (finalWidth > 1400) {
+            finalWidth = 1400;
+            finalHeight = 1400 / (16 / 9);
+        }
+
         setFrameBounds({
-            width: `${drawWidth / dpr}px`,
-            height: `${drawHeight / dpr}px`
+            width: `${finalWidth}px`,
+            height: `${finalHeight}px`
         });
 
+        // Step 2: Draw the image absolutely pixel-perfectly into the DOM canvas element.
+        // We DO NOT offset or letterbox it here. We draw it 0->100% pure. 
+        // The CSS container handles the scaling responsively.
         ctx.clearRect(0, 0, canvasWidth, canvasHeight);
-        ctx.drawImage(img, offsetX, offsetY, drawWidth, drawHeight);
+        ctx.drawImage(img, 0, 0, canvasWidth, canvasHeight);
     };
 
     // CSS DOM mechanics to freeze user scrolling explicitly when onboarding popups are active without crashing GSAP
@@ -525,15 +535,12 @@ export default function CanvasScrollytelling() {
                     </div>
                 </div>
 
-                {/* The actual bounded wrapper that strictly conforms to the exact video dimensions */}
+                {/* The actual bounded wrapper that STRICTLY conforms to the 16:9 calculated boundaries */}
                 <div
                     className="relative rounded-xl lg:rounded-2xl bg-black overflow-hidden transition-all duration-300 ease-out z-30"
                     style={{
                         width: frameBounds.width,
                         height: frameBounds.height,
-                        // Capping the maximum physical native resolution of the box on massive Ultrawide monitors
-                        maxWidth: "1400px",
-                        maxHeight: "100dvh"
                     }}
                 >
 
