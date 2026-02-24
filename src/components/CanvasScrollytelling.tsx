@@ -443,24 +443,44 @@ export default function CanvasScrollytelling() {
                     </p>
 
                     {/* Hold to Enter Button */}
-                    <button
-                        onMouseDown={startHold}
-                        onMouseUp={stopHold}
-                        onMouseLeave={stopHold}
-                        onTouchStart={startHold}
-                        onTouchEnd={stopHold}
-                        className="relative w-full overflow-hidden rounded-full border border-white border-opacity-30 bg-black/40 px-8 py-3 transition-transform hover:scale-[1.02] active:scale-95 select-none"
-                    >
-                        {/* Progress Fill Background */}
-                        <div
-                            className="absolute left-0 top-0 h-full bg-white transition-all duration-[20ms] ease-linear pointer-events-none"
-                            style={{ width: `${holdProgress}%` }}
-                        ></div>
+                    <div className="flex flex-col items-center gap-6 mt-4">
+                        <button
+                            onMouseDown={startHold}
+                            onMouseUp={stopHold}
+                            onMouseLeave={stopHold}
+                            onTouchStart={startHold}
+                            onTouchEnd={stopHold}
+                            className={`group relative w-20 h-20 rounded-full flex items-center justify-center transition-all duration-300 outline-none select-none border border-white/20 ${holdProgress > 0 ? 'scale-95 bg-white/5' : 'hover:scale-105 hover:bg-white/5'}`}
+                        >
+                            {/* Progress Ring */}
+                            <svg className="absolute inset-0 w-full h-full -rotate-90 pointer-events-none" viewBox="0 0 100 100">
+                                <circle
+                                    cx="50"
+                                    cy="50"
+                                    r="48"
+                                    fill="none"
+                                    stroke="rgba(255,255,255,0.8)"
+                                    strokeWidth="2"
+                                    strokeDasharray="301.6"
+                                    strokeDashoffset={301.6 - (301.6 * Math.min(holdProgress, 100)) / 100}
+                                    className="transition-all duration-[20ms] ease-linear drop-shadow-[0_0_8px_rgba(255,255,255,0.8)]"
+                                />
+                            </svg>
 
-                        <span className={`relative z-10 font-degular uppercase tracking-[0.2em] text-xs font-bold transition-colors duration-300 pointer-events-none ${holdProgress > 50 ? 'text-black' : 'text-white'}`}>
-                            {holdProgress > 0 ? `Loading...` : 'Hold to Enter'}
-                        </span>
-                    </button>
+                            {/* Abstract Minimal Target Icon */}
+                            <svg viewBox="0 0 24 24" fill="none" className={`w-8 h-8 transition-colors duration-300 ${holdProgress > 0 ? 'text-white drop-shadow-[0_0_12px_rgba(255,255,255,1)]' : 'text-white/40 group-hover:text-white/80'}`} stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round">
+                                <circle cx="12" cy="12" r="10" strokeDasharray="4 4" />
+                                <circle cx="12" cy="12" r="4" />
+                                <circle cx="12" cy="12" r="1" fill="currentColor" />
+                            </svg>
+                        </button>
+
+                        <div className="h-4">
+                            <span className={`font-degular uppercase text-[10px] transition-all duration-300 whitespace-nowrap ${holdProgress > 0 ? 'opacity-100 text-white tracking-[0.3em]' : 'opacity-40 text-white tracking-[0.2em]'}`}>
+                                {holdProgress > 0 ? 'Authenticating...' : 'Hold to Enter'}
+                            </span>
+                        </div>
+                    </div>
                 </div>
             </div>
 
