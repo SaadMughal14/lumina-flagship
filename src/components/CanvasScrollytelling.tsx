@@ -367,48 +367,25 @@ export default function CanvasScrollytelling() {
                     }}
                 >
 
-                    {/* Camera Frame Overlay */}
+                    {/* Premium Frame Overlay (sits top-level inside the bound to cast inset shadows over the video) */}
                     <div
                         ref={frameRef}
-                        className="absolute inset-0 z-50 pointer-events-none transition-opacity duration-700"
+                        className="absolute inset-0 border border-white/10 z-50 pointer-events-none rounded-xl lg:rounded-2xl transition-opacity duration-700"
+                        style={{
+                            boxShadow: "inset 0 0 100px 20px rgba(11,12,16, 0.9), inset 0 0 60px 10px rgba(0,0,0,0.8)"
+                        }}
                     >
-                        {/* Shimmer/Shadow Overlay (Optional padding inward) */}
-                        <div className="absolute inset-x-0 inset-y-0 shadow-[inset_0_0_80px_rgba(0,0,0,0.8)] pointer-events-none"></div>
-
                         {/* Top Left: REC */}
-                        <div className="absolute top-4 left-4 lg:top-5 lg:left-5 flex items-center gap-2">
+                        <div className="absolute top-6 left-6 lg:top-8 lg:left-8 flex items-center gap-2">
                             <div className="w-3 h-3 lg:w-4 lg:h-4 bg-red-500 rounded-full animate-rec-flicker"></div>
-                            <span className="font-degular font-bold text-white tracking-widest text-sm lg:text-base selection:bg-transparent">REC</span>
+                            <span className="font-degular font-bold text-white tracking-widest text-sm lg:text-base selection:bg-transparent shadow-black drop-shadow-md">REC</span>
                         </div>
 
-                        {/* Top Right: Battery */}
-                        <div className="absolute top-4 right-4 lg:top-5 lg:right-5 flex items-center">
-                            <div className="w-8 h-4 lg:w-10 lg:h-5 border-2 border-white rounded-[2px] p-[2px] flex items-center">
-                                <div className="w-full h-full bg-white rounded-[1px]"></div>
-                            </div>
-                            <div className="w-1 h-2 lg:w-1.5 lg:h-2.5 bg-white rounded-r-[2px] ml-[1px]"></div>
-                        </div>
-
-                        {/* Bottom Right: Exposure/Sun Icon */}
-                        <div className="absolute bottom-4 right-4 lg:bottom-5 lg:right-5">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-6 h-6 lg:w-8 lg:h-8">
-                                <circle cx="12" cy="12" r="5"></circle>
-                                <line x1="12" y1="1" x2="12" y2="3"></line>
-                                <line x1="12" y1="21" x2="12" y2="23"></line>
-                                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-                                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-                                <line x1="1" y1="12" x2="3" y2="12"></line>
-                                <line x1="21" y1="12" x2="23" y2="12"></line>
-                                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-                                <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
-                            </svg>
-                        </div>
-
-                        {/* Thin Sharp Camera Brackets (Corners) floating inside */}
-                        <div className="absolute top-8 left-8 lg:top-12 lg:left-12 w-6 h-6 lg:w-10 lg:h-10 border-t-[1.5px] border-l-[1.5px] border-white/80"></div>
-                        <div className="absolute top-8 right-8 lg:top-12 lg:right-12 w-6 h-6 lg:w-10 lg:h-10 border-t-[1.5px] border-r-[1.5px] border-white/80"></div>
-                        <div className="absolute bottom-8 left-8 lg:bottom-12 lg:left-12 w-6 h-6 lg:w-10 lg:h-10 border-b-[1.5px] border-l-[1.5px] border-white/80"></div>
-                        <div className="absolute bottom-8 right-8 lg:bottom-12 lg:right-12 w-6 h-6 lg:w-10 lg:h-10 border-b-[1.5px] border-r-[1.5px] border-white/80"></div>
+                        {/* Decorative Corner Marks */}
+                        <div className="absolute top-0 left-0 w-4 h-4 border-t border-l border-white/30 rounded-tl-xl lg:rounded-tl-2xl"></div>
+                        <div className="absolute top-0 right-0 w-4 h-4 border-t border-r border-white/30 rounded-tr-xl lg:rounded-tr-2xl"></div>
+                        <div className="absolute bottom-0 left-0 w-4 h-4 border-b border-l border-white/30 rounded-bl-xl lg:rounded-bl-2xl"></div>
+                        <div className="absolute bottom-0 right-0 w-4 h-4 border-b border-r border-white/30 rounded-br-xl lg:rounded-br-2xl"></div>
                     </div>
 
                     {/* ACT 3: EXTRAIT */}
