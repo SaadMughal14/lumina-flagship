@@ -173,6 +173,17 @@ export default function CanvasScrollytelling() {
         ctx.drawImage(img, offsetX, offsetY, drawWidth, drawHeight);
     };
 
+    // CSS DOM mechanics to freeze user scrolling explicitly when onboarding popups are active without crashing GSAP
+    useEffect(() => {
+        if (showWelcome || showInstructions) {
+            document.body.style.overflow = "hidden";
+        } else {
+            document.body.style.overflow = "auto";
+        }
+
+        return () => { document.body.style.overflow = "auto"; };
+    }, [showWelcome, showInstructions]);
+
     // Resize handling with devicePixelRatio for high-quality rendering
     useEffect(() => {
         const handleResize = () => {
@@ -207,7 +218,7 @@ export default function CanvasScrollytelling() {
 
     useGSAP(
         () => {
-            if (!loaded || (!hasBypassedLoader && showWelcome) || (!hasBypassedLoader && showInstructions)) return;
+            if (!loaded) return;
 
             const tl = gsap.timeline({
                 scrollTrigger: {
@@ -355,10 +366,10 @@ export default function CanvasScrollytelling() {
                         }}
                         className="group relative w-full overflow-hidden rounded-full border border-white/30 px-8 py-3 transition-colors hover:border-white"
                     >
-                        <span className="relative z-10 font-degular uppercase tracking-[0.2em] text-xs text-white transition-colors">
+                        <span className="relative z-10 font-degular uppercase tracking-[0.2em] text-xs text-white transition-colors group-hover:text-black">
                             Continue
                         </span>
-                        <div className="absolute inset-0 z-0 h-full w-0 bg-white transition-all duration-500 ease-out group-hover:w-full mix-blend-difference"></div>
+                        <div className="absolute inset-0 z-0 h-full w-0 bg-white transition-all duration-500 ease-out group-hover:w-full"></div>
                     </button>
                 </div>
             </div>
