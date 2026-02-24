@@ -528,9 +528,9 @@ export default function CanvasScrollytelling() {
                     style={{
                         width: frameBounds.width,
                         height: frameBounds.height,
-                        // Provide sensible max bounds
-                        maxWidth: "1400px",
-                        maxHeight: "100%"
+                        // Provide sensible architectural max bounds so it doesn't blow up on Ultrawide monitors
+                        maxWidth: "1200px",
+                        maxHeight: "800px"
                     }}
                 >
 
