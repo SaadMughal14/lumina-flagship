@@ -236,7 +236,7 @@ export default function CanvasScrollytelling() {
         return () => { document.body.style.overflow = "auto"; };
     }, [showWelcome, showInstructions]);
 
-    // Resize handling with devicePixelRatio for high-quality rendering
+    // Responsive handling based strictly on the parent container (not window.innerWidth)
     useEffect(() => {
         const handleResize = () => {
             const dpr = window.devicePixelRatio || 1;
@@ -540,7 +540,7 @@ export default function CanvasScrollytelling() {
                     className="relative rounded-xl lg:rounded-2xl bg-black overflow-hidden transition-all duration-300 ease-out z-30"
                     style={{
                         width: frameBounds.width,
-                        height: frameBounds.height,
+                        height: frameBounds.height
                     }}
                 >
 
