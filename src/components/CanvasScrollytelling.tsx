@@ -229,8 +229,29 @@ export default function CanvasScrollytelling() {
                 18
             );
 
+            // Fade out the global header logo ~1 second into scrolling (Time 1 ~ 2.5)
+            tl.to("#global-header", { opacity: 0, duration: 1.5, ease: "power2.inOut" }, 1);
+
             // Fade out the premium frame and text at the very end (Time 27 to 30) so it disappears before the footer
             tl.to([frameRef.current, textRef.current], { opacity: 0, duration: 3, ease: "power2.inOut" }, 27);
+
+            // Fade the global header back in right before footer appears (Time 28.5)
+            tl.to("#global-header", { opacity: 1, duration: 1.5, ease: "power2.inOut" }, 28.5);
+
+            // Unfurl the floating pill at the bottom of the scroll animation (Time 29 to 30)
+            tl.to("#floating-pill", { width: 220, duration: 1, ease: "power2.out" }, 29);
+            tl.to("#floating-pill-text", {
+                opacity: 1,
+                x: 0,
+                duration: 1,
+                ease: "power2.out",
+                onComplete: () => {
+                    document.getElementById("floating-pill-text")?.classList.add("animate-pill-blink");
+                },
+                onReverseComplete: () => {
+                    document.getElementById("floating-pill-text")?.classList.remove("animate-pill-blink");
+                }
+            }, 29);
 
         },
         { dependencies: [loaded], scope: containerRef }

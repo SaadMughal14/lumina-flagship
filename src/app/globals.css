@@ -64,3 +64,19 @@ body {
     transform: translateY(150%);
   }
 }
+
+@keyframes pillBlink {
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.3;
+  }
+}
+
+.animate-pill-blink {
+  animation: pillBlink 2s ease-in-out infinite;
+}

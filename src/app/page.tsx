@@ -6,7 +6,7 @@ import Footer from "../components/Footer";
 export default function Home() {
   return (
     <main className="min-h-screen bg-[#0B0C10] selection:bg-white/20 selection:text-white">
-      <header className="fixed top-0 left-0 w-full p-6 lg:p-10 flex justify-between items-center z-[100] mix-blend-difference pointer-events-none">
+      <header id="global-header" className="fixed top-0 left-0 w-full pt-6 pr-6 pb-6 pl-12 lg:pt-10 lg:pr-10 lg:pb-10 lg:pl-16 flex justify-between items-center z-[100] mix-blend-difference pointer-events-none transition-opacity duration-500">
         <div className="flex items-center gap-4">
           <svg className="w-8 h-8 text-white relative flex-shrink-0" viewBox="0 0 100 100" fill="currentColor">
             <path d="M20,85 C25,40 45,15 85,15 C60,25 35,50 20,85 Z" />
