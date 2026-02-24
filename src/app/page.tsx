@@ -15,7 +15,7 @@ export default function Home() {
               alt="Lumina Icon"
               className="w-8 h-8 lg:w-9 lg:h-9 object-contain brightness-0 invert"
             />
-            <span className="font-style-script font-normal text-4xl lg:text-5xl text-white capitalize leading-none tracking-wide translate-y-2 lg:translate-y-3" style={{ fontFamily: "var(--font-style-script)" }}>Lumina</span>
+            <span className="font-style-script font-normal text-3xl lg:text-4xl text-white capitalize leading-none tracking-wide pt-1" style={{ fontFamily: "var(--font-style-script)" }}>Lumina</span>
           </div>
         </div>
       </header>
