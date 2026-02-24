@@ -229,8 +229,7 @@ export default function CanvasScrollytelling() {
                 18
             );
 
-            // Fade out the global header logo ~1 second into scrolling (Time 1 ~ 2.5)
-            tl.to(document.querySelector("#global-header"), { opacity: 0, duration: 1.5, ease: "power2.inOut" }, 1);
+            // Header is initially opacity-0. It will ONLY fade in right before footer appears.
 
             // Fade out the premium frame and text at the very end (Time 27 to 30) so it disappears before the footer
             tl.to([frameRef.current, textRef.current], { opacity: 0, duration: 3, ease: "power2.inOut" }, 27);
@@ -239,19 +238,30 @@ export default function CanvasScrollytelling() {
             tl.to(document.querySelector("#global-header"), { opacity: 1, duration: 1.5, ease: "power2.inOut" }, 28.5);
 
             // Unfurl the floating pill at the bottom of the scroll animation (Time 29 to 30)
-            tl.to(document.querySelector("#floating-pill"), { width: 220, duration: 1, ease: "power2.out" }, 29);
+            tl.to(document.querySelector("#floating-pill"), {
+                width: 220,
+                duration: 1,
+                ease: "power2.out",
+                onComplete: () => {
+                    gsap.to(document.querySelector("#floating-pill"), {
+                        boxShadow: "0px 0px 15px 5px rgba(255,255,255,0.3)",
+                        borderColor: "rgba(255,255,255,0.6)",
+                        duration: 0.8,
+                        yoyo: true,
+                        repeat: -1,
+                        ease: "power1.inOut"
+                    });
+                },
+                onReverseComplete: () => {
+                    gsap.killTweensOf(document.querySelector("#floating-pill"));
+                    gsap.set(document.querySelector("#floating-pill"), { boxShadow: "none", borderColor: "rgba(255,255,255,0.1)" });
+                }
+            }, 29);
             tl.to(document.querySelector("#floating-pill-text"), {
                 opacity: 1,
                 x: 0,
                 duration: 1,
-                ease: "power2.out",
-                onComplete: () => {
-                    gsap.to(document.querySelector("#floating-pill-text"), { opacity: 0.3, duration: 0.75, yoyo: true, repeat: -1, ease: "power1.inOut" });
-                },
-                onReverseComplete: () => {
-                    gsap.killTweensOf(document.querySelector("#floating-pill-text"));
-                    gsap.set(document.querySelector("#floating-pill-text"), { opacity: 0 });
-                }
+                ease: "power2.out"
             }, 29);
 
         },
