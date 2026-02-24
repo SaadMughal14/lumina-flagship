@@ -131,12 +131,13 @@ export default function CanvasScrollytelling() {
             await Promise.all([...promises, minimumDelay]);
 
             if (!isCancelled) {
-                setProgress(100); // Guarantee 100% just in case mathematical rounding drops a percent
-                setLoaded(true); // Phase 1 complete: dismiss loader
+                setProgress(100);
+                setLoaded(true);
                 renderCanvas(act1Images.current[0], canvas1Ref.current);
 
-                // If they are a new user, block scrolling and show Popups. If returning, unlock immediately.
-                if (!hasBypassedLoader) {
+                // Check localStorage directly to prevent React state race conditions.
+                const visited = typeof window !== "undefined" ? localStorage.getItem("lumina_visited") : null;
+                if (visited !== "true") {
                     setShowWelcome(true);
                 }
 
@@ -185,28 +186,24 @@ export default function CanvasScrollytelling() {
 
         let drawWidth: number, drawHeight: number, offsetX: number, offsetY: number;
 
-        // "Contain" / Letterbox logic
+        // "Cover" logic - dynamically scale the image so it perfectly fills the container 
+        // without leaving any black bars, gracefully cropping the overflow natively by centering it.
         if (canvasRatio > imgRatio) {
-            // Screen is wider than image (add black bars on left/right)
-            drawHeight = canvasHeight;
-            drawWidth = canvasHeight * imgRatio;
-            offsetY = 0;
-            offsetX = (canvasWidth - drawWidth) / 2;
-        } else {
-            // Screen is taller than image (add black bars on top/bottom)
+            // Screen is wider than image (scale width to 100%, crop top/bottom overflow)
             drawWidth = canvasWidth;
             drawHeight = canvasWidth / imgRatio;
             offsetX = 0;
             offsetY = (canvasHeight - drawHeight) / 2;
+        } else {
+            // Screen is taller than image (scale height to 100%, crop left/right overflow)
+            drawHeight = canvasHeight;
+            drawWidth = canvasHeight * imgRatio;
+            offsetY = 0;
+            offsetX = (canvasWidth - drawWidth) / 2;
         }
 
-        // Sync the frame's CSS size to EXACTLY match the drawn image
-        // (convert from Dpr-scaled pixel sizes back to CSS sizes)
-        const dpr = window.devicePixelRatio || 1;
-        setFrameBounds({
-            width: `${drawWidth / dpr}px`,
-            height: `${drawHeight / dpr}px`
-        });
+        // We no longer manually resize the DOM container to match the letterbox. 
+        // We let the container be 100% architectural and the canvas fills it via cover.
 
         ctx.clearRect(0, 0, canvasWidth, canvasHeight);
         ctx.drawImage(img, offsetX, offsetY, drawWidth, drawHeight);
@@ -526,8 +523,8 @@ export default function CanvasScrollytelling() {
                 <div
                     className="relative rounded-xl lg:rounded-2xl bg-black overflow-hidden transition-all duration-300 ease-out z-30"
                     style={{
-                        width: frameBounds.width,
-                        height: frameBounds.height,
+                        width: "100%",
+                        height: "100%",
                         // Provide sensible architectural max bounds so it doesn't blow up on Ultrawide monitors
                         maxWidth: "1200px",
                         maxHeight: "800px"
