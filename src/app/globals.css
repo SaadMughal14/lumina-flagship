@@ -81,3 +81,21 @@ body {
 .animate-pill-glow {
   animation: pillGlow 0.8s ease-in-out infinite alternate !important;
 }
+
+@keyframes recFlicker {
+  0% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+.animate-rec-flicker {
+  animation: recFlicker 1.5s infinite;
+}

@@ -367,19 +367,48 @@ export default function CanvasScrollytelling() {
                     }}
                 >
 
-                    {/* Premium Frame Overlay (sits top-level inside the bound to cast inset shadows over the video) */}
+                    {/* Camera Frame Overlay */}
                     <div
                         ref={frameRef}
-                        className="absolute inset-0 border border-white/10 z-50 pointer-events-none rounded-xl lg:rounded-2xl transition-opacity duration-700"
-                        style={{
-                            boxShadow: "inset 0 0 100px 20px rgba(11,12,16, 0.9), inset 0 0 60px 10px rgba(0,0,0,0.8)"
-                        }}
+                        className="absolute inset-0 z-50 pointer-events-none transition-opacity duration-700"
                     >
-                        {/* Decorative Corner Marks */}
-                        <div className="absolute top-0 left-0 w-4 h-4 border-t border-l border-white/30 rounded-tl-xl lg:rounded-tl-2xl"></div>
-                        <div className="absolute top-0 right-0 w-4 h-4 border-t border-r border-white/30 rounded-tr-xl lg:rounded-tr-2xl"></div>
-                        <div className="absolute bottom-0 left-0 w-4 h-4 border-b border-l border-white/30 rounded-bl-xl lg:rounded-bl-2xl"></div>
-                        <div className="absolute bottom-0 right-0 w-4 h-4 border-b border-r border-white/30 rounded-br-xl lg:rounded-br-2xl"></div>
+                        {/* Shimmer/Shadow Overlay (Optional padding inward) */}
+                        <div className="absolute inset-x-0 inset-y-0 shadow-[inset_0_0_80px_rgba(0,0,0,0.8)] pointer-events-none"></div>
+
+                        {/* Top Left: REC */}
+                        <div className="absolute top-6 left-6 lg:top-8 lg:left-8 flex items-center gap-2">
+                            <div className="w-3 h-3 lg:w-4 lg:h-4 bg-red-500 rounded-full animate-rec-flicker"></div>
+                            <span className="font-degular font-bold text-white tracking-widest text-sm lg:text-base selection:bg-transparent">REC</span>
+                        </div>
+
+                        {/* Top Right: Battery */}
+                        <div className="absolute top-6 right-6 lg:top-8 lg:right-8 flex items-center">
+                            <div className="w-8 h-4 lg:w-10 lg:h-5 border-2 border-white rounded-[2px] p-[2px] flex items-center">
+                                <div className="w-full h-full bg-white rounded-[1px]"></div>
+                            </div>
+                            <div className="w-1 h-2 lg:w-1.5 lg:h-2.5 bg-white rounded-r-[2px] ml-[1px]"></div>
+                        </div>
+
+                        {/* Bottom Right: Exposure/Sun Icon */}
+                        <div className="absolute bottom-6 right-6 lg:bottom-8 lg:right-8">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-6 h-6 lg:w-8 lg:h-8">
+                                <circle cx="12" cy="12" r="5"></circle>
+                                <line x1="12" y1="1" x2="12" y2="3"></line>
+                                <line x1="12" y1="21" x2="12" y2="23"></line>
+                                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                                <line x1="1" y1="12" x2="3" y2="12"></line>
+                                <line x1="21" y1="12" x2="23" y2="12"></line>
+                                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                                <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                            </svg>
+                        </div>
+
+                        {/* Thick Camera Brackets (Corners) */}
+                        <div className="absolute top-4 left-4 lg:top-6 lg:left-6 w-12 h-12 lg:w-16 lg:h-16 border-t-[4px] border-l-[4px] border-white rounded-tl-[16px] lg:rounded-tl-[24px]"></div>
+                        <div className="absolute top-4 right-4 lg:top-6 lg:right-6 w-12 h-12 lg:w-16 lg:h-16 border-t-[4px] border-r-[4px] border-white rounded-tr-[16px] lg:rounded-tr-[24px]"></div>
+                        <div className="absolute bottom-4 left-4 lg:bottom-6 lg:left-6 w-12 h-12 lg:w-16 lg:h-16 border-b-[4px] border-l-[4px] border-white rounded-bl-[16px] lg:rounded-bl-[24px]"></div>
+                        <div className="absolute bottom-4 right-4 lg:bottom-6 lg:right-6 w-12 h-12 lg:w-16 lg:h-16 border-b-[4px] border-r-[4px] border-white rounded-br-[16px] lg:rounded-br-[24px]"></div>
                     </div>
 
                     {/* ACT 3: EXTRAIT */}
