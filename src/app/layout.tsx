@@ -36,6 +36,28 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              document.addEventListener('contextmenu', event => event.preventDefault());
+              document.addEventListener('keydown', event => {
+                if (
+                  event.key === 'F12' || 
+                  (event.ctrlKey && event.shiftKey && event.key === 'I') || 
+                  (event.ctrlKey && event.shiftKey && event.key === 'J') || 
+                  (event.ctrlKey && event.key === 'U') ||
+                  (event.metaKey && event.altKey && event.key === 'I') ||
+                  (event.metaKey && event.altKey && event.key === 'J') ||
+                  (event.metaKey && event.key === 'U')
+                ) {
+                  event.preventDefault();
+                }
+              });
+            `,
+          }}
+        />
+      </head>
       <body
         className={`${bricolage.variable} ${cursive.variable} ${spaceGrotesk.variable} ${styleScript.variable} font-degular antialiased selection:bg-white/20 selection:text-white`}
       >
