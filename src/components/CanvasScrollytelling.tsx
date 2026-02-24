@@ -26,10 +26,12 @@ export default function CanvasScrollytelling() {
     const [progress, setProgress] = useState(0); // for the loading screen (optional)
     const [frameBounds, setFrameBounds] = useState({ width: "100%", height: "100%" });
 
-    // Onboarding Feature
     const [showWelcome, setShowWelcome] = useState(false);
+    const [showContinueBtn, setShowContinueBtn] = useState(false); // Option 2: Delay button
     const [showInstructions, setShowInstructions] = useState(false);
     const [hasBypassedLoader, setHasBypassedLoader] = useState(false); // Controls GSAP scroll lock
+    const [holdProgress, setHoldProgress] = useState(0); // Option 3: Hold-to-enter progress
+    const holdIntervalRef = useRef<NodeJS.Timeout | null>(null);
 
     // Initial check for returning visitors
     useEffect(() => {
@@ -40,6 +42,43 @@ export default function CanvasScrollytelling() {
             }
         }
     }, []);
+
+    // Handle button delay logic when Welcome popup opens
+    useEffect(() => {
+        if (showWelcome) {
+            const t = setTimeout(() => setShowContinueBtn(true), 1200); // 1.2s delay before continue appears
+            return () => clearTimeout(t);
+        } else {
+            setShowContinueBtn(false); // Reset when closed
+        }
+    }, [showWelcome]);
+
+    // Handle Hold-to-Enter logic mechanics
+    const startHold = () => {
+        if (holdIntervalRef.current) return;
+        setHoldProgress(0);
+        let progress = 0;
+        holdIntervalRef.current = setInterval(() => {
+            progress += 2; // +2 every 20ms = 100 in 1000ms (1 second hold time)
+            setHoldProgress(progress);
+            if (progress >= 100) {
+                if (holdIntervalRef.current) clearInterval(holdIntervalRef.current);
+                setShowInstructions(false);
+                setHasBypassedLoader(true);
+                if (typeof window !== "undefined") {
+                    localStorage.setItem("lumina_visited", "true");
+                }
+            }
+        }, 20);
+    };
+
+    const stopHold = () => {
+        if (holdIntervalRef.current) {
+            clearInterval(holdIntervalRef.current);
+            holdIntervalRef.current = null;
+        }
+        setHoldProgress(0); // Reset if they let go early
+    };
 
     // We store Image objects in refs to persist across renders without trigerring react state
     const act1Images = useRef<HTMLImageElement[]>([]);
@@ -364,7 +403,7 @@ export default function CanvasScrollytelling() {
                             setShowWelcome(false);
                             setTimeout(() => setShowInstructions(true), 600);
                         }}
-                        className="group relative w-full overflow-hidden rounded-full border border-white/30 px-8 py-3 transition-colors hover:border-white"
+                        className={`group relative w-full overflow-hidden rounded-full border border-white/30 px-8 py-3 transition-all duration-1000 hover:border-white ${showContinueBtn ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 pointer-events-none'}`}
                     >
                         <span className="relative z-10 font-degular uppercase tracking-[0.2em] text-xs text-white transition-colors group-hover:text-black">
                             Continue
@@ -380,25 +419,33 @@ export default function CanvasScrollytelling() {
                 ${showInstructions ? 'opacity-100 pointer-events-auto backdrop-blur-md bg-black/40' : 'opacity-0 pointer-events-none'}`}
             >
                 <div className={`flex flex-col items-center justify-center max-w-md w-full p-10 border border-white/20 rounded-2xl bg-black/60 shadow-2xl transition-transform duration-700 ${showInstructions ? 'translate-y-0 scale-100' : 'translate-y-10 scale-95'}`}>
-                    <div className="w-12 h-20 border-2 border-white/50 rounded-full flex justify-center p-2 mb-8">
+                    <div className="w-12 h-20 border-2 border-white/50 rounded-full flex justify-center p-2 mb-8 shadow-[0_0_15px_rgba(255,255,255,0.2)]">
                         <div className="w-1.5 h-3 bg-white rounded-full animate-bounce"></div>
                     </div>
-                    <h2 className="font-degular font-bold uppercase tracking-[0.3em] text-white text-xl md:text-2xl mb-4 text-center">Keep Scrolling</h2>
+                    <h2 className="font-degular font-bold uppercase tracking-[0.3em] text-white text-xl md:text-2xl mb-4 text-center animate-pulse drop-shadow-[0_0_8px_rgba(255,255,255,0.8)]">
+                        Keep Scrolling
+                    </h2>
                     <p className="font-degular text-white/50 text-center text-sm mb-10">
                         This is a continuous scrollytelling experience. Scroll downwards at your own pace to explore the collection.
                     </p>
+
+                    {/* Hold to Enter Button */}
                     <button
-                        onClick={() => {
-                            setShowInstructions(false);
-                            setHasBypassedLoader(true);
-                            if (typeof window !== "undefined") {
-                                localStorage.setItem("lumina_visited", "true");
-                            }
-                        }}
-                        className="group relative w-full overflow-hidden rounded-full bg-white px-8 py-3 transition-transform hover:scale-105"
+                        onMouseDown={startHold}
+                        onMouseUp={stopHold}
+                        onMouseLeave={stopHold}
+                        onTouchStart={startHold}
+                        onTouchEnd={stopHold}
+                        className="relative w-full overflow-hidden rounded-full border border-white border-opacity-30 bg-transparent px-8 py-3 transition-transform hover:scale-105 active:scale-95 select-none"
                     >
-                        <span className="relative z-10 font-degular uppercase tracking-[0.2em] text-xs text-black font-bold">
-                            Enter Experience
+                        {/* Progress Fill Background */}
+                        <div
+                            className="absolute left-0 top-0 h-full bg-white transition-all duration-75 ease-linear pointer-events-none"
+                            style={{ width: `${holdProgress}%` }}
+                        ></div>
+
+                        <span className={`relative z-10 font-degular uppercase tracking-[0.2em] text-xs font-bold transition-colors duration-300 pointer-events-none ${holdProgress > 50 ? 'text-black' : 'text-white'}`}>
+                            {holdProgress > 0 ? `Loading... ${Math.floor(holdProgress)}%` : 'Hold to Enter'}
                         </span>
                     </button>
                 </div>
