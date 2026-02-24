@@ -176,6 +176,16 @@ export default function CanvasScrollytelling() {
                     end: "+=1200%", // 1200vh of scrolling for slower, smoother frame rate
                     scrub: 1,
                     pin: true,
+                    onUpdate: (self) => {
+                        const pill = document.querySelector("#floating-pill");
+                        if (pill) {
+                            if (self.progress > 0.98) {
+                                pill.classList.add("animate-pill-glow");
+                            } else {
+                                pill.classList.remove("animate-pill-glow");
+                            }
+                        }
+                    }
                 },
             });
 
@@ -234,28 +244,14 @@ export default function CanvasScrollytelling() {
             // Fade out the premium frame and text at the very end (Time 27 to 30) so it disappears before the footer
             tl.to([frameRef.current, textRef.current], { opacity: 0, duration: 3, ease: "power2.inOut" }, 27);
 
-            // Fade the global header back in right before footer appears (Time 28.5)
-            tl.to(document.querySelector("#global-header"), { opacity: 1, duration: 1.5, ease: "power2.inOut" }, 28.5);
+            // Fade IN the navbar background so logo doesn't clash with "The Alchemy" section (Time 28.5 to 30)
+            tl.to(document.querySelector("#navbar-bg"), { opacity: 0.95, duration: 1.5, ease: "power2.inOut" }, 28.5);
 
             // Unfurl the floating pill at the bottom of the scroll animation (Time 29 to 30)
             tl.to(document.querySelector("#floating-pill"), {
                 width: 220,
                 duration: 1,
-                ease: "power2.out",
-                onComplete: () => {
-                    gsap.to(document.querySelector("#floating-pill"), {
-                        boxShadow: "0px 0px 15px 5px rgba(255,255,255,0.3)",
-                        borderColor: "rgba(255,255,255,0.6)",
-                        duration: 0.8,
-                        yoyo: true,
-                        repeat: -1,
-                        ease: "power1.inOut"
-                    });
-                },
-                onReverseComplete: () => {
-                    gsap.killTweensOf(document.querySelector("#floating-pill"));
-                    gsap.set(document.querySelector("#floating-pill"), { boxShadow: "none", borderColor: "rgba(255,255,255,0.1)" });
-                }
+                ease: "power2.out"
             }, 29);
             tl.to(document.querySelector("#floating-pill-text"), {
                 opacity: 1,
