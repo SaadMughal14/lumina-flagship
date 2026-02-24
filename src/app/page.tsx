@@ -8,8 +8,8 @@ export default function Home() {
     <main className="min-h-screen bg-[#0B0C10] selection:bg-white/20 selection:text-white">
       <header id="global-header" className="fixed top-0 left-0 w-full z-[100] transition-all duration-500 pointer-events-none">
         <div id="navbar-bg" className="absolute inset-0 bg-[#0B0C10] border-b border-white/10 opacity-0 transition-opacity duration-500 pointer-events-auto"></div>
-        <div className="relative flex justify-between items-center p-2 lg:px-3 lg:py-2 left-0">
-          <div className="flex items-center gap-3 mix-blend-difference pointer-events-auto cursor-pointer">
+        <div className="relative flex justify-between items-center p-3 pt-4 lg:px-4 lg:py-3 left-0">
+          <div className="flex items-center gap-1 mix-blend-difference pointer-events-auto cursor-pointer">
             <img
               src="/assets/new-logo.png"
               alt="Lumina Icon"
