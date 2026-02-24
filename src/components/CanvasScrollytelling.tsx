@@ -38,26 +38,26 @@ export default function CanvasScrollytelling() {
         act3: 1,
     });
 
-    // Loading Logic: Load all frames continuously and update percentage. Enforce Artificial Minimum 3-Sec Delay.
+    // Loading Logic: Fast Initial Load (Phase 1) + Background Load (Phase 2)
     useEffect(() => {
         let isCancelled = false;
-        let loadedCount = 0;
-        const totalImages = TOTAL_FRAMES * 3;
+        let p1LoadedCount = 0;
+        const phase1Total = 60; // Only block UX on the first 60 frames
 
-        const loadAllImages = async () => {
+        const loadPhase1 = async () => {
             const promises = [];
             const loadImg = (src: string, arr: HTMLImageElement[], index: number) => {
                 const img = new Image();
                 img.src = src;
                 const p = new Promise((resolve) => {
                     img.onload = () => {
-                        loadedCount++;
-                        if (!isCancelled) setProgress(Math.floor((loadedCount / totalImages) * 100));
+                        p1LoadedCount++;
+                        if (!isCancelled) setProgress(Math.min(100, Math.floor((p1LoadedCount / phase1Total) * 100)));
                         resolve(img);
                     };
                     img.onerror = () => {
-                        loadedCount++;
-                        if (!isCancelled) setProgress(Math.floor((loadedCount / totalImages) * 100)); // Resolve anyway to not deadlock
+                        p1LoadedCount++;
+                        if (!isCancelled) setProgress(Math.min(100, Math.floor((p1LoadedCount / phase1Total) * 100))); // Resolve anyway to not deadlock
                         resolve(img);
                     };
                 });
@@ -65,31 +65,48 @@ export default function CanvasScrollytelling() {
                 return p;
             };
 
-            // Act 1
-            for (let i = 1; i <= TOTAL_FRAMES; i++) {
+            // Act 1 (First 60 frames only for instant visual readiness)
+            for (let i = 1; i <= phase1Total; i++) {
                 promises.push(loadImg(`/assets/lumina-web/ezgif-frame-${String(i).padStart(3, "0")}.jpg`, act1Images.current, i - 1));
             }
-            // Act 2
-            for (let i = 1; i <= TOTAL_FRAMES; i++) {
-                promises.push(loadImg(`/assets/monolith-web/ezgif-frame-${String(i).padStart(3, "0")}.jpg`, act2Images.current, i - 1));
-            }
-            // Act 3
-            for (let i = 1; i <= TOTAL_FRAMES; i++) {
-                promises.push(loadImg(`/assets/extrait-web/ezgif-frame-${String(i).padStart(3, "0")}.jpg`, act3Images.current, i - 1));
-            }
 
-            // Minimum required UX delay ensures screen looks intentional
-            const minimumDelay = new Promise(resolve => setTimeout(resolve, 3000));
+            // Quick 1.5-second delay so the loading screen feels intentional but not agonizing
+            const minimumDelay = new Promise(resolve => setTimeout(resolve, 1500));
 
             await Promise.all([...promises, minimumDelay]);
 
             if (!isCancelled) {
-                setLoaded(true); // Phase 2: dismiss loader
+                setProgress(100); // Guarantee 100% just in case mathematical rounding drops a percent
+                setLoaded(true); // Phase 1 complete: dismiss loader
                 renderCanvas(act1Images.current[0], canvas1Ref.current);
+
+                // Immediately kick off background loading for the massive rest of the site silently
+                loadPhase2();
             }
         };
 
-        loadAllImages();
+        const loadPhase2 = () => {
+            // Act 1 remaining
+            for (let i = phase1Total + 1; i <= TOTAL_FRAMES; i++) {
+                const img = new Image();
+                img.src = `/assets/lumina-web/ezgif-frame-${String(i).padStart(3, "0")}.jpg`;
+                act1Images.current[i - 1] = img;
+            }
+            // Act 2
+            for (let i = 1; i <= TOTAL_FRAMES; i++) {
+                const img = new Image();
+                img.src = `/assets/monolith-web/ezgif-frame-${String(i).padStart(3, "0")}.jpg`;
+                act2Images.current[i - 1] = img;
+            }
+            // Act 3
+            for (let i = 1; i <= TOTAL_FRAMES; i++) {
+                const img = new Image();
+                img.src = `/assets/extrait-web/ezgif-frame-${String(i).padStart(3, "0")}.jpg`;
+                act3Images.current[i - 1] = img;
+            }
+        };
+
+        loadPhase1();
 
         return () => {
             isCancelled = true;
