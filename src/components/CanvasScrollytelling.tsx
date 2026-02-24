@@ -404,11 +404,11 @@ export default function CanvasScrollytelling() {
                             </svg>
                         </div>
 
-                        {/* Thick Camera Brackets (Corners) attached to absolute edge */}
-                        <div className="absolute top-0 left-0 w-12 h-12 lg:w-16 lg:h-16 border-t-[4px] border-l-[4px] border-white rounded-tl-xl lg:rounded-tl-2xl"></div>
-                        <div className="absolute top-0 right-0 w-12 h-12 lg:w-16 lg:h-16 border-t-[4px] border-r-[4px] border-white rounded-tr-xl lg:rounded-tr-2xl"></div>
-                        <div className="absolute bottom-0 left-0 w-12 h-12 lg:w-16 lg:h-16 border-b-[4px] border-l-[4px] border-white rounded-bl-xl lg:rounded-bl-2xl"></div>
-                        <div className="absolute bottom-0 right-0 w-12 h-12 lg:w-16 lg:h-16 border-b-[4px] border-r-[4px] border-white rounded-br-xl lg:rounded-br-2xl"></div>
+                        {/* Thin Sharp Camera Brackets (Corners) floating inside */}
+                        <div className="absolute top-8 left-8 lg:top-12 lg:left-12 w-6 h-6 lg:w-10 lg:h-10 border-t-[1.5px] border-l-[1.5px] border-white/80"></div>
+                        <div className="absolute top-8 right-8 lg:top-12 lg:right-12 w-6 h-6 lg:w-10 lg:h-10 border-t-[1.5px] border-r-[1.5px] border-white/80"></div>
+                        <div className="absolute bottom-8 left-8 lg:bottom-12 lg:left-12 w-6 h-6 lg:w-10 lg:h-10 border-b-[1.5px] border-l-[1.5px] border-white/80"></div>
+                        <div className="absolute bottom-8 right-8 lg:bottom-12 lg:right-12 w-6 h-6 lg:w-10 lg:h-10 border-b-[1.5px] border-r-[1.5px] border-white/80"></div>
                     </div>
 
                     {/* ACT 3: EXTRAIT */}
