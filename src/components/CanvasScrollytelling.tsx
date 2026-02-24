@@ -273,7 +273,7 @@ export default function CanvasScrollytelling() {
                 className={`fixed inset-0 z-50 flex items-center justify-center bg-[#0B0C10] text-[#FFFFFF] transition-opacity duration-1000 ${loaded ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
             >
                 <div className="flex flex-col items-center gap-8">
-                    <div className="flex flex-row items-center gap-3 lg:gap-4">
+                    <div className="flex flex-row items-center gap-1 lg:gap-1.5">
                         <img
                             src="/assets/new-logo.png"
                             alt="Lumina Icon"
