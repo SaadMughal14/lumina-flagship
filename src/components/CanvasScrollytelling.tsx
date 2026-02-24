@@ -38,56 +38,58 @@ export default function CanvasScrollytelling() {
         act3: 1,
     });
 
-    // Loading Logic Phase 1, 2, 3
+    // Loading Logic: Load all frames continuously and update percentage. Enforce Artificial Minimum 3-Sec Delay.
     useEffect(() => {
         let isCancelled = false;
+        let loadedCount = 0;
+        const totalImages = TOTAL_FRAMES * 3;
 
-        const loadInitial60 = async () => {
+        const loadAllImages = async () => {
             const promises = [];
-            for (let i = 1; i <= 60; i++) {
+            const loadImg = (src: string, arr: HTMLImageElement[], index: number) => {
                 const img = new Image();
-                img.src = `/assets/lumina-web/ezgif-frame-${String(i).padStart(3, "0")}.jpg`;
-                promises.push(
-                    new Promise((resolve) => {
-                        img.onload = () => resolve(img);
-                        img.onerror = () => resolve(img); // resolve anyway to not block
-                    })
-                );
-                act1Images.current[i - 1] = img;
-            }
+                img.src = src;
+                const p = new Promise((resolve) => {
+                    img.onload = () => {
+                        loadedCount++;
+                        if (!isCancelled) setProgress(Math.floor((loadedCount / totalImages) * 100));
+                        resolve(img);
+                    };
+                    img.onerror = () => {
+                        loadedCount++;
+                        if (!isCancelled) setProgress(Math.floor((loadedCount / totalImages) * 100)); // Resolve anyway to not deadlock
+                        resolve(img);
+                    };
+                });
+                arr[index] = img;
+                return p;
+            };
 
-            await Promise.all(promises);
-
-            if (!isCancelled) {
-                setLoaded(true); // Phase 2: dismiss loader
-                // Draw the first frame immediately
-                renderCanvas(act1Images.current[0], canvas1Ref.current);
-                loadRest(); // Phase 3: load the rest in background
-            }
-        };
-
-        const loadRest = async () => {
-            // Act 1 remaining
-            for (let i = 61; i <= TOTAL_FRAMES; i++) {
-                const img = new Image();
-                img.src = `/assets/lumina-web/ezgif-frame-${String(i).padStart(3, "0")}.jpg`;
-                act1Images.current[i - 1] = img;
+            // Act 1
+            for (let i = 1; i <= TOTAL_FRAMES; i++) {
+                promises.push(loadImg(`/assets/lumina-web/ezgif-frame-${String(i).padStart(3, "0")}.jpg`, act1Images.current, i - 1));
             }
             // Act 2
             for (let i = 1; i <= TOTAL_FRAMES; i++) {
-                const img = new Image();
-                img.src = `/assets/monolith-web/ezgif-frame-${String(i).padStart(3, "0")}.jpg`;
-                act2Images.current[i - 1] = img;
+                promises.push(loadImg(`/assets/monolith-web/ezgif-frame-${String(i).padStart(3, "0")}.jpg`, act2Images.current, i - 1));
             }
             // Act 3
             for (let i = 1; i <= TOTAL_FRAMES; i++) {
-                const img = new Image();
-                img.src = `/assets/extrait-web/ezgif-frame-${String(i).padStart(3, "0")}.jpg`;
-                act3Images.current[i - 1] = img;
+                promises.push(loadImg(`/assets/extrait-web/ezgif-frame-${String(i).padStart(3, "0")}.jpg`, act3Images.current, i - 1));
+            }
+
+            // Minimum required UX delay ensures screen looks intentional
+            const minimumDelay = new Promise(resolve => setTimeout(resolve, 3000));
+
+            await Promise.all([...promises, minimumDelay]);
+
+            if (!isCancelled) {
+                setLoaded(true); // Phase 2: dismiss loader
+                renderCanvas(act1Images.current[0], canvas1Ref.current);
             }
         };
 
-        loadInitial60();
+        loadAllImages();
 
         return () => {
             isCancelled = true;
@@ -270,17 +272,31 @@ export default function CanvasScrollytelling() {
             <div
                 className={`fixed inset-0 z-50 flex items-center justify-center bg-[#0B0C10] text-[#FFFFFF] transition-opacity duration-1000 ${loaded ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
             >
-                <div className="flex flex-col items-center gap-6">
-                    <h1 className="font-cursive text-6xl lg:text-7xl capitalize font-normal text-white">
-                        Lumina
-                    </h1>
-                    {/* Elegant loading line expanding outward */}
-                    <div className="relative w-32 h-[1px] bg-white/10 overflow-hidden">
-                        <div className="absolute top-0 left-0 h-full bg-white/60 animate-[loadingLine_2s_ease-in-out_infinite]"></div>
+                <div className="flex flex-col items-center gap-8">
+                    <div className="flex flex-row items-center gap-3 lg:gap-4">
+                        <img
+                            src="/assets/new-logo.png"
+                            alt="Lumina Icon"
+                            className="w-10 h-10 lg:w-16 lg:h-16 object-contain brightness-0 invert"
+                        />
+                        <h1 className="font-style-script text-5xl lg:text-7xl capitalize font-normal text-white pt-2" style={{ fontFamily: "var(--font-style-script)" }}>
+                            Lumina
+                        </h1>
                     </div>
-                    <p className="font-degular text-xs uppercase tracking-[0.4em] text-white/40">
-                        Initializing Experience
-                    </p>
+
+                    {/* Progress Bar & Percentage Number */}
+                    <div className="flex flex-col items-center gap-2 w-48 lg:w-64 mt-4">
+                        <div className="w-full h-[1px] bg-white/10 overflow-hidden relative">
+                            <div
+                                className="absolute top-0 left-0 h-full bg-white/80 transition-all duration-300 ease-out"
+                                style={{ width: `${progress}%` }}
+                            ></div>
+                        </div>
+                        <div className="flex justify-between w-full font-degular text-[10px] uppercase tracking-[0.2em] text-white/40 pt-1">
+                            <span>Initializing</span>
+                            <span>{progress}%</span>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -376,7 +392,7 @@ export default function CanvasScrollytelling() {
                         }}
                     >
                         {/* Top Left: REC */}
-                        <div className="absolute top-6 left-6 lg:top-8 lg:left-8 flex items-center gap-2">
+                        <div className="absolute top-3 left-4 lg:top-5 lg:left-6 flex items-center gap-2">
                             <div className="w-3 h-3 lg:w-4 lg:h-4 bg-red-500 rounded-full animate-rec-flicker"></div>
                             <span className="font-degular font-bold text-white tracking-widest text-sm lg:text-base selection:bg-transparent shadow-black drop-shadow-md">REC</span>
                         </div>
