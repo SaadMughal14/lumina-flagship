@@ -42,7 +42,7 @@ export default function CanvasScrollytelling() {
     useEffect(() => {
         let isCancelled = false;
         let p1LoadedCount = 0;
-        const phase1Total = 60; // Only block UX on the first 60 frames
+        const phase1Total = 150; // Block UX to fetch the first 150 frames (~3 sec on 10Mbps)
 
         const loadPhase1 = async () => {
             const promises = [];
@@ -65,13 +65,14 @@ export default function CanvasScrollytelling() {
                 return p;
             };
 
-            // Act 1 (First 60 frames only for instant visual readiness)
+            // Act 1 (First 150 frames for deeper initial buffer)
             for (let i = 1; i <= phase1Total; i++) {
                 promises.push(loadImg(`/assets/lumina-web/ezgif-frame-${String(i).padStart(3, "0")}.jpg`, act1Images.current, i - 1));
             }
 
-            // Quick 1.5-second delay so the loading screen feels intentional but not agonizing
-            const minimumDelay = new Promise(resolve => setTimeout(resolve, 1500));
+            // Minimal 500ms delay: Downloading 150 files naturally takes ~2-4s for most users. 
+            // This 0.5s buffer simply guarantees the UI flash looks deliberate for Gigabit users.
+            const minimumDelay = new Promise(resolve => setTimeout(resolve, 500));
 
             await Promise.all([...promises, minimumDelay]);
 
