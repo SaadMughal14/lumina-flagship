@@ -173,7 +173,7 @@ export default function CanvasScrollytelling() {
                 scrollTrigger: {
                     trigger: containerRef.current,
                     start: "top top",
-                    end: "+=1800%", // 1800vh of scrolling for slower, smoother frame rate
+                    end: "+=1200%", // 1200vh of scrolling for slower, smoother frame rate
                     scrub: 1,
                     pin: true,
                 },
@@ -246,10 +246,11 @@ export default function CanvasScrollytelling() {
                 duration: 1,
                 ease: "power2.out",
                 onComplete: () => {
-                    document.getElementById("floating-pill-text")?.classList.add("animate-pill-blink");
+                    gsap.to(document.querySelector("#floating-pill-text"), { opacity: 0.3, duration: 0.75, yoyo: true, repeat: -1, ease: "power1.inOut" });
                 },
                 onReverseComplete: () => {
-                    document.getElementById("floating-pill-text")?.classList.remove("animate-pill-blink");
+                    gsap.killTweensOf(document.querySelector("#floating-pill-text"));
+                    gsap.set(document.querySelector("#floating-pill-text"), { opacity: 0 });
                 }
             }, 29);
 

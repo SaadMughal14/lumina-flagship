@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Bricolage_Grotesque, Great_Vibes, Space_Grotesk } from "next/font/google";
+import { Bricolage_Grotesque, Great_Vibes, Space_Grotesk, Style_Script } from "next/font/google";
 import "./globals.css";
 
 const bricolage = Bricolage_Grotesque({
@@ -18,6 +18,12 @@ const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
 });
 
+const styleScript = Style_Script({
+  weight: "400",
+  variable: "--font-style-script",
+  subsets: ["latin"],
+});
+
 export const metadata: Metadata = {
   title: "LUMINA | Digital Flagship",
   description: "An ultra-luxury fragrance experience.",
@@ -31,7 +37,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${bricolage.variable} ${cursive.variable} ${spaceGrotesk.variable} font-degular antialiased selection:bg-white/20 selection:text-white`}
+        className={`${bricolage.variable} ${cursive.variable} ${spaceGrotesk.variable} ${styleScript.variable} font-degular antialiased selection:bg-white/20 selection:text-white`}
       >
         <a
           href="https://saadmughal.space"
