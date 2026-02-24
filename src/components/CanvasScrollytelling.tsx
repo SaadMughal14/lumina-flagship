@@ -376,13 +376,13 @@ export default function CanvasScrollytelling() {
                         <div className="absolute inset-x-0 inset-y-0 shadow-[inset_0_0_80px_rgba(0,0,0,0.8)] pointer-events-none"></div>
 
                         {/* Top Left: REC */}
-                        <div className="absolute top-6 left-6 lg:top-8 lg:left-8 flex items-center gap-2">
+                        <div className="absolute top-4 left-4 lg:top-5 lg:left-5 flex items-center gap-2">
                             <div className="w-3 h-3 lg:w-4 lg:h-4 bg-red-500 rounded-full animate-rec-flicker"></div>
                             <span className="font-degular font-bold text-white tracking-widest text-sm lg:text-base selection:bg-transparent">REC</span>
                         </div>
 
                         {/* Top Right: Battery */}
-                        <div className="absolute top-6 right-6 lg:top-8 lg:right-8 flex items-center">
+                        <div className="absolute top-4 right-4 lg:top-5 lg:right-5 flex items-center">
                             <div className="w-8 h-4 lg:w-10 lg:h-5 border-2 border-white rounded-[2px] p-[2px] flex items-center">
                                 <div className="w-full h-full bg-white rounded-[1px]"></div>
                             </div>
@@ -390,7 +390,7 @@ export default function CanvasScrollytelling() {
                         </div>
 
                         {/* Bottom Right: Exposure/Sun Icon */}
-                        <div className="absolute bottom-6 right-6 lg:bottom-8 lg:right-8">
+                        <div className="absolute bottom-4 right-4 lg:bottom-5 lg:right-5">
                             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-6 h-6 lg:w-8 lg:h-8">
                                 <circle cx="12" cy="12" r="5"></circle>
                                 <line x1="12" y1="1" x2="12" y2="3"></line>
@@ -404,11 +404,11 @@ export default function CanvasScrollytelling() {
                             </svg>
                         </div>
 
-                        {/* Thick Camera Brackets (Corners) */}
-                        <div className="absolute top-4 left-4 lg:top-6 lg:left-6 w-12 h-12 lg:w-16 lg:h-16 border-t-[4px] border-l-[4px] border-white rounded-tl-[16px] lg:rounded-tl-[24px]"></div>
-                        <div className="absolute top-4 right-4 lg:top-6 lg:right-6 w-12 h-12 lg:w-16 lg:h-16 border-t-[4px] border-r-[4px] border-white rounded-tr-[16px] lg:rounded-tr-[24px]"></div>
-                        <div className="absolute bottom-4 left-4 lg:bottom-6 lg:left-6 w-12 h-12 lg:w-16 lg:h-16 border-b-[4px] border-l-[4px] border-white rounded-bl-[16px] lg:rounded-bl-[24px]"></div>
-                        <div className="absolute bottom-4 right-4 lg:bottom-6 lg:right-6 w-12 h-12 lg:w-16 lg:h-16 border-b-[4px] border-r-[4px] border-white rounded-br-[16px] lg:rounded-br-[24px]"></div>
+                        {/* Thick Camera Brackets (Corners) attached to absolute edge */}
+                        <div className="absolute top-0 left-0 w-12 h-12 lg:w-16 lg:h-16 border-t-[4px] border-l-[4px] border-white rounded-tl-xl lg:rounded-tl-2xl"></div>
+                        <div className="absolute top-0 right-0 w-12 h-12 lg:w-16 lg:h-16 border-t-[4px] border-r-[4px] border-white rounded-tr-xl lg:rounded-tr-2xl"></div>
+                        <div className="absolute bottom-0 left-0 w-12 h-12 lg:w-16 lg:h-16 border-b-[4px] border-l-[4px] border-white rounded-bl-xl lg:rounded-bl-2xl"></div>
+                        <div className="absolute bottom-0 right-0 w-12 h-12 lg:w-16 lg:h-16 border-b-[4px] border-r-[4px] border-white rounded-br-xl lg:rounded-br-2xl"></div>
                     </div>
 
                     {/* ACT 3: EXTRAIT */}
