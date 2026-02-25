@@ -61,7 +61,7 @@ export default function Footer() {
 
                 <div className="flex w-full justify-between items-center text-white/30 font-degular text-[10px] tracking-[0.2em] uppercase mt-8 border-t border-white/[0.06] pt-8 pb-10 lg:pb-16 lg:pr-10">
                     <span>&copy; {new Date().getFullYear()} Lumina Parfums</span>
-                    <div className="flex gap-8 lg:pr-32 pr-28 z-20">
+                    <div className="flex gap-8 z-20">
                         <a href="https://instagram.com/batch_systems" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:text-white transition-colors duration-300 group">
                             <Instagram className="w-3.5 h-3.5 group-hover:scale-110 transition-transform" strokeWidth={1.5} />
                             <span>Instagram</span>
