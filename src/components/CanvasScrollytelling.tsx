@@ -316,7 +316,15 @@ export default function CanvasScrollytelling() {
             tl.to(document.querySelector("#floating-pill"), {
                 width: 220,
                 duration: 1,
-                ease: "power2.out"
+                ease: "power2.out",
+                onComplete: () => {
+                    const pill = document.querySelector("#floating-pill") as HTMLElement;
+                    if (pill) pill.dataset.gsapExpanded = "true";
+                },
+                onReverseComplete: () => {
+                    const pill = document.querySelector("#floating-pill") as HTMLElement;
+                    if (pill) delete pill.dataset.gsapExpanded;
+                }
             }, 29);
             tl.to(document.querySelector("#floating-pill-text"), {
                 opacity: 1,
@@ -608,7 +616,7 @@ export default function CanvasScrollytelling() {
                         {/* Center Scroll Text */}
                         <div className="flex flex-col items-center gap-6">
                             <span
-                                className="font-degular tracking-[0.5em] text-[10px] text-white/90 uppercase animate-[pulse_3s_ease-in-out_infinite] drop-shadow-[0_0_12px_rgba(255,255,255,0.9)]"
+                                className="font-degular tracking-[0.5em] text-[10px] text-white uppercase animate-scroll-flicker"
                                 style={{ writingMode: "vertical-rl", transform: "rotate(180deg)" }}
                             >
                                 KEEP SCROLLING

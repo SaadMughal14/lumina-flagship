@@ -29,6 +29,7 @@ const ingredients = [
     {
         title: "Smoked Agarwood",
         category: "01 / BASE",
+        origin: "Southasia",
         description: "Sourced from the deep forests of Southasia, aged for unparalleled depth and woodsmoke character.",
         icon: SmokedAgarwoodIcon,
         color: "#C4A484" // Warm Earth/Amber
@@ -36,6 +37,7 @@ const ingredients = [
     {
         title: "Ambergris",
         category: "02 / HEART",
+        origin: "Atlantic Coast",
         description: "Oceanic warmth that anchors the volatile top notes with a sophisticated, salty mineral glow.",
         icon: AmbergrisIcon,
         color: "#8AA2A9" // Slate Blue/Oceanic
@@ -43,6 +45,7 @@ const ingredients = [
     {
         title: "Dark Saffron",
         category: "03 / TOP",
+        origin: "Kashmir Valley",
         description: "Hand-harvested crimson threads providing a leathery, spiced aura that defines the Lumina edge.",
         icon: DarkSaffronIcon,
         color: "#A64B2A" // Deep Spiced Red
@@ -51,59 +54,73 @@ const ingredients = [
 
 export default function IngredientsGrid() {
     return (
-        <section className="relative w-full bg-[#0B0C10] py-32 px-6 lg:px-24 border-t border-white/10 z-50 overflow-hidden">
-            {/* Brutalist Background Grid Overlay */}
-            <div className="absolute inset-0 opacity-[0.03] pointer-events-none" style={{ backgroundImage: "linear-gradient(#fff 1px, transparent 1px), linear-gradient(90deg, #fff 1px, transparent 1px)", backgroundSize: "100px 100px" }}></div>
+        <section className="relative w-full bg-[#0B0C10] py-32 px-6 lg:px-24 border-t border-white/[0.06] z-50 overflow-hidden">
+            {/* Subtle dot grid overlay */}
+            <div className="absolute inset-0 opacity-[0.025] pointer-events-none" style={{
+                backgroundImage: "radial-gradient(circle, #fff 0.5px, transparent 0.5px)",
+                backgroundSize: "32px 32px"
+            }} />
 
             <div className="max-w-7xl mx-auto relative z-10">
-                <div className="mb-32 flex flex-col lg:flex-row items-end justify-between gap-12">
+                {/* Header */}
+                <div className="mb-24 lg:mb-32 flex flex-col lg:flex-row items-start lg:items-end justify-between gap-12">
                     <div className="max-w-2xl">
-                        <span className="font-degular text-[10px] uppercase tracking-[0.5em] text-white/30 mb-4 block">Molecular Composition</span>
+                        <span className="font-degular text-[10px] uppercase tracking-[0.5em] text-white/25 mb-5 block">Molecular Composition</span>
                         <h2 className="font-bricolage text-6xl lg:text-[8rem] text-white uppercase leading-[0.8] mb-8 font-black tracking-tighter">
                             The <br />
                             <span className="text-transparent" style={{ WebkitTextStroke: "1px white" }}>Alchemy</span>
                         </h2>
                     </div>
-                    <p className="font-degular text-white/60 max-w-sm text-sm lg:text-base font-light leading-relaxed tracking-wide border-l border-white/20 pl-8 mb-4">
-                        A precise curation of the world’s rarest raw materials, meticulously blended to forge an uncompromising signature. Modern brutalism meets olfactory liquid art.
+                    <p className="font-degular text-white/40 max-w-sm text-sm lg:text-base font-light leading-[1.8] tracking-wide border-l border-white/10 pl-8 mb-4">
+                        A precise curation of the world&apos;s rarest raw materials, meticulously blended to forge an uncompromising signature.
                     </p>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 border-collapse">
+                {/* Ingredient Cards */}
+                <div className="grid grid-cols-1 md:grid-cols-3">
                     {ingredients.map((item, i) => {
                         const Icon = item.icon;
                         return (
                             <div
                                 key={i}
-                                className="group relative p-12 lg:p-16 border border-white/10 flex flex-col justify-between transition-all duration-500 hover:bg-white/[0.02]"
+                                className="group relative p-10 lg:p-14 border border-white/[0.06] flex flex-col justify-between transition-all duration-700 hover:bg-white/[0.015]"
                             >
-                                {/* Brutalist Index */}
-                                <div className="flex justify-between items-start mb-20">
-                                    <span className="font-degular text-[11px] tracking-[0.3em] text-white/20 group-hover:text-white/80 transition-colors uppercase">
-                                        {item.category}
-                                    </span>
+                                {/* Top: Category + Icon */}
+                                <div className="flex justify-between items-start mb-16 lg:mb-20">
+                                    <div>
+                                        <span className="font-degular text-[10px] tracking-[0.3em] text-white/15 group-hover:text-white/50 transition-colors duration-500 uppercase block">
+                                            {item.category}
+                                        </span>
+                                        <span className="font-degular text-[9px] tracking-[0.2em] text-white/10 group-hover:text-white/25 transition-colors duration-500 uppercase mt-1 block">
+                                            Origin: {item.origin}
+                                        </span>
+                                    </div>
                                     <div
-                                        className="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center transition-all duration-500 group-hover:border-white/40 group-hover:shadow-[0_0_20px_rgba(255,255,255,0.1)]"
+                                        className="w-14 h-14 rounded-full border border-white/[0.08] flex items-center justify-center transition-all duration-700 group-hover:border-white/25 group-hover:shadow-[0_0_30px_rgba(255,255,255,0.06)]"
                                         style={{ color: item.color }}
                                     >
-                                        <Icon className="w-6 h-6 transition-transform duration-700 group-hover:scale-110" />
+                                        <Icon className="w-7 h-7 transition-transform duration-700 group-hover:scale-110" />
                                     </div>
                                 </div>
 
+                                {/* Bottom: Title + Description */}
                                 <div>
-                                    <h3 className="font-bricolage text-3xl lg:text-4xl text-white tracking-tight mb-6 font-bold uppercase leading-none">
+                                    <h3 className="font-bricolage text-2xl lg:text-3xl text-white tracking-tight mb-5 font-bold uppercase leading-none">
                                         {item.title}
                                     </h3>
-                                    <p className="font-degular text-white/40 font-light leading-relaxed text-sm tracking-wide max-w-[240px] group-hover:text-white/70 transition-colors">
+                                    <p className="font-degular text-white/30 font-light leading-[1.8] text-[13px] tracking-wide max-w-[240px] group-hover:text-white/55 transition-colors duration-500">
                                         {item.description}
                                     </p>
                                 </div>
 
                                 {/* Bottom Accent Line */}
                                 <div
-                                    className="absolute bottom-0 left-0 w-0 h-[2px] transition-all duration-700 ease-in-out group-hover:w-full"
+                                    className="absolute bottom-0 left-0 w-0 h-[1px] transition-all duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:w-full"
                                     style={{ backgroundColor: item.color }}
-                                ></div>
+                                />
+
+                                {/* Top-right corner accent */}
+                                <div className="absolute top-0 right-0 w-0 h-[1px] transition-all duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:w-8 opacity-40" style={{ backgroundColor: item.color }} />
                             </div>
                         );
                     })}
@@ -112,4 +129,3 @@ export default function IngredientsGrid() {
         </section>
     );
 }
-

@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { Plus, Minus } from "lucide-react";
 
 const faqs = [
     {
@@ -26,40 +25,74 @@ export default function FAQ() {
     };
 
     return (
-        <section className="relative w-full bg-[#0B0C10] py-32 px-6 lg:px-24 border-t border-white/10 z-50">
-            <div className="max-w-4xl mx-auto">
-                <h2 className="font-bricolage text-4xl lg:text-5xl text-white uppercase tracking-wider mb-16 text-center lg:text-left font-medium">
-                    Enquiries
-                </h2>
+        <section className="relative w-full bg-[#0B0C10] py-32 px-6 lg:px-24 border-t border-white/[0.06] z-50 overflow-hidden">
+            {/* Subtle ambient background line */}
+            <div className="absolute top-0 left-1/2 w-[1px] h-full bg-gradient-to-b from-transparent via-white/[0.04] to-transparent pointer-events-none" />
 
-                <div className="space-y-4">
+            <div className="max-w-5xl mx-auto">
+                {/* Section Header */}
+                <div className="flex items-end justify-between mb-20 lg:mb-28">
+                    <div>
+                        <span className="font-degular text-[10px] uppercase tracking-[0.5em] text-white/25 mb-4 block">Knowledge Base</span>
+                        <h2 className="font-bricolage text-4xl lg:text-6xl text-white uppercase tracking-tight font-bold leading-none">
+                            Enquiries
+                        </h2>
+                    </div>
+                    <span className="font-degular text-[10px] uppercase tracking-[0.3em] text-white/20 hidden lg:block">
+                        {String(faqs.length).padStart(2, "0")} Items
+                    </span>
+                </div>
+
+                {/* FAQ Items */}
+                <div>
                     {faqs.map((faq, index) => {
                         const isOpen = openIndex === index;
                         return (
                             <div
                                 key={index}
-                                className="border-b border-white/10 pb-4 cursor-pointer group"
+                                className="group cursor-pointer"
                                 onClick={() => toggle(index)}
                             >
-                                <div className="flex items-center justify-between py-6">
-                                    <h3 className="font-bricolage text-xl lg:text-2xl text-white tracking-widest transition-colors group-hover:text-white/80 font-normal">
-                                        {faq.question}
-                                    </h3>
-                                    <div className="text-white">
-                                        {isOpen ? <Minus strokeWidth={1} /> : <Plus strokeWidth={1} />}
-                                    </div>
+                                {/* Top separator with index marker */}
+                                <div className="relative">
+                                    <div className={`h-[1px] w-full transition-all duration-700 ${isOpen ? 'bg-white/20' : 'bg-white/[0.07] group-hover:bg-white/15'}`} />
+                                    {/* Small index dot on the line */}
+                                    <div className={`absolute -top-[3px] left-0 w-[6px] h-[6px] rounded-full transition-all duration-500 ${isOpen ? 'bg-white scale-100' : 'bg-white/30 scale-75 group-hover:bg-white/60 group-hover:scale-100'}`} />
                                 </div>
-                                <div
-                                    className={`overflow-hidden transition-all duration-500 ease-in-out ${isOpen ? "max-h-40 opacity-100" : "max-h-0 opacity-0"
-                                        }`}
-                                >
-                                    <p className="font-degular text-white/50 text-[15px] tracking-wide font-light leading-loose pb-6 pr-8">
-                                        {faq.answer}
-                                    </p>
+
+                                <div className="flex items-start justify-between py-8 lg:py-10">
+                                    {/* Left: index number */}
+                                    <span className={`font-degular text-[11px] tracking-[0.2em] mr-8 lg:mr-12 transition-colors duration-500 mt-2 ${isOpen ? 'text-white/60' : 'text-white/15 group-hover:text-white/40'}`}>
+                                        {String(index + 1).padStart(2, "0")}
+                                    </span>
+
+                                    {/* Center: question */}
+                                    <div className="flex-1">
+                                        <h3 className={`font-bricolage text-lg lg:text-2xl tracking-wide transition-colors duration-500 font-normal leading-snug ${isOpen ? 'text-white' : 'text-white/70 group-hover:text-white/90'}`}>
+                                            {faq.question}
+                                        </h3>
+
+                                        {/* Answer */}
+                                        <div className={`overflow-hidden transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${isOpen ? "max-h-40 opacity-100 mt-5" : "max-h-0 opacity-0 mt-0"}`}>
+                                            <p className="font-degular text-white/45 text-[14px] tracking-wide font-light leading-[1.8] max-w-xl">
+                                                {faq.answer}
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    {/* Right: open/close indicator */}
+                                    <div className={`ml-8 mt-2 transition-all duration-500 ${isOpen ? 'rotate-45 text-white' : 'rotate-0 text-white/30 group-hover:text-white/60'}`}>
+                                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5">
+                                            <line x1="8" y1="1" x2="8" y2="15" />
+                                            <line x1="1" y1="8" x2="15" y2="8" />
+                                        </svg>
+                                    </div>
                                 </div>
                             </div>
                         );
                     })}
+                    {/* Final bottom line */}
+                    <div className="h-[1px] w-full bg-white/[0.07]" />
                 </div>
             </div>
         </section>

@@ -99,3 +99,9 @@ body {
 .animate-rec-flicker {
   animation: recFlicker 1.5s infinite;
 }
+
+/* Match KEEP SCROLLING pulse to REC dot intensity */
+.animate-scroll-flicker {
+  animation: recFlicker 1.5s infinite;
+  filter: drop-shadow(0 0 12px rgba(255, 255, 255, 0.9));
+}
