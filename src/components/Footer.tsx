@@ -1,11 +1,10 @@
 "use client";
 
+import { Instagram, FileText, Mail } from "lucide-react";
+
 export default function Footer() {
     return (
         <footer className="relative w-full h-[100dvh] bg-[#0B0C10] flex flex-col justify-between items-center z-50 pt-32 pb-16 px-6 lg:px-24 overflow-hidden">
-            {/* Ambient vertical center line */}
-            <div className="absolute top-0 left-1/2 w-[1px] h-full bg-gradient-to-b from-transparent via-white/[0.04] to-transparent pointer-events-none" />
-
             {/* Top Section: Newsletter */}
             <div className="w-full max-w-2xl text-center relative">
                 <span className="font-degular text-[10px] uppercase tracking-[0.5em] text-white/25 mb-6 block">Exclusive Access</span>
@@ -63,9 +62,18 @@ export default function Footer() {
                 <div className="flex w-full justify-between items-center text-white/30 font-degular text-[10px] tracking-[0.2em] uppercase mt-8 border-t border-white/[0.06] pt-8 pb-8 lg:pb-12">
                     <span>&copy; {new Date().getFullYear()} Lumina Parfums</span>
                     <div className="flex gap-8 lg:pr-32 pr-28 z-20">
-                        <a href="https://instagram.com/batch_systems" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors duration-300">Instagram</a>
-                        <a href="#" className="hover:text-white transition-colors duration-300">Legal</a>
-                        <a href="mailto:isaadimughal@gmail.com" className="hover:text-white transition-colors duration-300">Contact</a>
+                        <a href="https://instagram.com/batch_systems" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:text-white transition-colors duration-300 group">
+                            <Instagram className="w-3.5 h-3.5 group-hover:scale-110 transition-transform" strokeWidth={1.5} />
+                            <span>Instagram</span>
+                        </a>
+                        <a href="#" className="flex items-center gap-2 hover:text-white transition-colors duration-300 group">
+                            <FileText className="w-3.5 h-3.5 group-hover:scale-110 transition-transform" strokeWidth={1.5} />
+                            <span>Legal</span>
+                        </a>
+                        <a href="mailto:isaadimughal@gmail.com" className="flex items-center gap-2 hover:text-white transition-colors duration-300 group">
+                            <Mail className="w-3.5 h-3.5 group-hover:scale-110 transition-transform" strokeWidth={1.5} />
+                            <span>Contact</span>
+                        </a>
                     </div>
                 </div>
             </div>
