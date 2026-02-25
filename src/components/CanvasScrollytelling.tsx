@@ -471,6 +471,77 @@ export default function CanvasScrollytelling() {
                         <circle cx="20" cy="20" r="1.5" fill="currentColor" />
                     </svg>
 
+                    {/* === PREMIUM AMBIENT ICONS — only render in outer margin space on large screens === */}
+
+                    {/* TOP LEFT: Molecule / Hexagon glyph */}
+                    <div className="absolute top-16 left-16 opacity-[0.12] text-white animate-[pulse_6s_ease-in-out_infinite]">
+                        <svg width="56" height="56" viewBox="0 0 56 56" fill="none" stroke="currentColor" strokeWidth="0.6">
+                            <polygon points="28,4 50,16 50,40 28,52 6,40 6,16" />
+                            <polygon points="28,14 42,21 42,35 28,42 14,35 14,21" />
+                            <circle cx="28" cy="28" r="3" fill="currentColor" />
+                            <line x1="28" y1="4" x2="28" y2="14" />
+                            <line x1="50" y1="16" x2="42" y2="21" />
+                            <line x1="50" y1="40" x2="42" y2="35" />
+                            <line x1="28" y1="52" x2="28" y2="42" />
+                            <line x1="6" y1="40" x2="14" y2="35" />
+                            <line x1="6" y1="16" x2="14" y2="21" />
+                        </svg>
+                    </div>
+
+                    {/* TOP RIGHT: Rotating orbit rings */}
+                    <div className="absolute top-14 right-16 opacity-[0.10] text-white animate-[spin_20s_linear_infinite]">
+                        <svg width="52" height="52" viewBox="0 0 52 52" fill="none" stroke="currentColor" strokeWidth="0.6">
+                            <ellipse cx="26" cy="26" rx="24" ry="10" />
+                            <ellipse cx="26" cy="26" rx="24" ry="10" transform="rotate(60 26 26)" />
+                            <ellipse cx="26" cy="26" rx="24" ry="10" transform="rotate(120 26 26)" />
+                            <circle cx="26" cy="26" r="3" fill="currentColor" />
+                        </svg>
+                    </div>
+
+                    {/* BOTTOM LEFT: Smoke / Flame glyph */}
+                    <div className="absolute bottom-14 left-16 opacity-[0.12] text-white animate-[pulse_4s_ease-in-out_infinite_1s]">
+                        <svg width="40" height="56" viewBox="0 0 40 56" fill="none" stroke="currentColor" strokeWidth="0.7" strokeLinecap="round">
+                            <path d="M20 52 C20 52 32 42 32 32 C32 24 26 20 20 14 C20 14 28 22 22 30 C20 33 20 36 20 36 C20 36 18 29 12 26 C6 23 8 14 14 8 C8 14 4 24 8 32 C12 40 20 52 20 52Z" />
+                            <path d="M20 40 C20 40 26 35 26 30 C26 26 22 24 20 20" opacity="0.5" />
+                        </svg>
+                    </div>
+
+                    {/* BOTTOM RIGHT: Diamond facet */}
+                    <div className="absolute bottom-14 right-16 opacity-[0.12] text-white animate-[pulse_5s_ease-in-out_infinite_2s]">
+                        <svg width="48" height="48" viewBox="0 0 48 48" fill="none" stroke="currentColor" strokeWidth="0.6">
+                            <polygon points="24,2 44,18 24,46 4,18" />
+                            <polygon points="24,2 44,18 24,22 4,18" />
+                            <line x1="4" y1="18" x2="24" y2="22" />
+                            <line x1="44" y1="18" x2="24" y2="22" />
+                            <line x1="24" y1="22" x2="24" y2="46" />
+                            <line x1="24" y1="2" x2="14" y2="18" />
+                            <line x1="24" y1="2" x2="34" y2="18" />
+                        </svg>
+                    </div>
+
+                    {/* FAR LEFT: Vertical label + thin alchemical bar */}
+                    <div className="absolute left-6 top-1/2 -translate-y-1/2 hidden xl:flex flex-col items-center gap-3 opacity-[0.15]">
+                        <div className="w-[1px] h-24 bg-white/50 rounded-full" />
+                        <span className="font-degular text-[8px] uppercase tracking-[0.4em] text-white" style={{ writingMode: "vertical-rl", transform: "rotate(180deg)" }}>
+                            LUMINA / 2025
+                        </span>
+                        <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" strokeWidth="0.5" className="text-white">
+                            <polygon points="5,0 10,5 5,10 0,5" />
+                        </svg>
+                    </div>
+
+                    {/* FAR RIGHT: Vertical percentage + alchemical bar */}
+                    <div className="absolute right-6 top-1/2 -translate-y-1/2 hidden xl:flex flex-col items-center gap-3 opacity-[0.15]">
+                        <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" strokeWidth="0.5" className="text-white">
+                            <circle cx="5" cy="5" r="4" />
+                            <circle cx="5" cy="5" r="1.5" fill="currentColor" />
+                        </svg>
+                        <span className="font-degular text-[8px] uppercase tracking-[0.4em] text-white" style={{ writingMode: "vertical-rl" }}>
+                            AU / 24K CRAFT
+                        </span>
+                        <div className="w-[1px] h-24 bg-white/50 rounded-full" />
+                    </div>
+
                     {/* Left Column Fillers */}
                     <div className="flex flex-col items-center justify-between h-[60%] my-auto opacity-30">
                         {/* Top Crosshair */}
