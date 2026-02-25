@@ -24,7 +24,6 @@ export default function CanvasScrollytelling() {
 
     const [loaded, setLoaded] = useState(false);
     const [progress, setProgress] = useState(0); // for the loading screen (optional)
-    const [frameBounds, setFrameBounds] = useState({ width: "100%", height: "100%" });
 
     const [showWelcome, setShowWelcome] = useState(false);
     const [showContinueBtn, setShowContinueBtn] = useState(false); // Option 2: Delay button
@@ -181,46 +180,9 @@ export default function CanvasScrollytelling() {
 
         const canvasWidth = canvas.width;
         const canvasHeight = canvas.height;
-        const imgRatio = img.width / img.height;
-        const canvasRatio = canvasWidth / canvasHeight;
 
-        // Step 1: Calculate the maximum possible 16:9 bounding box that physically 
-        // fits inside the user's current screen WITHOUT extending past the screen edges.
-        const dpr = window.devicePixelRatio || 1;
-        const screenWidth = window.innerWidth;
-        const screenHeight = window.innerHeight;
-
-        // We subtract a little bit of padding so it's not literally touching the glass edge
-        const availableWidth = screenWidth - 32; // 16px padding on each side
-        const availableHeight = screenHeight - 64; // 32px padding top/bottom
-
-        let finalWidth, finalHeight;
-
-        // 16:9 = 1.777...
-        if (availableWidth / availableHeight > 16 / 9) {
-            // Screen is too wide. Lock height to max, calculate width.
-            finalHeight = availableHeight;
-            finalWidth = finalHeight * (16 / 9);
-        } else {
-            // Screen is too tall. Lock width to max, calculate height.
-            finalWidth = availableWidth;
-            finalHeight = finalWidth / (16 / 9);
-        }
-
-        // Apply a hard architectural cap so it doesn't get ridiculously big on 49-inch curved monitors
-        if (finalWidth > 1120) {
-            finalWidth = 1120;
-            finalHeight = 630;
-        }
-
-        setFrameBounds({
-            width: `${finalWidth}px`,
-            height: `${finalHeight}px`
-        });
-
-        // Step 2: Draw the image absolutely pixel-perfectly into the DOM canvas element.
-        // We DO NOT offset or letterbox it here. We draw it 0->100% pure. 
-        // The CSS container handles the scaling responsively.
+        // Frame size is now fully controlled by CSS (see the wrapper div below).
+        // We just draw the image to fill the canvas exactly — CSS handles the visual bounds.
         ctx.clearRect(0, 0, canvasWidth, canvasHeight);
         ctx.drawImage(img, 0, 0, canvasWidth, canvasHeight);
     };
@@ -555,14 +517,12 @@ export default function CanvasScrollytelling() {
                     </div>
                 </div>
 
-                {/* The actual bounded wrapper that STRICTLY conforms to the 16:9 calculated boundaries */}
+                {/* Frame: fixed 1120×630, shrinks on small screens via CSS min(), NEVER grows on large screens. */}
                 <div
-                    className="relative rounded-xl lg:rounded-2xl bg-black overflow-hidden transition-all duration-300 ease-out z-30"
+                    className="relative rounded-xl lg:rounded-2xl bg-black overflow-hidden z-30"
                     style={{
-                        width: frameBounds.width,
-                        height: frameBounds.height,
-                        maxWidth: "1120px",
-                        maxHeight: "630px"
+                        width: "min(1120px, calc(100vw - 32px), calc((100vh - 64px) * 16 / 9))",
+                        height: "min(630px, calc(100vh - 64px), calc((100vw - 32px) * 9 / 16))",
                     }}
                 >
 
