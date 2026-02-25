@@ -15,13 +15,23 @@ export default function Footer() {
                     Be the first to experience limited releases and private atelier events.
                 </p>
 
-                <form className="relative w-full max-w-md mx-auto" onSubmit={(e) => e.preventDefault()}>
+                <form className="relative w-full max-w-md mx-auto" onSubmit={(e) => {
+                    e.preventDefault();
+                    const input = e.currentTarget.querySelector("input") as HTMLInputElement;
+                    // Strip any HTML/script tags from the value
+                    const sanitized = input.value.replace(/<[^>]*>/g, "").trim();
+                    if (!sanitized || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(sanitized)) return;
+                    // Future: send sanitized value to your API
+                }}>
                     <div className="relative group">
                         <input
                             type="email"
                             placeholder="Your email address"
                             className="w-full bg-transparent border-b border-white/15 text-white font-degular font-light text-[14px] py-4 px-0 focus:outline-none focus:ring-0 focus:ring-offset-0 ring-0 hover:border-white/30 transition-all placeholder:text-white/15 tracking-wide outline-none shadow-none appearance-none"
                             required
+                            maxLength={254}
+                            pattern="[^\s@]+@[^\s@]+\.[^\s@]+"
+                            autoComplete="email"
                         />
                         {/* Animated underline that fills on focus */}
                         <div className="absolute bottom-0 left-0 w-0 h-[1px] bg-white transition-all duration-700 ease-out group-focus-within:w-full" />

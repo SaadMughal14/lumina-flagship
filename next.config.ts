@@ -1,7 +1,7 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  poweredByHeader: false, // Strip "X-Powered-By: Next.js" to prevent fingerprinting
 };
 
 export default nextConfig;
