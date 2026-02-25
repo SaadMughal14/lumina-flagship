@@ -4,7 +4,7 @@ import { Instagram, FileText, Mail } from "lucide-react";
 
 export default function Footer() {
     return (
-        <footer className="relative w-full h-[100dvh] bg-[#0B0C10] flex flex-col justify-between items-center z-50 pt-32 pb-16 px-6 lg:px-24 overflow-hidden">
+        <footer className="relative w-full min-h-[100dvh] bg-[#0B0C10] flex flex-col justify-between items-center z-50 pt-32 pb-32 px-6 lg:px-24">
             {/* Top Section: Newsletter */}
             <div className="w-full max-w-2xl text-center relative">
                 <span className="font-degular text-[10px] uppercase tracking-[0.5em] text-white/25 mb-6 block">Exclusive Access</span>
@@ -20,7 +20,7 @@ export default function Footer() {
                         <input
                             type="email"
                             placeholder="Your email address"
-                            className="w-full bg-transparent border-b border-white/15 text-white font-degular font-light text-[14px] py-4 px-0 focus:outline-none transition-all placeholder:text-white/15 tracking-wide group-hover:border-white/30"
+                            className="w-full bg-transparent border-b border-white/15 text-white font-degular font-light text-[14px] py-4 px-0 focus:outline-none focus:ring-0 focus:ring-offset-0 ring-0 hover:border-white/30 transition-all placeholder:text-white/15 tracking-wide outline-none shadow-none appearance-none"
                             required
                         />
                         {/* Animated underline that fills on focus */}
