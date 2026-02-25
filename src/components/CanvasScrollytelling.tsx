@@ -449,7 +449,7 @@ export default function CanvasScrollytelling() {
             {/* Scrollytelling Container (Only fade in once loaded) */}
             <div
                 ref={containerRef}
-                className={`relative w-full h-[100dvh] bg-[#0B0C10] overflow-hidden flex items-center justify-center p-4 lg:p-8 transition-opacity duration-1000 ${loaded ? 'opacity-100' : 'opacity-0'}`}
+                className={`relative w-full h-[100dvh] bg-[#0B0C10] overflow-hidden flex items-center justify-center p-4 lg:p-8 pt-16 lg:pt-16 transition-opacity duration-1000 ${loaded ? 'opacity-100' : 'opacity-0'}`}
             >
 
                 {/* Edge Typography & Architectural Marks (Visible only on wider screens) */}
@@ -471,75 +471,72 @@ export default function CanvasScrollytelling() {
                         <circle cx="20" cy="20" r="1.5" fill="currentColor" />
                     </svg>
 
-                    {/* === PREMIUM AMBIENT ICONS — only render in outer margin space on large screens === */}
+                    {/* === PREMIUM AMBIENT ICONS — xl+ only, fill empty side/top/bottom space around frame === */}
+                    {/* SAFE ZONES: avoid top-left (logo) and bottom-right (portfolio pill) */}
 
-                    {/* TOP LEFT: Molecule / Hexagon glyph */}
-                    <div className="absolute top-16 left-16 opacity-[0.12] text-white animate-[pulse_6s_ease-in-out_infinite]">
-                        <svg width="56" height="56" viewBox="0 0 56 56" fill="none" stroke="currentColor" strokeWidth="0.6">
-                            <polygon points="28,4 50,16 50,40 28,52 6,40 6,16" />
-                            <polygon points="28,14 42,21 42,35 28,42 14,35 14,21" />
-                            <circle cx="28" cy="28" r="3" fill="currentColor" />
-                            <line x1="28" y1="4" x2="28" y2="14" />
-                            <line x1="50" y1="16" x2="42" y2="21" />
-                            <line x1="50" y1="40" x2="42" y2="35" />
-                            <line x1="28" y1="52" x2="28" y2="42" />
-                            <line x1="6" y1="40" x2="14" y2="35" />
-                            <line x1="6" y1="16" x2="14" y2="21" />
+                    {/* TOP RIGHT: Fine astrolabe / compass rose — away from logo */}
+                    <div className="absolute top-12 right-20 hidden xl:block opacity-[0.13] text-white">
+                        <svg width="64" height="64" viewBox="0 0 64 64" fill="none" stroke="currentColor" strokeWidth="0.5">
+                            <circle cx="32" cy="32" r="30" />
+                            <circle cx="32" cy="32" r="20" />
+                            <circle cx="32" cy="32" r="10" />
+                            <circle cx="32" cy="32" r="1.5" fill="currentColor" />
+                            {/* Cardinal tick marks */}
+                            {[0, 45, 90, 135, 180, 225, 270, 315].map((deg, i) => {
+                                const r = Math.PI * deg / 180;
+                                const x1 = 32 + 30 * Math.sin(r);
+                                const y1 = 32 - 30 * Math.cos(r);
+                                const x2 = 32 + (i % 2 === 0 ? 24 : 27) * Math.sin(r);
+                                const y2 = 32 - (i % 2 === 0 ? 24 : 27) * Math.cos(r);
+                                return <line key={deg} x1={x1} y1={y1} x2={x2} y2={y2} strokeWidth={i % 2 === 0 ? "0.8" : "0.4"} />;
+                            })}
+                            {/* Arrow pointing north */}
+                            <polygon points="32,4 30,18 32,16 34,18" fill="currentColor" fillOpacity="0.5" />
                         </svg>
                     </div>
 
-                    {/* TOP RIGHT: Rotating orbit rings */}
-                    <div className="absolute top-14 right-16 opacity-[0.10] text-white animate-[spin_20s_linear_infinite]">
-                        <svg width="52" height="52" viewBox="0 0 52 52" fill="none" stroke="currentColor" strokeWidth="0.6">
-                            <ellipse cx="26" cy="26" rx="24" ry="10" />
-                            <ellipse cx="26" cy="26" rx="24" ry="10" transform="rotate(60 26 26)" />
-                            <ellipse cx="26" cy="26" rx="24" ry="10" transform="rotate(120 26 26)" />
-                            <circle cx="26" cy="26" r="3" fill="currentColor" />
+                    {/* BOTTOM LEFT: Crystal prism refraction — away from portfolio pill */}
+                    <div className="absolute bottom-12 left-20 hidden xl:block opacity-[0.11] text-white">
+                        <svg width="58" height="58" viewBox="0 0 58 58" fill="none" stroke="currentColor" strokeWidth="0.5">
+                            {/* Prism triangle */}
+                            <polygon points="29,4 54,48 4,48" />
+                            {/* Inner structure */}
+                            <line x1="29" y1="4" x2="29" y2="48" />
+                            <line x1="16" y1="26" x2="42" y2="26" />
+                            {/* Refraction rays from base */}
+                            <line x1="14" y1="48" x2="4" y2="56" strokeWidth="0.3" />
+                            <line x1="22" y1="48" x2="14" y2="58" strokeWidth="0.3" />
+                            <line x1="36" y1="48" x2="44" y2="58" strokeWidth="0.3" />
+                            <line x1="44" y1="48" x2="54" y2="56" strokeWidth="0.3" />
+                            {/* Apex dot */}
+                            <circle cx="29" cy="4" r="1.5" fill="currentColor" />
                         </svg>
                     </div>
 
-                    {/* BOTTOM LEFT: Smoke / Flame glyph */}
-                    <div className="absolute bottom-14 left-16 opacity-[0.12] text-white animate-[pulse_4s_ease-in-out_infinite_1s]">
-                        <svg width="40" height="56" viewBox="0 0 40 56" fill="none" stroke="currentColor" strokeWidth="0.7" strokeLinecap="round">
-                            <path d="M20 52 C20 52 32 42 32 32 C32 24 26 20 20 14 C20 14 28 22 22 30 C20 33 20 36 20 36 C20 36 18 29 12 26 C6 23 8 14 14 8 C8 14 4 24 8 32 C12 40 20 52 20 52Z" />
-                            <path d="M20 40 C20 40 26 35 26 30 C26 26 22 24 20 20" opacity="0.5" />
+                    {/* MID LEFT EDGE: Fine signal oscilloscope — xl+ only */}
+                    <div className="absolute left-4 top-1/2 -translate-y-1/2 hidden xl:flex flex-col items-center gap-4 opacity-[0.12] text-white">
+                        <div className="w-[1px] h-10 bg-white/40" />
+                        <svg width="32" height="24" viewBox="0 0 32 24" fill="none" stroke="currentColor" strokeWidth="0.5">
+                            <path d="M0 12 L6 12 L8 4 L10 20 L12 12 L18 12 L20 4 L22 20 L24 12 L32 12" strokeLinecap="round" />
                         </svg>
+                        <span className="font-degular text-[7px] uppercase tracking-[0.4em] text-white" style={{ writingMode: "vertical-rl", transform: "rotate(180deg)" }}>SIGNAL</span>
+                        <div className="w-[1px] h-10 bg-white/40" />
                     </div>
 
-                    {/* BOTTOM RIGHT: Diamond facet */}
-                    <div className="absolute bottom-14 right-16 opacity-[0.12] text-white animate-[pulse_5s_ease-in-out_infinite_2s]">
-                        <svg width="48" height="48" viewBox="0 0 48 48" fill="none" stroke="currentColor" strokeWidth="0.6">
-                            <polygon points="24,2 44,18 24,46 4,18" />
-                            <polygon points="24,2 44,18 24,22 4,18" />
-                            <line x1="4" y1="18" x2="24" y2="22" />
-                            <line x1="44" y1="18" x2="24" y2="22" />
-                            <line x1="24" y1="22" x2="24" y2="46" />
-                            <line x1="24" y1="2" x2="14" y2="18" />
-                            <line x1="24" y1="2" x2="34" y2="18" />
+                    {/* MID RIGHT EDGE: Fine molecular chain — xl+ only */}
+                    <div className="absolute right-4 top-1/2 -translate-y-1/2 hidden xl:flex flex-col items-center gap-4 opacity-[0.12] text-white">
+                        <div className="w-[1px] h-10 bg-white/40" />
+                        <svg width="28" height="48" viewBox="0 0 28 48" fill="none" stroke="currentColor" strokeWidth="0.5">
+                            <circle cx="14" cy="6" r="4" />
+                            <line x1="14" y1="10" x2="14" y2="16" />
+                            <circle cx="14" cy="20" r="4" />
+                            <line x1="14" y1="24" x2="14" y2="28" />
+                            <circle cx="14" cy="32" r="4" />
+                            <line x1="14" y1="36" x2="14" y2="40" />
+                            <circle cx="14" cy="44" r="3" />
+                            <circle cx="14" cy="6" r="1.5" fill="currentColor" />
                         </svg>
-                    </div>
-
-                    {/* FAR LEFT: Vertical label + thin alchemical bar */}
-                    <div className="absolute left-6 top-1/2 -translate-y-1/2 hidden xl:flex flex-col items-center gap-3 opacity-[0.15]">
-                        <div className="w-[1px] h-24 bg-white/50 rounded-full" />
-                        <span className="font-degular text-[8px] uppercase tracking-[0.4em] text-white" style={{ writingMode: "vertical-rl", transform: "rotate(180deg)" }}>
-                            LUMINA / 2025
-                        </span>
-                        <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" strokeWidth="0.5" className="text-white">
-                            <polygon points="5,0 10,5 5,10 0,5" />
-                        </svg>
-                    </div>
-
-                    {/* FAR RIGHT: Vertical percentage + alchemical bar */}
-                    <div className="absolute right-6 top-1/2 -translate-y-1/2 hidden xl:flex flex-col items-center gap-3 opacity-[0.15]">
-                        <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" strokeWidth="0.5" className="text-white">
-                            <circle cx="5" cy="5" r="4" />
-                            <circle cx="5" cy="5" r="1.5" fill="currentColor" />
-                        </svg>
-                        <span className="font-degular text-[8px] uppercase tracking-[0.4em] text-white" style={{ writingMode: "vertical-rl" }}>
-                            AU / 24K CRAFT
-                        </span>
-                        <div className="w-[1px] h-24 bg-white/50 rounded-full" />
+                        <div className="w-[1px] h-10 bg-white/40" />
                     </div>
 
                     {/* Left Column Fillers */}
@@ -551,7 +548,10 @@ export default function CanvasScrollytelling() {
 
                         {/* Center Scroll Text */}
                         <div className="flex flex-col items-center gap-6">
-                            <span className="font-degular tracking-[0.5em] text-[10px] text-white uppercase" style={{ writingMode: "vertical-rl", transform: "rotate(180deg)" }}>
+                            <span
+                                className="font-degular tracking-[0.5em] text-[10px] text-white uppercase animate-[pulse_3s_ease-in-out_infinite] drop-shadow-[0_0_8px_rgba(255,255,255,0.6)]"
+                                style={{ writingMode: "vertical-rl", transform: "rotate(180deg)" }}
+                            >
                                 KEEP SCROLLING
                             </span>
                             <div className="w-[1px] h-16 bg-white/30 rounded-full"></div>
