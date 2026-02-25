@@ -20,7 +20,7 @@ export default function Footer() {
                         <input
                             type="email"
                             placeholder="Your email address"
-                            className="w-full bg-transparent border-b border-white/15 text-white font-degular font-light text-[14px] py-4 px-0 focus:outline-none transition-all placeholder:text-white/15 tracking-wide group-hover:border-white/30 focus:border-white/50"
+                            className="w-full bg-transparent border-b border-white/15 text-white font-degular font-light text-[14px] py-4 px-0 focus:outline-none transition-all placeholder:text-white/15 tracking-wide group-hover:border-white/30"
                             required
                         />
                         {/* Animated underline that fills on focus */}
@@ -59,7 +59,7 @@ export default function Footer() {
                     <span className="font-degular text-[8px] uppercase tracking-[0.6em] text-white/20">Extrait de Parfum</span>
                 </div>
 
-                <div className="flex w-full justify-between items-center text-white/30 font-degular text-[10px] tracking-[0.2em] uppercase mt-8 border-t border-white/[0.06] pt-8 pb-8 lg:pb-12">
+                <div className="flex w-full justify-between items-center text-white/30 font-degular text-[10px] tracking-[0.2em] uppercase mt-8 border-t border-white/[0.06] pt-8 pb-10 lg:pb-16 lg:pr-10">
                     <span>&copy; {new Date().getFullYear()} Lumina Parfums</span>
                     <div className="flex gap-8 lg:pr-32 pr-28 z-20">
                         <a href="https://instagram.com/batch_systems" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:text-white transition-colors duration-300 group">
