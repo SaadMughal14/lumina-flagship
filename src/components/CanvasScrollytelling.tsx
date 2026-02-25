@@ -513,30 +513,89 @@ export default function CanvasScrollytelling() {
                         </svg>
                     </div>
 
-                    {/* MID LEFT EDGE: Fine signal oscilloscope — xl+ only */}
-                    <div className="absolute left-4 top-1/2 -translate-y-1/2 hidden xl:flex flex-col items-center gap-4 opacity-[0.12] text-white">
-                        <div className="w-[1px] h-10 bg-white/40" />
-                        <svg width="32" height="24" viewBox="0 0 32 24" fill="none" stroke="currentColor" strokeWidth="0.5">
-                            <path d="M0 12 L6 12 L8 4 L10 20 L12 12 L18 12 L20 4 L22 20 L24 12 L32 12" strokeLinecap="round" />
+                    {/* MID LEFT EDGE: Fine signal oscilloscope — xl+ only, positioned ABOVE the left column (not overlapping KEEP SCROLLING) */}
+                    <div className="absolute left-16 top-[22%] hidden xl:flex flex-row items-center gap-3 opacity-[0.12] text-white">
+                        <svg width="24" height="32" viewBox="0 0 24 32" fill="none" stroke="currentColor" strokeWidth="0.5">
+                            <path d="M12 0 L12 6 L4 12 L12 18 L20 12 L12 6" strokeLinecap="round" />
+                            <path d="M12 18 L12 32" strokeDasharray="2 2" />
                         </svg>
-                        <span className="font-degular text-[7px] uppercase tracking-[0.4em] text-white" style={{ writingMode: "vertical-rl", transform: "rotate(180deg)" }}>SIGNAL</span>
-                        <div className="w-[1px] h-10 bg-white/40" />
+                        <span className="font-degular text-[7px] uppercase tracking-[0.4em] text-white">SIGNAL</span>
                     </div>
 
-                    {/* MID RIGHT EDGE: Fine molecular chain — xl+ only */}
-                    <div className="absolute right-4 top-1/2 -translate-y-1/2 hidden xl:flex flex-col items-center gap-4 opacity-[0.12] text-white">
-                        <div className="w-[1px] h-10 bg-white/40" />
-                        <svg width="28" height="48" viewBox="0 0 28 48" fill="none" stroke="currentColor" strokeWidth="0.5">
-                            <circle cx="14" cy="6" r="4" />
-                            <line x1="14" y1="10" x2="14" y2="16" />
-                            <circle cx="14" cy="20" r="4" />
-                            <line x1="14" y1="24" x2="14" y2="28" />
-                            <circle cx="14" cy="32" r="4" />
-                            <line x1="14" y1="36" x2="14" y2="40" />
-                            <circle cx="14" cy="44" r="3" />
-                            <circle cx="14" cy="6" r="1.5" fill="currentColor" />
+                    {/* MID RIGHT EDGE: Fine molecular chain — xl+ only, positioned at 75% height (away from pill in bottom-right) */}
+                    <div className="absolute right-16 top-[70%] hidden xl:flex flex-row items-center gap-3 opacity-[0.12] text-white">
+                        <span className="font-degular text-[7px] uppercase tracking-[0.4em] text-white">CHAIN</span>
+                        <svg width="48" height="16" viewBox="0 0 48 16" fill="none" stroke="currentColor" strokeWidth="0.5">
+                            <circle cx="6" cy="8" r="4" />
+                            <line x1="10" y1="8" x2="16" y2="8" />
+                            <circle cx="20" cy="8" r="4" />
+                            <line x1="24" y1="8" x2="28" y2="8" />
+                            <circle cx="32" cy="8" r="4" />
+                            <line x1="36" y1="8" x2="40" y2="8" />
+                            <circle cx="44" cy="8" r="3" />
+                            <circle cx="6" cy="8" r="1.5" fill="currentColor" />
                         </svg>
-                        <div className="w-[1px] h-10 bg-white/40" />
+                    </div>
+
+                    {/* === 2XL+ ULTRAWIDE FILLERS (1536px+ / ~20" screens) — lightweight SVGs to fill empty margins === */}
+
+                    {/* TOP CENTER-LEFT: Delicate starburst */}
+                    <div className="absolute top-10 left-[30%] hidden 2xl:block opacity-[0.08] text-white">
+                        <svg width="36" height="36" viewBox="0 0 36 36" fill="none" stroke="currentColor" strokeWidth="0.4">
+                            <line x1="18" y1="0" x2="18" y2="36" />
+                            <line x1="0" y1="18" x2="36" y2="18" />
+                            <line x1="5" y1="5" x2="31" y2="31" />
+                            <line x1="5" y1="31" x2="31" y2="5" />
+                            <circle cx="18" cy="18" r="6" />
+                            <circle cx="18" cy="18" r="1.5" fill="currentColor" />
+                        </svg>
+                    </div>
+
+                    {/* TOP CENTER-RIGHT: Fine concentric rings */}
+                    <div className="absolute top-8 right-[30%] hidden 2xl:block opacity-[0.07] text-white">
+                        <svg width="40" height="40" viewBox="0 0 40 40" fill="none" stroke="currentColor" strokeWidth="0.3">
+                            <circle cx="20" cy="20" r="18" strokeDasharray="3 3" />
+                            <circle cx="20" cy="20" r="12" />
+                            <circle cx="20" cy="20" r="6" strokeDasharray="2 2" />
+                            <circle cx="20" cy="20" r="1" fill="currentColor" />
+                        </svg>
+                    </div>
+
+                    {/* BOTTOM CENTER: Fine waveform line */}
+                    <div className="absolute bottom-8 left-[40%] hidden 2xl:block opacity-[0.08] text-white">
+                        <svg width="120" height="20" viewBox="0 0 120 20" fill="none" stroke="currentColor" strokeWidth="0.4">
+                            <path d="M0 10 L10 10 L15 3 L20 17 L25 10 L35 10 L40 3 L45 17 L50 10 L60 10 L65 3 L70 17 L75 10 L85 10 L90 3 L95 17 L100 10 L120 10" strokeLinecap="round" />
+                        </svg>
+                    </div>
+
+                    {/* LEFT VERTICAL STRIP: Grid dots column — 2xl only */}
+                    <div className="absolute left-8 top-[15%] hidden 2xl:flex flex-col gap-8 opacity-[0.06] text-white">
+                        {[0, 1, 2, 3, 4].map(i => (
+                            <svg key={i} width="6" height="6" viewBox="0 0 6 6" fill="currentColor">
+                                <circle cx="3" cy="3" r="1.5" />
+                            </svg>
+                        ))}
+                    </div>
+
+                    {/* RIGHT VERTICAL STRIP: Grid dots column — 2xl only */}
+                    <div className="absolute right-8 top-[15%] hidden 2xl:flex flex-col gap-8 opacity-[0.06] text-white">
+                        {[0, 1, 2, 3, 4].map(i => (
+                            <svg key={i} width="6" height="6" viewBox="0 0 6 6" fill="currentColor">
+                                <circle cx="3" cy="3" r="1.5" />
+                            </svg>
+                        ))}
+                    </div>
+
+                    {/* BOTTOM-LEFT AREA: Fine latitude line — 2xl only */}
+                    <div className="absolute bottom-[20%] left-8 hidden 2xl:flex items-center gap-2 opacity-[0.07] text-white">
+                        <div className="w-16 h-[1px] bg-white/30" />
+                        <span className="font-degular text-[7px] uppercase tracking-[0.3em]">E 002° 20'</span>
+                    </div>
+
+                    {/* TOP-RIGHT AREA: Fine timestamp — 2xl only */}
+                    <div className="absolute top-[25%] right-8 hidden 2xl:flex items-center gap-2 opacity-[0.07] text-white">
+                        <span className="font-degular text-[7px] uppercase tracking-[0.3em]">ISO 9001</span>
+                        <div className="w-12 h-[1px] bg-white/30" />
                     </div>
 
                     {/* Left Column Fillers */}
@@ -549,7 +608,7 @@ export default function CanvasScrollytelling() {
                         {/* Center Scroll Text */}
                         <div className="flex flex-col items-center gap-6">
                             <span
-                                className="font-degular tracking-[0.5em] text-[10px] text-white uppercase animate-[pulse_3s_ease-in-out_infinite] drop-shadow-[0_0_8px_rgba(255,255,255,0.6)]"
+                                className="font-degular tracking-[0.5em] text-[10px] text-white/90 uppercase animate-[pulse_3s_ease-in-out_infinite] drop-shadow-[0_0_12px_rgba(255,255,255,0.9)]"
                                 style={{ writingMode: "vertical-rl", transform: "rotate(180deg)" }}
                             >
                                 KEEP SCROLLING

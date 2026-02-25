@@ -66,9 +66,9 @@ export default function RootLayout({
           target="_blank"
           rel="noopener noreferrer"
           id="floating-pill"
-          className="fixed bottom-6 right-6 lg:bottom-10 lg:right-10 z-[100] bg-white/5 backdrop-blur-md border border-white/10 text-white font-degular tracking-widest uppercase flex items-center justify-end rounded-full overflow-hidden w-12 h-12 hover:bg-white/10 transition-colors duration-300"
+          className="group fixed bottom-6 right-6 lg:bottom-10 lg:right-10 z-[100] bg-white/5 backdrop-blur-md border border-white/10 text-white font-degular tracking-widest uppercase flex items-center justify-end rounded-full overflow-hidden w-12 h-12 hover:w-[220px] hover:bg-white/10 transition-all duration-500 ease-out"
         >
-          <span id="floating-pill-text" className="text-[9px] opacity-0 whitespace-nowrap absolute right-14 translate-x-4">
+          <span id="floating-pill-text" className="text-[9px] opacity-0 group-hover:opacity-100 whitespace-nowrap absolute right-14 translate-x-4 group-hover:translate-x-0 transition-all duration-500 ease-out">
             Want a site like this?
           </span>
           <div className="w-8 h-8 rounded-full bg-white text-black flex flex-shrink-0 items-center justify-center mr-2">
