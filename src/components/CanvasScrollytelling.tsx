@@ -435,7 +435,7 @@ export default function CanvasScrollytelling() {
                                         strokeDasharray: "301.6",
                                         strokeDashoffset: 301.6 - (301.6 * Math.min(holdProgress, 100)) / 100,
                                     }}
-                                    className="transition-all duration-[20ms] ease-linear drop-shadow-[0_0_8px_rgba(255,255,255,0.8)]"
+                                    className="drop-shadow-[0_0_8px_rgba(255,255,255,0.8)]"
                                 />
                             </svg>
 
