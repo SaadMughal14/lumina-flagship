@@ -475,7 +475,7 @@ export default function CanvasScrollytelling() {
                     {/* SAFE ZONES: avoid top-left (logo) and bottom-right (portfolio pill) */}
 
                     {/* TOP RIGHT: Fine astrolabe / compass rose — away from logo */}
-                    <div className="absolute top-12 right-20 hidden xl:block opacity-[0.13] text-white">
+                    <div className="absolute top-12 right-20 hidden 2xl:block opacity-[0.13] text-white">
                         <svg width="64" height="64" viewBox="0 0 64 64" fill="none" stroke="currentColor" strokeWidth="0.5">
                             <circle cx="32" cy="32" r="30" />
                             <circle cx="32" cy="32" r="20" />
@@ -496,7 +496,7 @@ export default function CanvasScrollytelling() {
                     </div>
 
                     {/* BOTTOM LEFT: Crystal prism refraction — away from portfolio pill */}
-                    <div className="absolute bottom-12 left-20 hidden xl:block opacity-[0.11] text-white">
+                    <div className="absolute bottom-12 left-20 hidden 2xl:block opacity-[0.11] text-white">
                         <svg width="58" height="58" viewBox="0 0 58 58" fill="none" stroke="currentColor" strokeWidth="0.5">
                             {/* Prism triangle */}
                             <polygon points="29,4 54,48 4,48" />
@@ -514,7 +514,7 @@ export default function CanvasScrollytelling() {
                     </div>
 
                     {/* MID LEFT EDGE: Fine signal oscilloscope — xl+ only, positioned ABOVE the left column (not overlapping KEEP SCROLLING) */}
-                    <div className="absolute left-16 top-[22%] hidden xl:flex flex-row items-center gap-3 opacity-[0.12] text-white">
+                    <div className="absolute left-16 top-[22%] hidden 2xl:flex flex-row items-center gap-3 opacity-[0.12] text-white">
                         <svg width="24" height="32" viewBox="0 0 24 32" fill="none" stroke="currentColor" strokeWidth="0.5">
                             <path d="M12 0 L12 6 L4 12 L12 18 L20 12 L12 6" strokeLinecap="round" />
                             <path d="M12 18 L12 32" strokeDasharray="2 2" />
@@ -523,7 +523,7 @@ export default function CanvasScrollytelling() {
                     </div>
 
                     {/* MID RIGHT EDGE: Fine molecular chain — xl+ only, positioned at 75% height (away from pill in bottom-right) */}
-                    <div className="absolute right-16 top-[70%] hidden xl:flex flex-row items-center gap-3 opacity-[0.12] text-white">
+                    <div className="absolute right-16 top-[70%] hidden 2xl:flex flex-row items-center gap-3 opacity-[0.12] text-white">
                         <span className="font-degular text-[7px] uppercase tracking-[0.4em] text-white">CHAIN</span>
                         <svg width="48" height="16" viewBox="0 0 48 16" fill="none" stroke="currentColor" strokeWidth="0.5">
                             <circle cx="6" cy="8" r="4" />
