@@ -477,7 +477,7 @@ export default function CanvasScrollytelling() {
             {/* Scrollytelling Container (Only fade in once loaded) */}
             <div
                 ref={containerRef}
-                className={`relative w-full h-[100dvh] bg-[#0B0C10] overflow-hidden flex items-center justify-center p-0 lg:p-8 pt-0 lg:pt-16 transition-opacity duration-1000 ${loaded ? 'opacity-100' : 'opacity-0'}`}
+                className={`relative w-full h-[100dvh] bg-[#0B0C10] overflow-hidden flex items-center justify-center p-4 lg:p-8 pt-16 lg:pt-16 transition-opacity duration-1000 ${loaded ? 'opacity-100' : 'opacity-0'}`}
             >
 
                 {/* Edge Typography & Architectural Marks (Visible only on wider screens) */}
@@ -675,12 +675,12 @@ export default function CanvasScrollytelling() {
                     </div>
                 </div>
 
-                {/* Frame: fullscreen on mobile, fixed 1120×630 on desktop, shrinks on small desktops via CSS min(), NEVER grows on large screens. */}
+                {/* Frame: portrait 9:16 on mobile (with padding), landscape 16:9 on desktop. Both use CSS min() to never overflow. */}
                 <div
-                    className="relative rounded-none lg:rounded-2xl bg-black overflow-hidden z-30"
+                    className="relative rounded-xl lg:rounded-2xl bg-black overflow-hidden z-30"
                     style={isMobile ? {
-                        width: "100vw",
-                        height: "100dvh",
+                        width: "min(calc(100vw - 32px), calc((100dvh - 96px) * 9 / 16))",
+                        height: "min(calc(100dvh - 96px), calc((100vw - 32px) * 16 / 9))",
                     } : {
                         width: "min(1120px, calc(100vw - 32px), calc((100vh - 64px) * 16 / 9))",
                         height: "min(630px, calc(100vh - 64px), calc((100vw - 32px) * 9 / 16))",
