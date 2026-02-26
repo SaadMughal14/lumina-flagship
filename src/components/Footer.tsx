@@ -69,7 +69,7 @@ export default function Footer() {
                     <span className="font-degular text-[8px] uppercase tracking-[0.6em] text-white/20">Extrait de Parfum</span>
                 </div>
 
-                <div className="flex w-full justify-between items-center text-white/30 font-degular text-[10px] tracking-[0.2em] uppercase mt-8 border-t border-white/[0.06] pt-8 pb-10 lg:pb-16 lg:pr-10">
+                <div className="flex flex-col lg:flex-row w-full justify-between items-center gap-6 lg:gap-0 text-white/30 font-degular text-[10px] tracking-[0.2em] uppercase mt-8 border-t border-white/[0.06] pt-8 pb-10 lg:pb-16 lg:pr-10">
                     <span>&copy; {new Date().getFullYear()} Lumina Parfums</span>
                     <div className="flex gap-8 z-20">
                         <a href="https://instagram.com/batch_systems" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:text-white transition-colors duration-300 group">

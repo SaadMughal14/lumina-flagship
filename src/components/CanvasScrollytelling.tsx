@@ -25,6 +25,8 @@ export default function CanvasScrollytelling() {
     const [isMobile, setIsMobile] = useState(false);
 
 
+    // Mobile scroll prompt state
+    const [hideMobileScrollText, setHideMobileScrollText] = useState(false);
 
     const [loaded, setLoaded] = useState(false);
     const [progress, setProgress] = useState(0); // for the loading screen (optional)
@@ -291,69 +293,92 @@ export default function CanvasScrollytelling() {
                                 pill.classList.remove("animate-pill-glow");
                             }
                         }
+                        if (isMobile && self.progress > 0.95 && !hideMobileScrollText) {
+                            setHideMobileScrollText(true);
+                        }
                     }
                 },
             });
 
             // --- OVERLAPPING CONTINUOUS SCROLL LOGIC ---
+            // On desktop: we overlap the timelines (Act 2 starts playing WHILE Act 1 is fading) to simulate a continuous take
+            // On mobile: we play them sequentially so the shorter screen has time to display the full focus correctly
 
-            // ACT 1 logic (Time 0 to 12)
+            const t1_end = 12;
+
+            const fade12_start = isMobile ? t1_end : 9;
+            const fade12_dur = isMobile ? 2 : 3;
+
+            const t2_start = isMobile ? fade12_start + fade12_dur : 9;
+            const t2_dur = 12;
+            const t2_end = t2_start + t2_dur;
+
+            const fade23_start = isMobile ? t2_end : 18;
+            const fade23_dur = isMobile ? 2 : 3;
+
+            const t3_start = isMobile ? fade23_start + fade23_dur : 18;
+            const t3_dur = 12;
+            const t3_end = t3_start + t3_dur;
+
+            const end_fade_start = isMobile ? t3_end - 3 : 27;
+
+
+            // ACT 1 logic
             tl.to(
                 frames.current,
                 {
                     act1: TOTAL_FRAMES,
                     snap: "act1",
                     ease: "none",
-                    duration: 12,
+                    duration: t1_end,
                     onUpdate: () => renderCanvas(act1Images.current[Math.max(0, Math.round(frames.current.act1) - 1)], canvas1Ref.current),
                 },
                 0
             );
 
-            // Crossfade 1 -> 2 (Starts fading out Act 1 at Time 9, fades in Act 2 at Time 9, finishes crossfade at Time 12)
-            // By doing this while Act 1's frames are still updating, it looks like a continuous transforming video
-            tl.to(canvas1Ref.current, { opacity: 0, duration: 3, ease: "none" }, 9);
-            tl.to(canvas2Ref.current, { opacity: 1, duration: 3, ease: "none" }, 9);
+            // Crossfade 1 -> 2
+            tl.to(canvas1Ref.current, { opacity: 0, duration: fade12_dur, ease: "none" }, fade12_start);
+            tl.to(canvas2Ref.current, { opacity: 1, duration: fade12_dur, ease: "none" }, fade12_start);
 
-            // ACT 2 logic (Time 9 to 21) - Act 2 starts playing frames AS it is fading in
+            // ACT 2 logic
             tl.to(
                 frames.current,
                 {
                     act2: TOTAL_FRAMES,
                     snap: "act2",
                     ease: "none",
-                    duration: 12,
+                    duration: t2_dur,
                     onUpdate: () => renderCanvas(act2Images.current[Math.max(0, Math.round(frames.current.act2) - 1)], canvas2Ref.current),
                 },
-                9
+                t2_start
             );
 
-            // Crossfade 2 -> 3 (Time 18 to 21)
-            tl.to(canvas2Ref.current, { opacity: 0, duration: 3, ease: "none" }, 18);
-            tl.to(canvas3Ref.current, { opacity: 1, duration: 3, ease: "none" }, 18);
+            // Crossfade 2 -> 3
+            tl.to(canvas2Ref.current, { opacity: 0, duration: fade23_dur, ease: "none" }, fade23_start);
+            tl.to(canvas3Ref.current, { opacity: 1, duration: fade23_dur, ease: "none" }, fade23_start);
 
-            // ACT 3 logic (Time 18 to 30) - Act 3 starts playing AS it is fading in
+            // ACT 3 logic
             tl.to(
                 frames.current,
                 {
                     act3: TOTAL_FRAMES,
                     snap: "act3",
                     ease: "none",
-                    duration: 12,
+                    duration: t3_dur,
                     onUpdate: () => renderCanvas(act3Images.current[Math.max(0, Math.round(frames.current.act3) - 1)], canvas3Ref.current),
                 },
-                18
+                t3_start
             );
 
             // Header is initially opacity-0. It will ONLY fade in right before footer appears.
 
-            // Fade out the premium frame and text at the very end (Time 27 to 30) so it disappears before the footer
-            tl.to([frameRef.current, textRef.current], { opacity: 0, duration: 3, ease: "power2.inOut" }, 27);
+            // Fade out the premium frame and text at the very end so it disappears before the footer
+            tl.to([frameRef.current, textRef.current], { opacity: 0, duration: 3, ease: "power2.inOut" }, end_fade_start);
 
-            // Fade IN the navbar background so logo doesn't clash with "The Alchemy" section (Time 28.5 to 30)
-            tl.to(document.querySelector("#navbar-bg"), { opacity: 0.95, duration: 1.5, ease: "power2.inOut" }, 28.5);
+            // Fade IN the navbar background so logo doesn't clash with "The Alchemy" section
+            tl.to(document.querySelector("#navbar-bg"), { opacity: 0.95, duration: 1.5, ease: "power2.inOut" }, end_fade_start + 1.5);
 
-            // Unfurl the floating pill at the bottom of the scroll animation (Time 29 to 30)
+            // Unfurl the floating pill at the bottom of the scroll animation
             tl.to(document.querySelector("#floating-pill"), {
                 width: 220,
                 duration: 1,
@@ -366,7 +391,7 @@ export default function CanvasScrollytelling() {
                     const pill = document.querySelector("#floating-pill") as HTMLElement;
                     if (pill) delete pill.dataset.gsapExpanded;
                 }
-            }, 29);
+            }, end_fade_start + 2);
             tl.to(document.querySelector("#floating-pill-text"), {
                 opacity: 1,
                 x: 0,
@@ -710,7 +735,7 @@ export default function CanvasScrollytelling() {
                     }}
                 >
 
-                    {/* Premium Frame Overlay (sits top-level inside the bound to cast inset shadows over the video) */}
+                    {/* Frame Overlay (desktop only extra details) */}
                     <div
                         ref={frameRef}
                         className="absolute inset-0 border border-white/10 z-50 pointer-events-none rounded-xl lg:rounded-2xl transition-opacity duration-700"
@@ -722,6 +747,14 @@ export default function CanvasScrollytelling() {
                         <div className="absolute top-3 left-4 lg:top-5 lg:left-6 flex items-center gap-2">
                             <div className="w-3 h-3 lg:w-4 lg:h-4 bg-red-500 rounded-full animate-rec-flicker"></div>
                             <span className="font-degular font-bold text-white tracking-widest text-sm lg:text-base selection:bg-transparent shadow-black drop-shadow-md">REC</span>
+                        </div>
+
+                        {/* Mobile Keep Scrolling Indicator (Bottom Left) */}
+                        <div className={`absolute bottom-6 left-6 lg:hidden flex flex-col items-center gap-4 opacity-50 transition-opacity duration-1000 ${hideMobileScrollText ? 'opacity-0' : 'opacity-100'}`}>
+                            <span className="font-degular tracking-[0.4em] text-[8px] text-white uppercase animate-scroll-flicker" style={{ writingMode: "vertical-rl", transform: "rotate(180deg)" }}>
+                                KEEP SCROLLING
+                            </span>
+                            <div className="w-[1px] h-8 bg-white/50 rounded-full"></div>
                         </div>
 
                         {/* Decorative Corner Marks */}
