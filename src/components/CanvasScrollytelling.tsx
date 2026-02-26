@@ -237,6 +237,29 @@ export default function CanvasScrollytelling() {
         return () => { document.body.style.overflow = "auto"; };
     }, [showWelcome, showInstructions]);
 
+    // HIDDEN AUTO-SCROLL FOR PERFECT VIDEO CAPTURE (Shift+S)
+    useEffect(() => {
+        const handleKeyDown = (e: KeyboardEvent) => {
+            if (e.key === 'S' && e.shiftKey) {
+                const maxScroll = document.body.scrollHeight - window.innerHeight;
+                let currentScroll = window.scrollY;
+                const scrollSpeed = isMobile ? 8 : 12; // Adjust pixels per frame (smooths out scrolling)
+
+                const autoScroll = () => {
+                    if (currentScroll < maxScroll) {
+                        currentScroll += scrollSpeed;
+                        window.scrollTo(0, Math.min(currentScroll, maxScroll));
+                        requestAnimationFrame(autoScroll);
+                    }
+                };
+                requestAnimationFrame(autoScroll);
+            }
+        };
+
+        window.addEventListener('keydown', handleKeyDown);
+        return () => window.removeEventListener('keydown', handleKeyDown);
+    }, [isMobile]);
+
     // Responsive handling based strictly on the parent container (not window.innerWidth)
     useEffect(() => {
         const handleResize = () => {
