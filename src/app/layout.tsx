@@ -44,12 +44,14 @@ export default function RootLayout({
               document.addEventListener('keydown', event => {
                 if (
                   event.key === 'F12' || 
-                  (event.ctrlKey && event.shiftKey && event.key === 'I') || 
-                  (event.ctrlKey && event.shiftKey && event.key === 'J') || 
-                  (event.ctrlKey && event.key === 'U') ||
-                  (event.metaKey && event.altKey && event.key === 'I') ||
-                  (event.metaKey && event.altKey && event.key === 'J') ||
-                  (event.metaKey && event.key === 'U')
+                  (event.ctrlKey && event.shiftKey && (event.key === 'I' || event.key === 'i')) || 
+                  (event.ctrlKey && event.shiftKey && (event.key === 'J' || event.key === 'j')) || 
+                  (event.ctrlKey && event.shiftKey && (event.key === 'C' || event.key === 'c')) || 
+                  (event.ctrlKey && (event.key === 'U' || event.key === 'u')) ||
+                  (event.metaKey && event.altKey && (event.key === 'I' || event.key === 'i')) ||
+                  (event.metaKey && event.altKey && (event.key === 'J' || event.key === 'j')) ||
+                  (event.metaKey && event.altKey && (event.key === 'C' || event.key === 'c')) ||
+                  (event.metaKey && (event.key === 'U' || event.key === 'u'))
                 ) {
                   event.preventDefault();
                 }
