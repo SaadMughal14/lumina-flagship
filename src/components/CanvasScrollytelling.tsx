@@ -237,27 +237,45 @@ export default function CanvasScrollytelling() {
         return () => { document.body.style.overflow = "auto"; };
     }, [showWelcome, showInstructions]);
 
-    // HIDDEN AUTO-SCROLL FOR PERFECT VIDEO CAPTURE (Shift+S)
+    // HIDDEN AUTO-SCROLL FOR PERFECT VIDEO CAPTURE (Shift+S toggles play/pause)
     useEffect(() => {
+        let isAutoScrolling = false;
+        let animationFrameId: number | null = null;
+
         const handleKeyDown = (e: KeyboardEvent) => {
             if (e.key === 'S' && e.shiftKey) {
-                const maxScroll = document.body.scrollHeight - window.innerHeight;
-                let currentScroll = window.scrollY;
-                const scrollSpeed = isMobile ? 8 : 12; // Adjust pixels per frame (smooths out scrolling)
+                isAutoScrolling = !isAutoScrolling; // Toggle state
 
-                const autoScroll = () => {
-                    if (currentScroll < maxScroll) {
-                        currentScroll += scrollSpeed;
-                        window.scrollTo(0, Math.min(currentScroll, maxScroll));
-                        requestAnimationFrame(autoScroll);
+                if (isAutoScrolling) {
+                    const maxScroll = document.body.scrollHeight - window.innerHeight;
+                    const scrollSpeed = isMobile ? 8 : 12; // Adjust pixels per frame
+
+                    const autoScroll = () => {
+                        if (isAutoScrolling && window.scrollY < maxScroll) {
+                            window.scrollBy(0, scrollSpeed);
+                            animationFrameId = requestAnimationFrame(autoScroll);
+                        } else {
+                            // If we hit the bottom, automatically stop
+                            isAutoScrolling = false;
+                        }
+                    };
+                    animationFrameId = requestAnimationFrame(autoScroll);
+                } else {
+                    // Stop scrolling if toggled off
+                    if (animationFrameId !== null) {
+                        cancelAnimationFrame(animationFrameId);
                     }
-                };
-                requestAnimationFrame(autoScroll);
+                }
             }
         };
 
         window.addEventListener('keydown', handleKeyDown);
-        return () => window.removeEventListener('keydown', handleKeyDown);
+        return () => {
+            window.removeEventListener('keydown', handleKeyDown);
+            if (animationFrameId !== null) {
+                cancelAnimationFrame(animationFrameId);
+            }
+        };
     }, [isMobile]);
 
     // Responsive handling based strictly on the parent container (not window.innerWidth)
