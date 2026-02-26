@@ -248,7 +248,7 @@ export default function CanvasScrollytelling() {
 
                 if (isAutoScrolling) {
                     const maxScroll = document.body.scrollHeight - window.innerHeight;
-                    const scrollSpeed = isMobile ? 14 : 32; // Adjust pixels per frame
+                    const scrollSpeed = isMobile ? 14 : 42; // Adjust pixels per frame
 
                     const autoScroll = () => {
                         if (isAutoScrolling && window.scrollY < maxScroll) {
@@ -320,7 +320,7 @@ export default function CanvasScrollytelling() {
                 scrollTrigger: {
                     trigger: containerRef.current,
                     start: "top top",
-                    end: isMobile ? "+=2400%" : "+=1200%", // 2400vh on mobile for much slower scroll, 1200vh on desktop
+                    end: isMobile ? "+=1200%" : "+=800%", // 1200vh on mobile, 800vh on desktop for faster transit
                     scrub: 1,
                     pin: true,
                     onUpdate: (self) => {
