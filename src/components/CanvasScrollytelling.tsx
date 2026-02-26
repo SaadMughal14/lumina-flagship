@@ -196,13 +196,34 @@ export default function CanvasScrollytelling() {
         const ctx = canvas.getContext("2d");
         if (!ctx) return;
 
-        const canvasWidth = canvas.width;
-        const canvasHeight = canvas.height;
+        const dpr = window.devicePixelRatio || 1;
 
-        // Frame size is now fully controlled by CSS (see the wrapper div below).
-        // We just draw the image to fill the canvas exactly — CSS handles the visual bounds.
-        ctx.clearRect(0, 0, canvasWidth, canvasHeight);
-        ctx.drawImage(img, 0, 0, canvasWidth, canvasHeight);
+        // Canvas display dimensions (CSS pixels, accounting for ctx.scale(dpr))
+        const displayW = canvas.width / dpr;
+        const displayH = canvas.height / dpr;
+
+        // Image natural dimensions
+        const imgW = img.naturalWidth;
+        const imgH = img.naturalHeight;
+
+        // Object-fit: cover — crop source image to fill canvas without distortion
+        const canvasRatio = displayW / displayH;
+        const imgRatio = imgW / imgH;
+
+        let sx = 0, sy = 0, sw = imgW, sh = imgH;
+
+        if (imgRatio > canvasRatio) {
+            // Image is wider than canvas ratio → crop sides
+            sw = imgH * canvasRatio;
+            sx = (imgW - sw) / 2;
+        } else {
+            // Image is taller than canvas ratio → crop top/bottom
+            sh = imgW / canvasRatio;
+            sy = (imgH - sh) / 2;
+        }
+
+        ctx.clearRect(0, 0, displayW, displayH);
+        ctx.drawImage(img, sx, sy, sw, sh, 0, 0, displayW, displayH);
     };
 
     // CSS DOM mechanics to freeze user scrolling explicitly when onboarding popups are active without crashing GSAP
