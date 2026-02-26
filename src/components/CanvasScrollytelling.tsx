@@ -358,7 +358,7 @@ export default function CanvasScrollytelling() {
                 tl.to(
                     frames.current,
                     {
-                        act3: TOTAL_FRAMES,
+                        act3: TOTAL_FRAMES - 5,
                         snap: "act3",
                         ease: "none",
                         duration: act3_play_dur,
@@ -408,7 +408,7 @@ export default function CanvasScrollytelling() {
                 tl.to(
                     frames.current,
                     {
-                        act3: TOTAL_FRAMES,
+                        act3: TOTAL_FRAMES - 5,
                         snap: "act3",
                         ease: "none",
                         duration: 12,
