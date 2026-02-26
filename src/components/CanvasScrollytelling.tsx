@@ -281,7 +281,7 @@ export default function CanvasScrollytelling() {
                 scrollTrigger: {
                     trigger: containerRef.current,
                     start: "top top",
-                    end: isMobile ? "+=2400%" : "+=1200%", // 2400vh on mobile for much slower scroll, 1200vh on desktop
+                    end: "+=1200%", // 1200vh of scrolling (standardized across devices)
                     scrub: 1,
                     pin: true,
                     onUpdate: (self) => {
@@ -309,14 +309,16 @@ export default function CanvasScrollytelling() {
             const fade12_start = isMobile ? t1_end : 9;
             const fade12_dur = isMobile ? 2 : 3;
 
-            const t2_start = isMobile ? fade12_start + fade12_dur : 9;
+            // Start the next act EXACTLY when the crossfade begins, removing any static gap
+            const t2_start = fade12_start;
             const t2_dur = 12;
             const t2_end = t2_start + t2_dur;
 
             const fade23_start = isMobile ? t2_end : 18;
             const fade23_dur = isMobile ? 2 : 3;
 
-            const t3_start = isMobile ? fade23_start + fade23_dur : 18;
+            // Start the next act EXACTLY when the crossfade begins
+            const t3_start = fade23_start;
             const t3_dur = 12;
             const t3_end = t3_start + t3_dur;
 
@@ -532,6 +534,14 @@ export default function CanvasScrollytelling() {
                 </div>
             </div>
 
+            {/* Mobile Keep Scrolling Indicator (Bottom Left) - Placed at top level so it is never clipped */}
+            <div className={`fixed bottom-6 left-6 lg:hidden flex flex-col items-center gap-4 opacity-50 z-[90] transition-opacity duration-1000 ${hideMobileScrollText ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
+                <span className="font-degular tracking-[0.4em] text-[8px] text-white uppercase animate-scroll-flicker" style={{ writingMode: "vertical-rl", transform: "rotate(180deg)" }}>
+                    KEEP SCROLLING
+                </span>
+                <div className="w-[1px] h-8 bg-white/50 rounded-full"></div>
+            </div>
+
             {/* Scrollytelling Container (Only fade in once loaded) */}
             <div
                 ref={containerRef}
@@ -731,65 +741,58 @@ export default function CanvasScrollytelling() {
                             <path d="M6 0V12M0 6H12" />
                         </svg>
                     </div>
-                    {/* Mobile Keep Scrolling Indicator (Bottom Left) - Moved OUTSIDE the frame */}
-                    <div className={`absolute bottom-6 left-6 lg:hidden flex flex-col items-center gap-4 opacity-50 z-40 transition-opacity duration-1000 ${hideMobileScrollText ? 'opacity-0' : 'opacity-100'}`}>
-                        <span className="font-degular tracking-[0.4em] text-[8px] text-white uppercase animate-scroll-flicker" style={{ writingMode: "vertical-rl", transform: "rotate(180deg)" }}>
-                            KEEP SCROLLING
-                        </span>
-                        <div className="w-[1px] h-8 bg-white/50 rounded-full"></div>
-                    </div>
                 </div>
+            </div>
 
-                {/* Frame: portrait 9:16 on mobile (with padding), landscape 16:9 on desktop. Both use CSS min() to never overflow. */}
+            {/* Frame: portrait 9:16 on mobile (with padding), landscape 16:9 on desktop. Both use CSS min() to never overflow. */}
+            <div
+                className="relative rounded-xl lg:rounded-2xl bg-black overflow-hidden z-30"
+                style={isMobile ? {
+                    width: "min(calc(100vw - 32px), calc((100dvh - 96px) * 9 / 16))",
+                    height: "min(calc(100dvh - 96px), calc((100vw - 32px) * 16 / 9))",
+                } : {
+                    width: "min(1120px, calc(100vw - 32px), calc((100vh - 64px) * 16 / 9))",
+                    height: "min(630px, calc(100vh - 64px), calc((100vw - 32px) * 9 / 16))",
+                }}
+            >
+
+                {/* Frame Overlay (desktop only extra details) */}
                 <div
-                    className="relative rounded-xl lg:rounded-2xl bg-black overflow-hidden z-30"
-                    style={isMobile ? {
-                        width: "min(calc(100vw - 32px), calc((100dvh - 96px) * 9 / 16))",
-                        height: "min(calc(100dvh - 96px), calc((100vw - 32px) * 16 / 9))",
-                    } : {
-                        width: "min(1120px, calc(100vw - 32px), calc((100vh - 64px) * 16 / 9))",
-                        height: "min(630px, calc(100vh - 64px), calc((100vw - 32px) * 9 / 16))",
+                    ref={frameRef}
+                    className="absolute inset-0 border border-white/10 z-50 pointer-events-none rounded-xl lg:rounded-2xl transition-opacity duration-700"
+                    style={{
+                        boxShadow: "inset 0 0 100px 20px rgba(11,12,16, 0.9), inset 0 0 60px 10px rgba(0,0,0,0.8)"
                     }}
                 >
-
-                    {/* Frame Overlay (desktop only extra details) */}
-                    <div
-                        ref={frameRef}
-                        className="absolute inset-0 border border-white/10 z-50 pointer-events-none rounded-xl lg:rounded-2xl transition-opacity duration-700"
-                        style={{
-                            boxShadow: "inset 0 0 100px 20px rgba(11,12,16, 0.9), inset 0 0 60px 10px rgba(0,0,0,0.8)"
-                        }}
-                    >
-                        {/* Top Left: REC */}
-                        <div className="absolute top-3 left-4 lg:top-5 lg:left-6 flex items-center gap-2">
-                            <div className="w-3 h-3 lg:w-4 lg:h-4 bg-red-500 rounded-full animate-rec-flicker"></div>
-                            <span className="font-degular font-bold text-white tracking-widest text-sm lg:text-base selection:bg-transparent shadow-black drop-shadow-md">REC</span>
-                        </div>
-
-                        {/* Decorative Corner Marks */}
-                        <div className="absolute top-0 left-0 w-4 h-4 border-t border-l border-white/30 rounded-tl-xl lg:rounded-tl-2xl"></div>
-                        <div className="absolute top-0 right-0 w-4 h-4 border-t border-r border-white/30 rounded-tr-xl lg:rounded-tr-2xl"></div>
-                        <div className="absolute bottom-0 left-0 w-4 h-4 border-b border-l border-white/30 rounded-bl-xl lg:rounded-bl-2xl"></div>
-                        <div className="absolute bottom-0 right-0 w-4 h-4 border-b border-r border-white/30 rounded-br-xl lg:rounded-br-2xl"></div>
+                    {/* Top Left: REC */}
+                    <div className="absolute top-3 left-4 lg:top-5 lg:left-6 flex items-center gap-2">
+                        <div className="w-3 h-3 lg:w-4 lg:h-4 bg-red-500 rounded-full animate-rec-flicker"></div>
+                        <span className="font-degular font-bold text-white tracking-widest text-sm lg:text-base selection:bg-transparent shadow-black drop-shadow-md">REC</span>
                     </div>
-                    {/* ACT 3: EXTRAIT */}
-                    <canvas
-                        ref={canvas3Ref}
-                        className="absolute inset-0 w-full h-full object-cover opacity-0 z-10"
-                    />
 
-                    {/* ACT 2: MONOLITH */}
-                    <canvas
-                        ref={canvas2Ref}
-                        className="absolute inset-0 w-full h-full object-cover opacity-0 z-20"
-                    />
-
-                    {/* ACT 1: LUMINA */}
-                    <canvas
-                        ref={canvas1Ref}
-                        className="absolute inset-0 w-full h-full object-cover opacity-100 z-40"
-                    />
+                    {/* Decorative Corner Marks */}
+                    <div className="absolute top-0 left-0 w-4 h-4 border-t border-l border-white/30 rounded-tl-xl lg:rounded-tl-2xl"></div>
+                    <div className="absolute top-0 right-0 w-4 h-4 border-t border-r border-white/30 rounded-tr-xl lg:rounded-tr-2xl"></div>
+                    <div className="absolute bottom-0 left-0 w-4 h-4 border-b border-l border-white/30 rounded-bl-xl lg:rounded-bl-2xl"></div>
+                    <div className="absolute bottom-0 right-0 w-4 h-4 border-b border-r border-white/30 rounded-br-xl lg:rounded-br-2xl"></div>
                 </div>
+                {/* ACT 3: EXTRAIT */}
+                <canvas
+                    ref={canvas3Ref}
+                    className="absolute inset-0 w-full h-full object-cover opacity-0 z-10"
+                />
+
+                {/* ACT 2: MONOLITH */}
+                <canvas
+                    ref={canvas2Ref}
+                    className="absolute inset-0 w-full h-full object-cover opacity-0 z-20"
+                />
+
+                {/* ACT 1: LUMINA */}
+                <canvas
+                    ref={canvas1Ref}
+                    className="absolute inset-0 w-full h-full object-cover opacity-100 z-40"
+                />
             </div>
         </>
     );
