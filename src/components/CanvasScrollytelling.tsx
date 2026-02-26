@@ -264,10 +264,12 @@ export default function CanvasScrollytelling() {
             renderCanvas(act3Images.current[Math.max(0, Math.round(frames.current.act3) - 1)], canvas3Ref.current);
         };
 
-        handleResize();
+        // Use rAF to ensure the DOM has painted the new frame dimensions before measuring
+        const recalc = () => requestAnimationFrame(handleResize);
+        recalc();
         window.addEventListener("resize", handleResize);
         return () => window.removeEventListener("resize", handleResize);
-    }, []);
+    }, [isMobile]);
 
     useGSAP(
         () => {
