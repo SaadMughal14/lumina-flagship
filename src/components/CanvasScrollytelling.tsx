@@ -444,7 +444,12 @@ export default function CanvasScrollytelling() {
                 }
             }, end_fade_start + 2);
 
-
+            // Hide the mobile keep scrolling text exactly when the pill expands
+            tl.to(document.querySelector("#mobile-keep-scrolling"), {
+                opacity: 0,
+                duration: 0.5,
+                ease: "power2.out"
+            }, end_fade_start + 2);
 
             tl.to(document.querySelector("#floating-pill-text"), {
                 opacity: 1,
@@ -581,6 +586,16 @@ export default function CanvasScrollytelling() {
                 ref={containerRef}
                 className={`relative w-full h-[100dvh] bg-[#0B0C10] overflow-hidden flex items-center justify-center p-4 lg:p-8 pt-16 lg:pt-16 transition-opacity duration-1000 ${loaded ? 'opacity-100' : 'opacity-0'}`}
             >
+
+                {/* Mobile Scroll Indicator - Flush against left edge */}
+                <div id="mobile-keep-scrolling" className="absolute top-[60%] -translate-y-1/2 left-2 lg:hidden flex flex-col items-center gap-4 opacity-50 z-50">
+                    <span className="font-degular tracking-[0.3em] text-[8px] sm:text-[10px] text-white whitespace-nowrap" style={{ writingMode: "vertical-rl", transform: "rotate(180deg)" }}>
+                        KEEP SCROLLING
+                    </span>
+                    <div className="relative w-[1px] h-12 bg-white/10 overflow-hidden rounded-full">
+                        <div className="absolute top-0 left-0 w-full h-[50%] bg-white animate-[scrollLine_2s_ease-in-out_infinite]"></div>
+                    </div>
+                </div>
 
                 {/* Edge Typography & Architectural Marks (Visible only on wider screens) */}
                 <div ref={textRef} className="absolute inset-0 hidden lg:flex items-center justify-between px-10 pointer-events-none z-40 transition-opacity duration-700">
