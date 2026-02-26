@@ -112,8 +112,8 @@ export default function CanvasScrollytelling() {
         let p1LoadedCount = 0;
         const phase1Total = 150; // Block UX to fetch the first 150 frames (~3 sec on 10Mbps)
 
-        // Dynamically pick mobile or web asset folders — uses ref (synchronous) since this effect has [] deps
-        const suffix = isMobileRef.current ? '-mob' : '-web';
+        // Dynamically pick mobile or web asset folders — reads viewport width directly to avoid effect ordering race
+        const suffix = (typeof window !== "undefined" && window.innerWidth < 768) ? '-mob' : '-web';
 
         const loadPhase1 = async () => {
             const promises = [];
