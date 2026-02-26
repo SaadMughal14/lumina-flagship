@@ -9,7 +9,7 @@ export default function Home() {
       <header id="global-header" className="fixed top-0 left-0 w-full z-[100] transition-all duration-500 pointer-events-none">
         <div id="navbar-bg" className="absolute inset-0 bg-[#0B0C10] border-b border-white/10 opacity-0 transition-opacity duration-500 pointer-events-auto"></div>
         <div className="relative flex justify-between items-center p-3 pt-4 lg:px-4 lg:py-3 left-0">
-          <div className="flex items-center gap-0.5 mix-blend-difference pointer-events-auto cursor-pointer opacity-40 lg:opacity-100 scale-90 lg:scale-100 origin-top-left">
+          <div className="flex items-center gap-0.5 mix-blend-difference pointer-events-auto cursor-pointer">
             <img
               src="/assets/new-logo.png"
               alt="Lumina Icon"
