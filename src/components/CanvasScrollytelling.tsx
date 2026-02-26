@@ -25,8 +25,6 @@ export default function CanvasScrollytelling() {
     const [isMobile, setIsMobile] = useState(false);
 
 
-    // Mobile scroll prompt state
-    const [hideMobileScrollText, setHideMobileScrollText] = useState(false);
 
     const [loaded, setLoaded] = useState(false);
     const [progress, setProgress] = useState(0); // for the loading screen (optional)
@@ -281,7 +279,7 @@ export default function CanvasScrollytelling() {
                 scrollTrigger: {
                     trigger: containerRef.current,
                     start: "top top",
-                    end: "+=1200%", // 1200vh of scrolling (standardized across devices)
+                    end: isMobile ? "+=2400%" : "+=1200%", // 2400vh on mobile for much slower scroll, 1200vh on desktop
                     scrub: 1,
                     pin: true,
                     onUpdate: (self) => {
@@ -293,96 +291,142 @@ export default function CanvasScrollytelling() {
                                 pill.classList.remove("animate-pill-glow");
                             }
                         }
-                        if (isMobile && self.progress > 0.95 && !hideMobileScrollText) {
-                            setHideMobileScrollText(true);
-                        }
                     }
                 },
             });
 
-            // --- OVERLAPPING CONTINUOUS SCROLL LOGIC ---
-            // On desktop: we overlap the timelines (Act 2 starts playing WHILE Act 1 is fading) to simulate a continuous take
-            // On mobile: we play them sequentially so the shorter screen has time to display the full focus correctly
+            // --- CONTINUOUS SCROLL LOGIC ---
 
-            const t1_end = 12;
+            if (isMobile) {
+                // SEQUENTIAL MOBILE LOGIC
+                // Plays each animation fully before crossfading to the next to prevent overlap on small screens
 
-            const fade12_start = isMobile ? t1_end : 9;
-            const fade12_dur = isMobile ? 2 : 3;
+                const t1_end = 12;
+                const fade12_start = t1_end;
+                const fade12_dur = 2;
 
-            // Start the next act EXACTLY when the crossfade begins, removing any static gap
-            const t2_start = fade12_start;
-            const t2_dur = 12;
-            const t2_end = t2_start + t2_dur;
+                const t2_start = fade12_start;
+                const t2_dur = 12;
+                const t2_end = t2_start + t2_dur;
 
-            const fade23_start = isMobile ? t2_end : 18;
-            const fade23_dur = isMobile ? 2 : 3;
+                const fade23_start = t2_end;
+                const fade23_dur = 2;
 
-            // Start the next act EXACTLY when the crossfade begins
-            const t3_start = fade23_start;
-            const t3_dur = 12;
-            const t3_end = t3_start + t3_dur;
+                const t3_start = fade23_start;
+                const t3_dur = 12;
 
-            const end_fade_start = isMobile ? t3_end - 3 : 27;
+                // Frame playback durations (extended to cover their respective fade-outs so the video doesn't freeze)
+                const act1_play_dur = fade12_start + fade12_dur; // 14
+                const act2_play_dur = (fade23_start + fade23_dur) - t2_start; // 14
+                const act3_play_dur = t3_dur; // 12
 
-            // Frame playback durations (extended to cover their respective fade-outs so the video doesn't freeze)
-            const act1_play_dur = fade12_start + fade12_dur; // Desktop: 12. Mobile: 14.
-            const act2_play_dur = (fade23_start + fade23_dur) - t2_start; // Desktop: 12. Mobile: 14.
-            const act3_play_dur = t3_dur; // Desktop: 12. Mobile: 12.
+                // ACT 1 logic
+                tl.to(
+                    frames.current,
+                    {
+                        act1: TOTAL_FRAMES,
+                        snap: "act1",
+                        ease: "none",
+                        duration: act1_play_dur,
+                        onUpdate: () => renderCanvas(act1Images.current[Math.max(0, Math.round(frames.current.act1) - 1)], canvas1Ref.current),
+                    },
+                    0
+                );
 
+                // Crossfade 1 -> 2
+                tl.to(canvas1Ref.current, { opacity: 0, duration: fade12_dur, ease: "none" }, fade12_start);
+                tl.to(canvas2Ref.current, { opacity: 1, duration: fade12_dur, ease: "none" }, fade12_start);
 
-            // ACT 1 logic
-            tl.to(
-                frames.current,
-                {
-                    act1: TOTAL_FRAMES,
-                    snap: "act1",
-                    ease: "none",
-                    duration: act1_play_dur,
-                    onUpdate: () => renderCanvas(act1Images.current[Math.max(0, Math.round(frames.current.act1) - 1)], canvas1Ref.current),
-                },
-                0
-            );
+                // ACT 2 logic
+                tl.to(
+                    frames.current,
+                    {
+                        act2: TOTAL_FRAMES,
+                        snap: "act2",
+                        ease: "none",
+                        duration: act2_play_dur,
+                        onUpdate: () => renderCanvas(act2Images.current[Math.max(0, Math.round(frames.current.act2) - 1)], canvas2Ref.current),
+                    },
+                    t2_start
+                );
 
-            // Crossfade 1 -> 2
-            tl.to(canvas1Ref.current, { opacity: 0, duration: fade12_dur, ease: "none" }, fade12_start);
-            tl.to(canvas2Ref.current, { opacity: 1, duration: fade12_dur, ease: "none" }, fade12_start);
+                // Crossfade 2 -> 3
+                tl.to(canvas2Ref.current, { opacity: 0, duration: fade23_dur, ease: "none" }, fade23_start);
+                tl.to(canvas3Ref.current, { opacity: 1, duration: fade23_dur, ease: "none" }, fade23_start);
 
-            // ACT 2 logic
-            tl.to(
-                frames.current,
-                {
-                    act2: TOTAL_FRAMES,
-                    snap: "act2",
-                    ease: "none",
-                    duration: act2_play_dur,
-                    onUpdate: () => renderCanvas(act2Images.current[Math.max(0, Math.round(frames.current.act2) - 1)], canvas2Ref.current),
-                },
-                t2_start
-            );
+                // ACT 3 logic
+                tl.to(
+                    frames.current,
+                    {
+                        act3: TOTAL_FRAMES,
+                        snap: "act3",
+                        ease: "none",
+                        duration: act3_play_dur,
+                        onUpdate: () => renderCanvas(act3Images.current[Math.max(0, Math.round(frames.current.act3) - 1)], canvas3Ref.current),
+                    },
+                    t3_start
+                );
+            } else {
+                // ORIGINAL DESKTOP LOGIC (Overlapping timelines to simulate a continuous take)
 
-            // Crossfade 2 -> 3
-            tl.to(canvas2Ref.current, { opacity: 0, duration: fade23_dur, ease: "none" }, fade23_start);
-            tl.to(canvas3Ref.current, { opacity: 1, duration: fade23_dur, ease: "none" }, fade23_start);
+                // ACT 1 logic (Time 0 to 12)
+                tl.to(
+                    frames.current,
+                    {
+                        act1: TOTAL_FRAMES,
+                        snap: "act1",
+                        ease: "none",
+                        duration: 12,
+                        onUpdate: () => renderCanvas(act1Images.current[Math.max(0, Math.round(frames.current.act1) - 1)], canvas1Ref.current),
+                    },
+                    0
+                );
 
-            // ACT 3 logic
-            tl.to(
-                frames.current,
-                {
-                    act3: TOTAL_FRAMES,
-                    snap: "act3",
-                    ease: "none",
-                    duration: act3_play_dur,
-                    onUpdate: () => renderCanvas(act3Images.current[Math.max(0, Math.round(frames.current.act3) - 1)], canvas3Ref.current),
-                },
-                t3_start
-            );
+                // Crossfade 1 -> 2 (Starts fading out Act 1 at Time 9, fades in Act 2 at Time 9, finishes crossfade at Time 12)
+                // By doing this while Act 1's frames are still updating, it looks like a continuous transforming video
+                tl.to(canvas1Ref.current, { opacity: 0, duration: 3, ease: "none" }, 9);
+                tl.to(canvas2Ref.current, { opacity: 1, duration: 3, ease: "none" }, 9);
 
+                // ACT 2 logic (Time 9 to 21) - Act 2 starts playing frames AS it is fading in
+                tl.to(
+                    frames.current,
+                    {
+                        act2: TOTAL_FRAMES,
+                        snap: "act2",
+                        ease: "none",
+                        duration: 12,
+                        onUpdate: () => renderCanvas(act2Images.current[Math.max(0, Math.round(frames.current.act2) - 1)], canvas2Ref.current),
+                    },
+                    9
+                );
+
+                // Crossfade 2 -> 3 (Time 18 to 21)
+                tl.to(canvas2Ref.current, { opacity: 0, duration: 3, ease: "none" }, 18);
+                tl.to(canvas3Ref.current, { opacity: 1, duration: 3, ease: "none" }, 18);
+
+                // ACT 3 logic (Time 18 to 30) - Act 3 starts playing AS it is fading in
+                tl.to(
+                    frames.current,
+                    {
+                        act3: TOTAL_FRAMES,
+                        snap: "act3",
+                        ease: "none",
+                        duration: 12,
+                        onUpdate: () => renderCanvas(act3Images.current[Math.max(0, Math.round(frames.current.act3) - 1)], canvas3Ref.current),
+                    },
+                    18
+                );
+            }
+
+            // --- END SEQUENCE ---
             // Header is initially opacity-0. It will ONLY fade in right before footer appears.
 
-            // Fade out the premium frame and text at the very end so it disappears before the footer
+            const end_fade_start = isMobile ? 37 : 27;
+
+            // Fade out the premium frame and text at the very end (Time 27 to 30) so it disappears before the footer
             tl.to([frameRef.current, textRef.current], { opacity: 0, duration: 3, ease: "power2.inOut" }, end_fade_start);
 
-            // Fade IN the navbar background so logo doesn't clash with "The Alchemy" section
+            // Fade IN the navbar background so logo doesn't clash with "The Alchemy" section (Time 28.5 to 30)
             tl.to(document.querySelector("#navbar-bg"), { opacity: 0.95, duration: 1.5, ease: "power2.inOut" }, end_fade_start + 1.5);
 
             // Unfurl the floating pill at the bottom of the scroll animation
@@ -398,12 +442,13 @@ export default function CanvasScrollytelling() {
                     const pill = document.querySelector("#floating-pill") as HTMLElement;
                     if (pill) delete pill.dataset.gsapExpanded;
                 }
-            }, end_fade_start + 2.5);
+            }, end_fade_start + 2);
 
             // Scroll Buffer / Dead Zone
             // Halts scrolling after the last frame finishes so the user doesn't accidentally
             // scroll past the monolith/extrait presentation into the next section too quickly.
             tl.to({}, { duration: isMobile ? 8 : 4 });
+
             tl.to(document.querySelector("#floating-pill-text"), {
                 opacity: 1,
                 x: 0,
@@ -532,14 +577,6 @@ export default function CanvasScrollytelling() {
                         </div>
                     </div>
                 </div>
-            </div>
-
-            {/* Mobile Keep Scrolling Indicator (Bottom Left) - Placed at top level so it is never clipped */}
-            <div className={`fixed bottom-6 left-6 lg:hidden flex flex-col items-center gap-4 opacity-50 z-[90] transition-opacity duration-1000 ${hideMobileScrollText ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
-                <span className="font-degular tracking-[0.4em] text-[8px] text-white uppercase animate-scroll-flicker" style={{ writingMode: "vertical-rl", transform: "rotate(180deg)" }}>
-                    KEEP SCROLLING
-                </span>
-                <div className="w-[1px] h-8 bg-white/50 rounded-full"></div>
             </div>
 
             {/* Scrollytelling Container (Only fade in once loaded) */}
@@ -742,57 +779,57 @@ export default function CanvasScrollytelling() {
                         </svg>
                     </div>
                 </div>
-            </div>
 
-            {/* Frame: portrait 9:16 on mobile (with padding), landscape 16:9 on desktop. Both use CSS min() to never overflow. */}
-            <div
-                className="relative rounded-xl lg:rounded-2xl bg-black overflow-hidden z-30"
-                style={isMobile ? {
-                    width: "min(calc(100vw - 32px), calc((100dvh - 96px) * 9 / 16))",
-                    height: "min(calc(100dvh - 96px), calc((100vw - 32px) * 16 / 9))",
-                } : {
-                    width: "min(1120px, calc(100vw - 32px), calc((100vh - 64px) * 16 / 9))",
-                    height: "min(630px, calc(100vh - 64px), calc((100vw - 32px) * 9 / 16))",
-                }}
-            >
-
-                {/* Frame Overlay (desktop only extra details) */}
+                {/* Frame: portrait 9:16 on mobile (with padding), landscape 16:9 on desktop. Both use CSS min() to never overflow. */}
                 <div
-                    ref={frameRef}
-                    className="absolute inset-0 border border-white/10 z-50 pointer-events-none rounded-xl lg:rounded-2xl transition-opacity duration-700"
-                    style={{
-                        boxShadow: "inset 0 0 100px 20px rgba(11,12,16, 0.9), inset 0 0 60px 10px rgba(0,0,0,0.8)"
+                    className="relative rounded-xl lg:rounded-2xl bg-black overflow-hidden z-30"
+                    style={isMobile ? {
+                        width: "min(calc(100vw - 32px), calc((100dvh - 96px) * 9 / 16))",
+                        height: "min(calc(100dvh - 96px), calc((100vw - 32px) * 16 / 9))",
+                    } : {
+                        width: "min(1120px, calc(100vw - 32px), calc((100vh - 64px) * 16 / 9))",
+                        height: "min(630px, calc(100vh - 64px), calc((100vw - 32px) * 9 / 16))",
                     }}
                 >
-                    {/* Top Left: REC */}
-                    <div className="absolute top-3 left-4 lg:top-5 lg:left-6 flex items-center gap-2">
-                        <div className="w-3 h-3 lg:w-4 lg:h-4 bg-red-500 rounded-full animate-rec-flicker"></div>
-                        <span className="font-degular font-bold text-white tracking-widest text-sm lg:text-base selection:bg-transparent shadow-black drop-shadow-md">REC</span>
+
+                    {/* Premium Frame Overlay (sits top-level inside the bound to cast inset shadows over the video) */}
+                    <div
+                        ref={frameRef}
+                        className="absolute inset-0 border border-white/10 z-50 pointer-events-none rounded-xl lg:rounded-2xl transition-opacity duration-700"
+                        style={{
+                            boxShadow: "inset 0 0 100px 20px rgba(11,12,16, 0.9), inset 0 0 60px 10px rgba(0,0,0,0.8)"
+                        }}
+                    >
+                        {/* Top Left: REC */}
+                        <div className="absolute top-3 left-4 lg:top-5 lg:left-6 flex items-center gap-2">
+                            <div className="w-3 h-3 lg:w-4 lg:h-4 bg-red-500 rounded-full animate-rec-flicker"></div>
+                            <span className="font-degular font-bold text-white tracking-widest text-sm lg:text-base selection:bg-transparent shadow-black drop-shadow-md">REC</span>
+                        </div>
+
+                        {/* Decorative Corner Marks */}
+                        <div className="absolute top-0 left-0 w-4 h-4 border-t border-l border-white/30 rounded-tl-xl lg:rounded-tl-2xl"></div>
+                        <div className="absolute top-0 right-0 w-4 h-4 border-t border-r border-white/30 rounded-tr-xl lg:rounded-tr-2xl"></div>
+                        <div className="absolute bottom-0 left-0 w-4 h-4 border-b border-l border-white/30 rounded-bl-xl lg:rounded-bl-2xl"></div>
+                        <div className="absolute bottom-0 right-0 w-4 h-4 border-b border-r border-white/30 rounded-br-xl lg:rounded-br-2xl"></div>
                     </div>
+                    {/* ACT 3: EXTRAIT */}
+                    <canvas
+                        ref={canvas3Ref}
+                        className="absolute inset-0 w-full h-full object-cover opacity-0 z-10"
+                    />
 
-                    {/* Decorative Corner Marks */}
-                    <div className="absolute top-0 left-0 w-4 h-4 border-t border-l border-white/30 rounded-tl-xl lg:rounded-tl-2xl"></div>
-                    <div className="absolute top-0 right-0 w-4 h-4 border-t border-r border-white/30 rounded-tr-xl lg:rounded-tr-2xl"></div>
-                    <div className="absolute bottom-0 left-0 w-4 h-4 border-b border-l border-white/30 rounded-bl-xl lg:rounded-bl-2xl"></div>
-                    <div className="absolute bottom-0 right-0 w-4 h-4 border-b border-r border-white/30 rounded-br-xl lg:rounded-br-2xl"></div>
+                    {/* ACT 2: MONOLITH */}
+                    <canvas
+                        ref={canvas2Ref}
+                        className="absolute inset-0 w-full h-full object-cover opacity-0 z-20"
+                    />
+
+                    {/* ACT 1: LUMINA */}
+                    <canvas
+                        ref={canvas1Ref}
+                        className="absolute inset-0 w-full h-full object-cover opacity-100 z-40"
+                    />
                 </div>
-                {/* ACT 3: EXTRAIT */}
-                <canvas
-                    ref={canvas3Ref}
-                    className="absolute inset-0 w-full h-full object-cover opacity-0 z-10"
-                />
-
-                {/* ACT 2: MONOLITH */}
-                <canvas
-                    ref={canvas2Ref}
-                    className="absolute inset-0 w-full h-full object-cover opacity-0 z-20"
-                />
-
-                {/* ACT 1: LUMINA */}
-                <canvas
-                    ref={canvas1Ref}
-                    className="absolute inset-0 w-full h-full object-cover opacity-100 z-40"
-                />
             </div>
         </>
     );
