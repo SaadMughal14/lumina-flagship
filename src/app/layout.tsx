@@ -41,6 +41,7 @@ export default function RootLayout({
         <script
           dangerouslySetInnerHTML={{
             __html: `
+              document.addEventListener('contextmenu', event => event.preventDefault());
               document.addEventListener('keydown', event => {
                 if (
                   event.key === 'F12' || 
