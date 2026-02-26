@@ -444,10 +444,7 @@ export default function CanvasScrollytelling() {
                 }
             }, end_fade_start + 2);
 
-            // Scroll Buffer / Dead Zone
-            // Halts scrolling after the last frame finishes so the user doesn't accidentally
-            // scroll past the monolith/extrait presentation into the next section too quickly.
-            tl.to({}, { duration: isMobile ? 8 : 4 });
+
 
             tl.to(document.querySelector("#floating-pill-text"), {
                 opacity: 1,
