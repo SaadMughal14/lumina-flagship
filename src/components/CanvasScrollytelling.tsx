@@ -322,6 +322,11 @@ export default function CanvasScrollytelling() {
 
             const end_fade_start = isMobile ? t3_end - 3 : 27;
 
+            // Frame playback durations (extended to cover their respective fade-outs so the video doesn't freeze)
+            const act1_play_dur = fade12_start + fade12_dur; // Desktop: 12. Mobile: 14.
+            const act2_play_dur = (fade23_start + fade23_dur) - t2_start; // Desktop: 12. Mobile: 14.
+            const act3_play_dur = t3_dur; // Desktop: 12. Mobile: 12.
+
 
             // ACT 1 logic
             tl.to(
@@ -330,7 +335,7 @@ export default function CanvasScrollytelling() {
                     act1: TOTAL_FRAMES,
                     snap: "act1",
                     ease: "none",
-                    duration: t1_end,
+                    duration: act1_play_dur,
                     onUpdate: () => renderCanvas(act1Images.current[Math.max(0, Math.round(frames.current.act1) - 1)], canvas1Ref.current),
                 },
                 0
@@ -347,7 +352,7 @@ export default function CanvasScrollytelling() {
                     act2: TOTAL_FRAMES,
                     snap: "act2",
                     ease: "none",
-                    duration: t2_dur,
+                    duration: act2_play_dur,
                     onUpdate: () => renderCanvas(act2Images.current[Math.max(0, Math.round(frames.current.act2) - 1)], canvas2Ref.current),
                 },
                 t2_start
@@ -364,7 +369,7 @@ export default function CanvasScrollytelling() {
                     act3: TOTAL_FRAMES,
                     snap: "act3",
                     ease: "none",
-                    duration: t3_dur,
+                    duration: act3_play_dur,
                     onUpdate: () => renderCanvas(act3Images.current[Math.max(0, Math.round(frames.current.act3) - 1)], canvas3Ref.current),
                 },
                 t3_start
