@@ -391,13 +391,18 @@ export default function CanvasScrollytelling() {
                     const pill = document.querySelector("#floating-pill") as HTMLElement;
                     if (pill) delete pill.dataset.gsapExpanded;
                 }
-            }, end_fade_start + 2);
+            }, end_fade_start + 2.5);
+
+            // Scroll Buffer / Dead Zone
+            // Halts scrolling after the last frame finishes so the user doesn't accidentally
+            // scroll past the monolith/extrait presentation into the next section too quickly.
+            tl.to({}, { duration: isMobile ? 8 : 4 });
             tl.to(document.querySelector("#floating-pill-text"), {
                 opacity: 1,
                 x: 0,
                 duration: 1,
                 ease: "power2.out"
-            }, 29);
+            }, end_fade_start + 2.5);
 
         },
         { dependencies: [loaded], scope: containerRef }
@@ -721,6 +726,13 @@ export default function CanvasScrollytelling() {
                             <path d="M6 0V12M0 6H12" />
                         </svg>
                     </div>
+                    {/* Mobile Keep Scrolling Indicator (Bottom Left) - Moved OUTSIDE the frame */}
+                    <div className={`absolute bottom-6 left-6 lg:hidden flex flex-col items-center gap-4 opacity-50 z-40 transition-opacity duration-1000 ${hideMobileScrollText ? 'opacity-0' : 'opacity-100'}`}>
+                        <span className="font-degular tracking-[0.4em] text-[8px] text-white uppercase animate-scroll-flicker" style={{ writingMode: "vertical-rl", transform: "rotate(180deg)" }}>
+                            KEEP SCROLLING
+                        </span>
+                        <div className="w-[1px] h-8 bg-white/50 rounded-full"></div>
+                    </div>
                 </div>
 
                 {/* Frame: portrait 9:16 on mobile (with padding), landscape 16:9 on desktop. Both use CSS min() to never overflow. */}
@@ -747,14 +759,6 @@ export default function CanvasScrollytelling() {
                         <div className="absolute top-3 left-4 lg:top-5 lg:left-6 flex items-center gap-2">
                             <div className="w-3 h-3 lg:w-4 lg:h-4 bg-red-500 rounded-full animate-rec-flicker"></div>
                             <span className="font-degular font-bold text-white tracking-widest text-sm lg:text-base selection:bg-transparent shadow-black drop-shadow-md">REC</span>
-                        </div>
-
-                        {/* Mobile Keep Scrolling Indicator (Bottom Left) */}
-                        <div className={`absolute bottom-6 left-6 lg:hidden flex flex-col items-center gap-4 opacity-50 transition-opacity duration-1000 ${hideMobileScrollText ? 'opacity-0' : 'opacity-100'}`}>
-                            <span className="font-degular tracking-[0.4em] text-[8px] text-white uppercase animate-scroll-flicker" style={{ writingMode: "vertical-rl", transform: "rotate(180deg)" }}>
-                                KEEP SCROLLING
-                            </span>
-                            <div className="w-[1px] h-8 bg-white/50 rounded-full"></div>
                         </div>
 
                         {/* Decorative Corner Marks */}
