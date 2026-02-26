@@ -7,7 +7,7 @@ export default function FloatingPill() {
             target="_blank"
             rel="noopener noreferrer"
             id="floating-pill"
-            className="group fixed bottom-6 right-6 lg:bottom-10 lg:right-10 z-[100] bg-white/5 backdrop-blur-md border border-white/10 text-white font-degular tracking-widest uppercase flex items-center justify-end rounded-full overflow-hidden w-12 h-12 hover:bg-white/10 transition-all duration-500 ease-out"
+            className="group fixed bottom-6 right-6 lg:bottom-10 lg:right-10 z-[100] bg-white/5 backdrop-blur-md border border-white/10 text-white font-degular tracking-widest uppercase flex items-center justify-end rounded-full overflow-hidden w-12 h-12 hover:bg-white/10 transition-all duration-500 ease-out scale-75 lg:scale-100 opacity-30 lg:opacity-100 hover:opacity-100 origin-bottom-right"
             onMouseEnter={(e) => {
                 const el = e.currentTarget;
                 if (!el.dataset.gsapExpanded) {

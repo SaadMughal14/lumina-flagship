@@ -20,6 +20,9 @@ export default function CanvasScrollytelling() {
     const frameRef = useRef<HTMLDivElement>(null);
     const textRef = useRef<HTMLDivElement>(null);
 
+    // Mobile detection — resolved once on mount, stored as ref so it never triggers re-renders
+    const isMobile = useRef(false);
+
 
 
     const [loaded, setLoaded] = useState(false);
@@ -32,7 +35,7 @@ export default function CanvasScrollytelling() {
     const [holdProgress, setHoldProgress] = useState(0); // Option 3: Hold-to-enter progress
     const holdIntervalRef = useRef<NodeJS.Timeout | null>(null);
 
-    // Initial check for returning visitors and scroll position reset
+    // Initial check for returning visitors, scroll position reset, and mobile detection
     useEffect(() => {
         if (typeof window !== "undefined") {
             // Force scroll to top on every load
@@ -40,6 +43,9 @@ export default function CanvasScrollytelling() {
                 history.scrollRestoration = 'manual';
             }
             window.scrollTo(0, 0);
+
+            // Set mobile flag once — this drives which image set gets loaded
+            isMobile.current = window.innerWidth < 768;
 
             const visited = localStorage.getItem("lumina_visited");
             if (visited === "true") {
@@ -103,6 +109,9 @@ export default function CanvasScrollytelling() {
         let p1LoadedCount = 0;
         const phase1Total = 150; // Block UX to fetch the first 150 frames (~3 sec on 10Mbps)
 
+        // Dynamically pick mobile or web asset folders — resolved once, never changes mid-session
+        const suffix = isMobile.current ? '-mob' : '-web';
+
         const loadPhase1 = async () => {
             const promises = [];
             const loadImg = (src: string, arr: HTMLImageElement[], index: number) => {
@@ -126,7 +135,7 @@ export default function CanvasScrollytelling() {
 
             // Act 1 (First 150 frames for deeper initial buffer)
             for (let i = 1; i <= phase1Total; i++) {
-                promises.push(loadImg(`/assets/lumina-web/ezgif-frame-${String(i).padStart(3, "0")}.jpg`, act1Images.current, i - 1));
+                promises.push(loadImg(`/assets/lumina${suffix}/ezgif-frame-${String(i).padStart(3, "0")}.jpg`, act1Images.current, i - 1));
             }
 
             // Minimal 1500ms delay: Downloading 150 files naturally takes ~2-4s for most users. 
@@ -155,19 +164,19 @@ export default function CanvasScrollytelling() {
             // Act 1 remaining
             for (let i = phase1Total + 1; i <= TOTAL_FRAMES; i++) {
                 const img = new Image();
-                img.src = `/assets/lumina-web/ezgif-frame-${String(i).padStart(3, "0")}.jpg`;
+                img.src = `/assets/lumina${suffix}/ezgif-frame-${String(i).padStart(3, "0")}.jpg`;
                 act1Images.current[i - 1] = img;
             }
             // Act 2
             for (let i = 1; i <= TOTAL_FRAMES; i++) {
                 const img = new Image();
-                img.src = `/assets/monolith-web/ezgif-frame-${String(i).padStart(3, "0")}.jpg`;
+                img.src = `/assets/monolith${suffix}/ezgif-frame-${String(i).padStart(3, "0")}.jpg`;
                 act2Images.current[i - 1] = img;
             }
             // Act 3
             for (let i = 1; i <= TOTAL_FRAMES; i++) {
                 const img = new Image();
-                img.src = `/assets/extrait-web/ezgif-frame-${String(i).padStart(3, "0")}.jpg`;
+                img.src = `/assets/extrait${suffix}/ezgif-frame-${String(i).padStart(3, "0")}.jpg`;
                 act3Images.current[i - 1] = img;
             }
         };
@@ -465,7 +474,7 @@ export default function CanvasScrollytelling() {
             {/* Scrollytelling Container (Only fade in once loaded) */}
             <div
                 ref={containerRef}
-                className={`relative w-full h-[100dvh] bg-[#0B0C10] overflow-hidden flex items-center justify-center p-4 lg:p-8 pt-16 lg:pt-16 transition-opacity duration-1000 ${loaded ? 'opacity-100' : 'opacity-0'}`}
+                className={`relative w-full h-[100dvh] bg-[#0B0C10] overflow-hidden flex items-center justify-center p-0 lg:p-8 pt-0 lg:pt-16 transition-opacity duration-1000 ${loaded ? 'opacity-100' : 'opacity-0'}`}
             >
 
                 {/* Edge Typography & Architectural Marks (Visible only on wider screens) */}
@@ -663,12 +672,12 @@ export default function CanvasScrollytelling() {
                     </div>
                 </div>
 
-                {/* Frame: fixed 1120×630, shrinks on small screens via CSS min(), NEVER grows on large screens. */}
+                {/* Frame: fullscreen on mobile, fixed 1120×630 on desktop, shrinks on small desktops via CSS min(), NEVER grows on large screens. */}
                 <div
-                    className="relative rounded-xl lg:rounded-2xl bg-black overflow-hidden z-30"
+                    className="relative rounded-none lg:rounded-2xl bg-black overflow-hidden z-30"
                     style={{
-                        width: "min(1120px, calc(100vw - 32px), calc((100vh - 64px) * 16 / 9))",
-                        height: "min(630px, calc(100vh - 64px), calc((100vw - 32px) * 9 / 16))",
+                        width: "min(1120px, 100vw, calc((100vh - 64px) * 16 / 9))",
+                        height: "min(630px, 100dvh, calc(100vw * 9 / 16))",
                     }}
                 >
 
