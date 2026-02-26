@@ -279,7 +279,7 @@ export default function CanvasScrollytelling() {
                 scrollTrigger: {
                     trigger: containerRef.current,
                     start: "top top",
-                    end: "+=1200%", // 1200vh of scrolling for slower, smoother frame rate
+                    end: isMobile ? "+=2400%" : "+=1200%", // 2400vh on mobile for much slower scroll, 1200vh on desktop
                     scrub: 1,
                     pin: true,
                     onUpdate: (self) => {
