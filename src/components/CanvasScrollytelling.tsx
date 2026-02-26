@@ -248,7 +248,7 @@ export default function CanvasScrollytelling() {
 
                 if (isAutoScrolling) {
                     const maxScroll = document.body.scrollHeight - window.innerHeight;
-                    const scrollSpeed = isMobile ? 14 : 20; // Adjust pixels per frame
+                    const scrollSpeed = isMobile ? 14 : 32; // Adjust pixels per frame
 
                     const autoScroll = () => {
                         if (isAutoScrolling && window.scrollY < maxScroll) {
