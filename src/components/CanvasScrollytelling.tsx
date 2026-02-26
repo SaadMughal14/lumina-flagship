@@ -32,9 +32,15 @@ export default function CanvasScrollytelling() {
     const [holdProgress, setHoldProgress] = useState(0); // Option 3: Hold-to-enter progress
     const holdIntervalRef = useRef<NodeJS.Timeout | null>(null);
 
-    // Initial check for returning visitors
+    // Initial check for returning visitors and scroll position reset
     useEffect(() => {
         if (typeof window !== "undefined") {
+            // Force scroll to top on every load
+            if ('scrollRestoration' in history) {
+                history.scrollRestoration = 'manual';
+            }
+            window.scrollTo(0, 0);
+
             const visited = localStorage.getItem("lumina_visited");
             if (visited === "true") {
                 setHasBypassedLoader(true);
