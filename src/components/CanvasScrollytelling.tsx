@@ -20,8 +20,9 @@ export default function CanvasScrollytelling() {
     const frameRef = useRef<HTMLDivElement>(null);
     const textRef = useRef<HTMLDivElement>(null);
 
-    // Mobile detection — resolved once on mount, stored as ref so it never triggers re-renders
-    const isMobile = useRef(false);
+    // Mobile detection — ref for synchronous reads in effects, state for re-rendering frame UI
+    const isMobileRef = useRef(false);
+    const [isMobile, setIsMobile] = useState(false);
 
 
 
@@ -44,8 +45,10 @@ export default function CanvasScrollytelling() {
             }
             window.scrollTo(0, 0);
 
-            // Set mobile flag once — this drives which image set gets loaded
-            isMobile.current = window.innerWidth < 768;
+            // Set mobile flag once — drives image loading (ref) AND frame sizing (state)
+            const mobile = window.innerWidth < 768;
+            isMobileRef.current = mobile;
+            setIsMobile(mobile);
 
             const visited = localStorage.getItem("lumina_visited");
             if (visited === "true") {
@@ -109,8 +112,8 @@ export default function CanvasScrollytelling() {
         let p1LoadedCount = 0;
         const phase1Total = 150; // Block UX to fetch the first 150 frames (~3 sec on 10Mbps)
 
-        // Dynamically pick mobile or web asset folders — resolved once, never changes mid-session
-        const suffix = isMobile.current ? '-mob' : '-web';
+        // Dynamically pick mobile or web asset folders — uses ref (synchronous) since this effect has [] deps
+        const suffix = isMobileRef.current ? '-mob' : '-web';
 
         const loadPhase1 = async () => {
             const promises = [];
@@ -675,9 +678,12 @@ export default function CanvasScrollytelling() {
                 {/* Frame: fullscreen on mobile, fixed 1120×630 on desktop, shrinks on small desktops via CSS min(), NEVER grows on large screens. */}
                 <div
                     className="relative rounded-none lg:rounded-2xl bg-black overflow-hidden z-30"
-                    style={{
-                        width: "min(1120px, 100vw, calc((100vh - 64px) * 16 / 9))",
-                        height: "min(630px, 100dvh, calc(100vw * 9 / 16))",
+                    style={isMobile ? {
+                        width: "100vw",
+                        height: "100dvh",
+                    } : {
+                        width: "min(1120px, calc(100vw - 32px), calc((100vh - 64px) * 16 / 9))",
+                        height: "min(630px, calc(100vh - 64px), calc((100vw - 32px) * 9 / 16))",
                     }}
                 >
 
