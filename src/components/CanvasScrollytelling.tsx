@@ -248,7 +248,7 @@ export default function CanvasScrollytelling() {
 
                 if (isAutoScrolling) {
                     const maxScroll = document.body.scrollHeight - window.innerHeight;
-                    const scrollSpeed = isMobile ? 14 : 42; // Adjust pixels per frame
+                    const scrollSpeed = isMobile ? 14 : 50; // Adjust pixels per frame
 
                     const autoScroll = () => {
                         if (isAutoScrolling && window.scrollY < maxScroll) {
@@ -320,8 +320,8 @@ export default function CanvasScrollytelling() {
                 scrollTrigger: {
                     trigger: containerRef.current,
                     start: "top top",
-                    end: isMobile ? "+=1200%" : "+=800%", // 1200vh on mobile, 800vh on desktop for faster transit
-                    scrub: 1,
+                    end: isMobile ? "+=1200%" : "+=600%", // 1200vh on mobile, 600vh on desktop for ultra-fast transit
+                    scrub: 0.5, // Tighter scrub for less visual lag at high speeds
                     pin: true,
                     onUpdate: (self) => {
                         const pill = document.querySelector("#floating-pill");
